@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using test1.Models;
+using ProjektCmentarz.Models;
 
-namespace test1.Controllers
+namespace ProjektCmentarz.Controllers
 {
     public class HomeController : Controller
     {

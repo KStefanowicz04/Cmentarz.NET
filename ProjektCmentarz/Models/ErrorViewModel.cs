@@ -1,4 +1,4 @@
-namespace test1.Models
+namespace ProjektCmentarz.Models
 {
     public class ErrorViewModel
     {
