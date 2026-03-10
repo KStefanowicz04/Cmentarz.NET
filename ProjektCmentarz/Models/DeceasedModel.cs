@@ -13,48 +13,23 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Imię nieboszczyka
+        [Required(ErrorMessage = "Deceased Name is required")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Name should be between 2 and 100 characters")]
         public string FirstName { get; set; }
 
         // Nazwisko nieboszczyka
+        [Required(ErrorMessage = "Deceased Surname is required")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Name should be between 2 and 100 characters")]
         public string Surname { get; set; }
 
         // Data urodzenia nieboszczyka
+        [Required(ErrorMessage = "Deceased BirthDate is required")]
+        [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
         // Data śmierci nieboszczyka
+        [Required(ErrorMessage = "Deceased DeathDate is required")]
+        [DataType(DataType.Date)]
         public DateTime DeathDate { get; set; }
-    }
-    //Grob
-        public class Grave
-    {
-        [Key]
-        public int Id { get; set; }
-    
-        // Numer grobu
-        public string GraveNumber { get; set; }
-    
-        // Sektor cmentarza
-        public string Sector { get; set; }
-    
-        // Relacja ze zmarłym (Wiecej niz jeden grób rodzinny)
-        public List<Deceased> Deceased { get; set; }
-    }
-    // Pogrzeb
-    //2 zmarly
-    public class Funeral
-{
-        [Key]
-        public int Id { get; set; }
-    
-        // Data pogrzebu
-        public DateTime FuneralDate { get; set; }
-    
-        // Miejsce ceremonii
-        public string CeremonyPlace { get; set; }
-    
-        // Klucz obcy do nieboszczyka
-        public int DeceasedId { get; set; }
-    
-        public Deceased Deceased { get; set; }
     }
 }
