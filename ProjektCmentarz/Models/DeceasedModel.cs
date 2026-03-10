@@ -24,7 +24,7 @@ namespace ProjektCmentarz.Models
         // Data śmierci nieboszczyka
         public DateTime DeathDate { get; set; }
     }
-        //grob
+    //Grob
         public class Grave
     {
         [Key]
@@ -38,5 +38,23 @@ namespace ProjektCmentarz.Models
     
         // Relacja ze zmarłym (Wiecej niz jeden grób rodzinny)
         public List<Deceased> Deceased { get; set; }
+    }
+    // Pogrzeb
+    //2 zmarly
+    public class Funeral
+{
+        [Key]
+        public int Id { get; set; }
+    
+        // Data pogrzebu
+        public DateTime FuneralDate { get; set; }
+    
+        // Miejsce ceremonii
+        public string CeremonyPlace { get; set; }
+    
+        // Klucz obcy do nieboszczyka
+        public int DeceasedId { get; set; }
+    
+        public Deceased Deceased { get; set; }
     }
 }
