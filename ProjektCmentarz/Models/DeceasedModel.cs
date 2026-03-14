@@ -14,7 +14,7 @@ namespace ProjektCmentarz.Models
 
         // Imię nieboszczyka
         [Required(ErrorMessage = "Deceased Name is required")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "Name should be between 2 and 100 characters")]
+        [StringLength(40, MinimumLength = 2, ErrorMessage = "Name should be between 2 and 100 characters")]
         public string FirstName { get; set; }
 
         // Nazwisko nieboszczyka

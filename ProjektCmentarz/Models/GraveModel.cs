@@ -2,23 +2,17 @@
 
 namespace ProjektCmentarz.Models
 {
-    public class GraveModel
+    // Grób (to miejsce w cmetarzu)
+    public class Grave
     {
-        // Grób
-        public class Grave
-        {
-            // ID grobu; klucz główny
-            [Key]
-            public int Id { get; set; }
+        // ID grobu; klucz główny
+        [Key]
+        public int Id { get; set; }
 
-            // Numer grobu
-            public string GraveNumber { get; set; }
+        // Działka na której jest dany grób; grób może należeć tylko do 1 działki
+        public Plot GravePlot { get; set; }
 
-            // Sektor cmentarza - może to powinna być encja słownikowa?
-            public string Sector { get; set; }
-
-            // Relacja ze zmarłym (Wiecej niż jeden grób rodzinny)
-            public List<Deceased> Deceased { get; set; }
-        }
+        // Relacja ze zmarłym (Jeśli wiecej niż jeden, jest to grób rodzinny)
+        public List<Deceased> Deceased { get; set; }
     }
 }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProjektCmentarz")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8de633509a9b6b0b42daf2227598f75751aa6fbf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+85e564528480678dd3184b115545df352580c8bc")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProjektCmentarz")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProjektCmentarz")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
