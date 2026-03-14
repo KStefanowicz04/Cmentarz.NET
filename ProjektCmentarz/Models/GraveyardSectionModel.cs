@@ -3,7 +3,7 @@
 namespace ProjektCmentarz.Models
 {
     // Sekcja cmentarza - zawiera konkretne działki z grobami
-    public class Section
+    public class GraveyardSection
     {
         // ID sekcji; klucz główny
         [Key]
@@ -15,6 +15,6 @@ namespace ProjektCmentarz.Models
         public string Name { get; set; }
 
         // Lista działek w danej sekcji; może być pusta - sekcja może nie zawierać żadnych działek
-        public List<Plot>? Plots { get; set; }
+        public ICollection<Plot>? Plots { get; set; }
     }
 }

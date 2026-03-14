@@ -19,7 +19,7 @@ namespace ProjektCmentarz.Models
 
         // Nazwisko nieboszczyka
         [Required(ErrorMessage = "Deceased Surname is required")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "Name should be between 2 and 100 characters")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Surname should be between 2 and 100 characters")]
         public string Surname { get; set; }
 
         // Data urodzenia nieboszczyka
@@ -31,5 +31,11 @@ namespace ProjektCmentarz.Models
         [Required(ErrorMessage = "Deceased DeathDate is required")]
         [DataType(DataType.Date)]
         public DateTime DeathDate { get; set; }
+
+        // Klucz obcy na Pogrzeb, w którym brał udział Nieboszczyk. Nieboszczyk jest nadrzędny!
+        //[ForeignKey("Funeral")]
+        //public int FuneralId { get; set; }
+        public Funeral Funeral { get; set; }
+
     }
 }
