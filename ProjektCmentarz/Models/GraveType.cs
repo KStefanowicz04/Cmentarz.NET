@@ -2,6 +2,7 @@
 
 namespace ProjektCmentarz.Models
 {
+    // ???
     public class GraveType
     {
         // Id typu grobu; klucz głóny 

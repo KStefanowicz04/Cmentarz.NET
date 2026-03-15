@@ -33,9 +33,6 @@ namespace ProjektCmentarz.Models
         public DateTime DeathDate { get; set; }
 
         // Klucz obcy na Pogrzeb, w którym brał udział Nieboszczyk. Nieboszczyk jest nadrzędny!
-        //[ForeignKey("Funeral")]
-        //public int FuneralId { get; set; }
         public Funeral Funeral { get; set; }
-
     }
 }
