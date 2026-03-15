@@ -12,13 +12,21 @@ namespace ProjektCmentarz.Data
         public virtual DbSet<ContactData> ContactDatas { get; set; }
         public virtual DbSet<Deceased> Deceaseds { get; set; }
         public virtual DbSet<Funeral> Funerals { get; set; }
+        public virtual DbSet<FuneralHome> FuneralHomes { get; set; }
         public virtual DbSet<Gravekeeper> Gravekeepers { get; set; }
         public virtual DbSet<GraveMaintenance> GraveMaintenances { get; set; }
         public virtual DbSet<Grave> Graves { get; set; }
+        public virtual DbSet<Gravestone> Gravestones { get; set; }
+        public virtual DbSet<GraveType> GraveTypes { get; set; }
+        public virtual DbSet<SectionType> SectionTypes { get; set; }
+        public virtual DbSet<Reservation> Reservations { get; set; }
+        public virtual DbSet<DeathCertificate> DeathCertificates { get; set; }
+        public virtual DbSet<Cremation> Cremations { get; set; }    
         public virtual DbSet<Plot> Plots { get; set; }
         public virtual DbSet<PlotOwner> PlotOwners { get; set; }
         public virtual DbSet<Priest> Priests { get; set; }
         public virtual DbSet<GraveyardSection> GraveyardSections { get; set; }
+        public virtual DbSet<MaintenanceRequest> MaintenanceRequests { get; set; }
 
         // Konstruktor
         public GraveyardContext(DbContextOptions options) : base(options) { }
