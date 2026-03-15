@@ -7,6 +7,8 @@
 .vs
 /ProjektCmentarz/bin/
 /ProjektCmentarz/obj/
+ProjektCmentarz/obj/
+
 
 # User-specific files
 *.rsuser
