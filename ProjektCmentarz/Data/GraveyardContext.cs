@@ -12,6 +12,7 @@ namespace ProjektCmentarz.Data
         public virtual DbSet<ContactData> ContactDatas { get; set; }
         public virtual DbSet<Deceased> Deceaseds { get; set; }
         public virtual DbSet<Funeral> Funerals { get; set; }
+        public virtual DbSet<FuneralHome> FuneralHomes { get; set; }
         public virtual DbSet<Gravekeeper> Gravekeepers { get; set; }
         public virtual DbSet<GraveMaintenance> GraveMaintenances { get; set; }
         public virtual DbSet<Grave> Graves { get; set; }
