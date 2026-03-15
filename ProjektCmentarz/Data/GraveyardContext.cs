@@ -26,6 +26,7 @@ namespace ProjektCmentarz.Data
         public virtual DbSet<PlotOwner> PlotOwners { get; set; }
         public virtual DbSet<Priest> Priests { get; set; }
         public virtual DbSet<GraveyardSection> GraveyardSections { get; set; }
+        public virtual DbSet<MaintenanceRequest> MaintenanceRequests { get; set; }
 
         // Konstruktor
         public GraveyardContext(DbContextOptions options) : base(options) { }
