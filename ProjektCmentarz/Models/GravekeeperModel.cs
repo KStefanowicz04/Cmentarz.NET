@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjektCmentarz.Models
 {
@@ -20,9 +21,14 @@ namespace ProjektCmentarz.Models
         public string Surname { get; set; }
 
         // Dane kontaktowe
+        [Required]
+        public int ContactDataId { get; set; }
+
+        [Required]
+        [ForeignKey("ContactDataId")]
         public ContactData GravekeeperContactData { get; set; }
 
         // Wykonane pogrzeby; lista może być pusta
-        public ICollection<Funeral>? Funerals { get; set; }
+        public virtual ICollection<Funeral>? Funerals { get; set; }
     }
 }
