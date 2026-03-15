@@ -15,6 +15,8 @@ namespace ProjektCmentarz.Data
         public virtual DbSet<Gravekeeper> Gravekeepers { get; set; }
         public virtual DbSet<GraveMaintenance> GraveMaintenances { get; set; }
         public virtual DbSet<Grave> Graves { get; set; }
+        public virtual DbSet<Gravestone> Gravestones { get; set; }
+        public virtual DbSet<DeathCertificate> DeathCertificates { get; set; }
         public virtual DbSet<Plot> Plots { get; set; }
         public virtual DbSet<PlotOwner> PlotOwners { get; set; }
         public virtual DbSet<Priest> Priests { get; set; }
