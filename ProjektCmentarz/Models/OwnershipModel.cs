@@ -6,6 +6,7 @@ namespace ProjektCmentarz.Models
 {
     public class Ownership
     {
+        // ID - klucz główny
         [Key]
         public int Id { get; set; }
 
@@ -24,14 +25,12 @@ namespace ProjektCmentarz.Models
         // Grób, do którego przypisana jest własność
         [Required]
         public int GraveId { get; set; }
-
         [ForeignKey("GraveId")]
         public virtual Grave Grave { get; set; } = null!;
 
         // Dane kontaktowe osoby, do której przypisana jest własność
         [Required]
         public int ContactDataId { get; set; }
-
         [ForeignKey("ContactDataId")]
         public virtual ContactData ContactData { get; set; } = null!;
     }

@@ -25,7 +25,13 @@ namespace ProjektCmentarz.Models
         public int ContactDataId { get; set; }
         public ContactData PriestContactData { get; set; }
 
-        // Wykonane pogrzeby
-        public ICollection<Funeral> Funerals { get; set; }
+        // Parafia do której należy ksiądz; klucz obcy
+        [ForeignKey("Parish")]
+        [Required(ErrorMessage = "Parish is required")]
+        public int ParishId { get; set; }
+        public Parish Parish { get; set; }
+
+        // Wykonane pogrzeby; lista może być pusta
+        public ICollection<Funeral>? Funerals { get; set; }
     }
 }

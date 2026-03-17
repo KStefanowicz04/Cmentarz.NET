@@ -15,8 +15,11 @@ namespace ProjektCmentarz.Models
         [DataType(DataType.Date)]
         public DateTime FuneralDate { get; set; }
 
-        // Miejsce odbycia pogrzebu - może to powinna być encja słownikowa?
-        public string FuneralPlace { get; set; }
+        // Miejsce odbycia pogrzebu (działka); klucz obcy
+        [ForeignKey("Plot")]
+        [Required(ErrorMessage = "A Funeral place a Deceased")]
+        public int PlotId { get; set; }
+        public Plot FuneralPlot { get; set; }
 
         // Klucz obcy do nieboszczyka danego pogrzebu. Nieboszczyk jest nadrzędny!
         [ForeignKey("Deceased")]

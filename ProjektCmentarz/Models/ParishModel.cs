@@ -1,15 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 namespace ProjektCmentarz.Models
 {
-    // Słownik sektorów cmentarza 
-    public class SectionType
+    // Parafia
+    public class Parish
     {
-        // ID sektora; klucz główny 
+        // ID parafii; klucz główny 
         [Key]
         public int Id { get; set; }
 
-        // Nazwa sektora 
-        [Required(ErrorMessage = "Section name is requires")]
+        // Nazwa parafii
+        [Required(ErrorMessage = "Parish name is requires")]
         [StringLength(100)]
         public string Name { get; set; }
     }

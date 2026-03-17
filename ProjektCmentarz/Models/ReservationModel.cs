@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjektCmentarz.Models
 {
-    // ???
+    // Działka może myć zarezerwowana
     public class Reservation
     {
         // Id rezerwacji; klucz główny 
@@ -17,23 +17,23 @@ namespace ProjektCmentarz.Models
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
 
-
         // Data zakończenia rezerwacji 
         [Required]
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
         // Klucz obcy do działi 
-        [ForeignKey("Plot")]
         [Required]
+        [ForeignKey("Plot")]
         public int PlotId { get; set; }
-
         // Działka która została zarezerwowana 
         public Plot Plot {  get; set; }
 
-        // Imie i nazwisko osoby rezerwującej 
+        // Klucz obcy na osobę rezerwującą działkę
         [Required]
-        [StringLength(100)]
-        public string ReservedBy { get; set; }
+        [ForeignKey("PlotOwner")]
+        public int PlotOwnerId { get; set; }
+        // Działka która została zarezerwowana 
+        public PlotOwner PlotOwner { get; set; }
     }
 }

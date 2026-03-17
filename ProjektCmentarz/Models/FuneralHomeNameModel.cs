@@ -1,15 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 namespace ProjektCmentarz.Models
 {
-    // Słownik sektorów cmentarza 
-    public class SectionType
+    // Nazwy domów pogrzebowych
+    public class FuneralHomeName
     {
-        // ID sektora; klucz główny 
+        // ID nazwy domu; klucz główny 
         [Key]
         public int Id { get; set; }
 
-        // Nazwa sektora 
-        [Required(ErrorMessage = "Section name is requires")]
+        // Nazwa domu pogrzebowego 
+        [Required(ErrorMessage = "Funeral Home anme is required")]
         [StringLength(100)]
         public string Name { get; set; }
     }

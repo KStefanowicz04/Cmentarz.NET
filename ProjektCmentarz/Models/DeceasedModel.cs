@@ -32,6 +32,9 @@ namespace ProjektCmentarz.Models
         [DataType(DataType.Date)]
         public DateTime DeathDate { get; set; }
 
+        // Klucz obcy na Trumnę należącą do Nieboszczyka. Nieboszczyk jest nadrzędny!
+        public Casket Casket { get; set; }
+
         // Klucz obcy na Pogrzeb, w którym brał udział Nieboszczyk. Nieboszczyk jest nadrzędny!
         public Funeral Funeral { get; set; }
     }

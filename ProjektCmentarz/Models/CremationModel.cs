@@ -10,7 +10,7 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Data kremacji 
-        [Required(ErrorMessage ="Cremation date is required")]
+        [Required(ErrorMessage = "Cremation date is required")]
         [DataType(DataType.Date)]
         public DateTime CremationDate { get; set; }
 

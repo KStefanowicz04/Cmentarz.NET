@@ -7,13 +7,18 @@ namespace ProjektCmentarz.Models
 {
     public class DeathCertificate
     {
-        // Id aktu zgonu; klucz główny 
+        // Id aktu zgonu; klucz główny
         [Key]
         public int Id { get; set; }
 
         // Data wystawienia aktu zgonu
-        [Required(ErrorMessage ="Issue date is required")]
+        [Required(ErrorMessage = "Issue date is required")]
         public DateTime IssueDate { get; set; }
+
+        // Przyczyna śmierci
+        [ForeignKey("CauseOfDeath")]
+        [Required(ErrorMessage = "Cause of Death is required")]
+        public string CauseOfDeath { get; set; }
 
         // Urząd który wystawił dokument - może należy dodać do tego encję słownikową?
         [Required(ErrorMessage = "Issuing authority is required")]

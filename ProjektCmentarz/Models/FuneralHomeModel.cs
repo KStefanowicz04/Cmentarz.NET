@@ -11,13 +11,18 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Nazwa domu pogrzebowego 
+        [ForeignKey("FuneralHomeName")]
         [Required(ErrorMessage ="Funeral home name is required")]
-        public string Name { get; set; }
+        public int FuneralHomeNameId { get; set; }
+        public FuneralHomeName FuneralHomeName { get; set; }
 
         // Dane kontaktowe
-        public ContactData GravekeeperContactData { get; set; }
+        [ForeignKey("ContactData")]
+        public int ContactDataId { get; set; }
+        public ContactData FuneralHomeContactData { get; set; }
 
-        // Lista pogrzebów organizowanych przez ten dom pogrzebowy; opcjonalne, dany zakład może nie organizował pogrzebów
+        // Lista pogrzebów organizowanych przez ten dom pogrzebowy;
+        // opcjonalne, dany zakład może jeszcze nie organizował pogrzebów
         public ICollection<Funeral>? Funerals { get; set; }
     }
 }
