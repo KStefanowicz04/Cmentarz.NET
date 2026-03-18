@@ -10,23 +10,26 @@ namespace ProjektCmentarz.Data
     {
         // Modele w bazie danych
         public virtual DbSet<ContactData> ContactDatas { get; set; }
+        public virtual DbSet<Cremation> Cremations { get; set; }
+        public virtual DbSet<DeathCertificate> DeathCertificates { get; set; }
         public virtual DbSet<Deceased> Deceaseds { get; set; }
-        public virtual DbSet<Funeral> Funerals { get; set; }
         public virtual DbSet<FuneralHome> FuneralHomes { get; set; }
+        public virtual DbSet<Funeral> Funerals { get; set; }
         public virtual DbSet<Gravekeeper> Gravekeepers { get; set; }
         public virtual DbSet<GraveMaintenance> GraveMaintenances { get; set; }
         public virtual DbSet<Grave> Graves { get; set; }
         public virtual DbSet<Gravestone> Gravestones { get; set; }
-        public virtual DbSet<GraveType> GraveTypes { get; set; }
-        public virtual DbSet<SectionType> SectionTypes { get; set; }
-        public virtual DbSet<Reservation> Reservations { get; set; }
-        public virtual DbSet<DeathCertificate> DeathCertificates { get; set; }
-        public virtual DbSet<Cremation> Cremations { get; set; }    
+        public virtual DbSet<GraveyardSection> Sections { get; set; }
+        public virtual DbSet<MaintenanceRequest> MaintenanceRequests { get; set; }
+        public virtual DbSet<Material> Materials { get; set; }
+        public virtual DbSet<Ownership> Ownerships { get; set; }
+        public virtual DbSet<Parish> Parishes { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Plot> Plots { get; set; }
         public virtual DbSet<PlotOwner> PlotOwners { get; set; }
         public virtual DbSet<Priest> Priests { get; set; }
-        public virtual DbSet<GraveyardSection> GraveyardSections { get; set; }
-        public virtual DbSet<MaintenanceRequest> MaintenanceRequests { get; set; }
+        public virtual DbSet<Reservation> Reservations { get; set; }
+        public virtual DbSet<Transfer> Transfers { get; set; }
 
         // Konstruktor
         public GraveyardContext(DbContextOptions options) : base(options) { }
@@ -41,6 +44,7 @@ namespace ProjektCmentarz.Data
                 .WithOne(f => f.Deceased)  // Pogrzeb ma Nieboszczyka
                 .HasForeignKey<Funeral>(f => f.DeceasedId);  // Pogrzeb jest podrzędny
 
+            // Relacja wiele:wielu dla Gravekeeper <-> Funeral
             modelBuilder.Entity<Funeral>()
                 .HasMany(f => f.FuneralGravekeepers)
                 .WithMany(g => g.Funerals)
@@ -58,24 +62,45 @@ namespace ProjektCmentarz.Data
                         .OnDelete(DeleteBehavior.Restrict)
                 );
 
+            // Usunięcie ON DELETE CASCADE z Transfer, ponieważ
+            // Model Grave pojawia się tam 2 razy
+            modelBuilder.Entity<Transfer>()
+                .HasOne(t => t.TransferFromGrave)
+                .WithMany()
+                .HasForeignKey(t => t.FromGraveId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Transfer>()
+                .HasOne(t => t.TransferToGrave)
+                .WithMany()
+                .HasForeignKey(t => t.ToGraveId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //// Relacja wiele:wielu dla Pogrzeby <-> Grabarze
-            //modelBuilder.Entity<Funeral>()
-            //    .HasMany(f => f.FuneralGravekeepers)  // Pogrzeb ma wiele Grabarzy
-            //    .WithMany(g => g.Funerals)  // Grabarz ma wiele pogrzebów
-            //    .UsingEntity <Dictionary<string, object>>(
-            //        "FuneralGravekeeper",
-            //        j => j
-            //            .HasOne<Gravekeeper>()
-            //            .WithMany()
-            //            .HasForeignKey("FuneralGravekeepersId")
-            //            .OnDelete(DeleteBehavior.Restrict),
-            //        j => j
-            //            .HasOne<Funeral>()
-            //            .WithMany()
-            //            .HasForeignKey("FuneralsId")
-            //            .OnDelete(DeleteBehavior.Restrict)
-            //    );  // Zmiana ustawień usuwania
+            // Przy usuwaniu Funeral, nie usuwamy Plot
+            modelBuilder.Entity<Funeral>()
+                .HasOne(f => f.FuneralPlot)
+                .WithMany()
+                .HasForeignKey(f => f.PlotId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Przy usuwaniu Gravekeeper, nie usuwamy ContactData
+            modelBuilder.Entity<Gravekeeper>()
+                .HasOne(g => g.GravekeeperContactData)
+                .WithMany()
+                .HasForeignKey(g => g.ContactDataId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // 
+            modelBuilder.Entity<Ownership>()
+                .HasOne(o => o.Grave)
+                .WithMany()
+                .HasForeignKey(o => o.GraveId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Ownership>()
+                .HasOne(o => o.ContactData)
+                .WithMany()
+                .HasForeignKey(o => o.ContactDataId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

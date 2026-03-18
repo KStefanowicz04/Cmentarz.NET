@@ -28,12 +28,5 @@ namespace ProjektCmentarz.Models
         public int PlotId { get; set; }
         // Działka która została zarezerwowana 
         public Plot Plot {  get; set; }
-
-        // Klucz obcy na osobę rezerwującą działkę
-        [Required]
-        [ForeignKey("PlotOwner")]
-        public int PlotOwnerId { get; set; }
-        // Działka która została zarezerwowana 
-        public PlotOwner PlotOwner { get; set; }
     }
 }
