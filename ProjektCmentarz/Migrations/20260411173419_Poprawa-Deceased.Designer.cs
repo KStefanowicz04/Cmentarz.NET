@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjektCmentarz.Data;
 
@@ -11,9 +12,11 @@ using ProjektCmentarz.Data;
 namespace ProjektCmentarz.Migrations
 {
     [DbContext(typeof(GraveyardContext))]
-    partial class GraveyardContextModelSnapshot : ModelSnapshot
+    [Migration("20260411173419_Poprawa-Deceased")]
+    partial class PoprawaDeceased
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,8 +66,7 @@ namespace ProjektCmentarz.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("DeceasedId")
-                        .IsRequired()
+                    b.Property<int>("DeceasedId")
                         .HasColumnType("int");
 
                     b.Property<int>("MaterialId")
@@ -230,8 +232,7 @@ namespace ProjektCmentarz.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("DeceasedId")
-                        .IsRequired()
+                    b.Property<int>("DeceasedId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FuneralDate")
@@ -723,7 +724,9 @@ namespace ProjektCmentarz.Migrations
                 {
                     b.HasOne("ProjektCmentarz.Models.Deceased", "Deceased")
                         .WithOne("Casket")
-                        .HasForeignKey("ProjektCmentarz.Models.Casket", "DeceasedId");
+                        .HasForeignKey("ProjektCmentarz.Models.Casket", "DeceasedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjektCmentarz.Models.Material", "Material")
                         .WithMany()
@@ -762,7 +765,9 @@ namespace ProjektCmentarz.Migrations
                 {
                     b.HasOne("ProjektCmentarz.Models.Deceased", "Deceased")
                         .WithOne("Funeral")
-                        .HasForeignKey("ProjektCmentarz.Models.Funeral", "DeceasedId");
+                        .HasForeignKey("ProjektCmentarz.Models.Funeral", "DeceasedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjektCmentarz.Models.FuneralHome", null)
                         .WithMany("Funerals")
@@ -1020,9 +1025,11 @@ namespace ProjektCmentarz.Migrations
 
             modelBuilder.Entity("ProjektCmentarz.Models.Deceased", b =>
                 {
-                    b.Navigation("Casket");
+                    b.Navigation("Casket")
+                        .IsRequired();
 
-                    b.Navigation("Funeral");
+                    b.Navigation("Funeral")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.FuneralHome", b =>

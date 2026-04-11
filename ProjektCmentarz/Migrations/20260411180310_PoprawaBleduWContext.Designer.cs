@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjektCmentarz.Data;
 
@@ -11,9 +12,11 @@ using ProjektCmentarz.Data;
 namespace ProjektCmentarz.Migrations
 {
     [DbContext(typeof(GraveyardContext))]
-    partial class GraveyardContextModelSnapshot : ModelSnapshot
+    [Migration("20260411180310_PoprawaBleduWContext")]
+    partial class PoprawaBleduWContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1020,9 +1023,11 @@ namespace ProjektCmentarz.Migrations
 
             modelBuilder.Entity("ProjektCmentarz.Models.Deceased", b =>
                 {
-                    b.Navigation("Casket");
+                    b.Navigation("Casket")
+                        .IsRequired();
 
-                    b.Navigation("Funeral");
+                    b.Navigation("Funeral")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.FuneralHome", b =>

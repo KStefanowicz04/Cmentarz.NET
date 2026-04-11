@@ -24,7 +24,7 @@ namespace ProjektCmentarz.Models
         // Klucz obcy do nieboszczyka danej trumny. Nieboszczyk jest nadrzędny!
         [ForeignKey("Deceased")]
         [Required(ErrorMessage = "A casket belongs to a Deceased")]
-        public int DeceasedId { get; set; }
+        public int? DeceasedId { get; set; }
         public Deceased Deceased { get; set; }
     }
 }

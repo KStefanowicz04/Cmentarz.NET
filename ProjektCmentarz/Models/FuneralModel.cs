@@ -24,7 +24,7 @@ namespace ProjektCmentarz.Models
         // Klucz obcy do nieboszczyka danego pogrzebu. Nieboszczyk jest nadrzędny!
         [ForeignKey("Deceased")]
         [Required(ErrorMessage = "A Funeral requires a Deceased")]
-        public int DeceasedId { get; set; }
+        public int? DeceasedId { get; set; }
         public Deceased Deceased { get; set; }
 
         // Klucz obcy na Księdza, który wykonał dany pogrzeb

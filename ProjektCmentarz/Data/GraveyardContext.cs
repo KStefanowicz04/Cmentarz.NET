@@ -42,7 +42,15 @@ namespace ProjektCmentarz.Data
             modelBuilder.Entity<Deceased>()
                 .HasOne(d => d.Funeral)  // Nieboszczyk ma Pogrzeb
                 .WithOne(f => f.Deceased)  // Pogrzeb ma Nieboszczyka
-                .HasForeignKey<Funeral>(f => f.DeceasedId);  // Pogrzeb jest podrzędny
+                .HasForeignKey<Funeral>(f => f.DeceasedId)  // Pogrzeb jest podrzędny
+                .IsRequired(false);  // Nieboszczyk może istnieć w bazie bez pogrzebu
+
+            // Relacja 1:1 dla Trumna <-> Nieboszczyk (Trumna jest podrzędna)
+            modelBuilder.Entity<Deceased>()
+                .HasOne(d => d.Casket)  // Nieboszczyk ma Trumnę
+                .WithOne(f => f.Deceased)  // Trumna ma Nieboszczyka
+                .HasForeignKey<Casket>(f => f.DeceasedId)  // Trumna jest podrzędną
+                .IsRequired(false);  // Nieboszczyk może istnieć w bazie bez trumny
 
             // Relacja wiele:wielu dla Gravekeeper <-> Funeral
             modelBuilder.Entity<Funeral>()
@@ -89,13 +97,14 @@ namespace ProjektCmentarz.Data
                 .HasForeignKey(g => g.ContactDataId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 
+            // Przy usuwaniu właności, nie usuwamy grobu
             modelBuilder.Entity<Ownership>()
                 .HasOne(o => o.Grave)
                 .WithMany()
                 .HasForeignKey(o => o.GraveId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Przy usuwaniu właności nie usuwamy danych kontaktowych
             modelBuilder.Entity<Ownership>()
                 .HasOne(o => o.ContactData)
                 .WithMany()
