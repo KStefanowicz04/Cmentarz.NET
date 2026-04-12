@@ -1,0 +1,42 @@
+﻿@model ProjektCmentarz.Models.Funeral
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Funeral</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FuneralDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FuneralDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FuneralPlot)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FuneralPlot.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Deceased)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Deceased.FirstName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FuneralPriest)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FuneralPriest.FirstName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

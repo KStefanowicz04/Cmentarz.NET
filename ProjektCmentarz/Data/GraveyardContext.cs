@@ -111,5 +111,7 @@ namespace ProjektCmentarz.Data
                 .HasForeignKey(o => o.ContactDataId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
+    // Własny Context dla Cmentarza
+public DbSet<ProjektCmentarz.Models.Casket> Casket { get; set; } = default!;
     }
 }

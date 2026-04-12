@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjektCmentarz.Data;
 
@@ -11,9 +12,11 @@ using ProjektCmentarz.Data;
 namespace ProjektCmentarz.Migrations
 {
     [DbContext(typeof(GraveyardContext))]
-    partial class GraveyardContextModelSnapshot : ModelSnapshot
+    [Migration("20260412142834_PoprawkiFuneralCasket")]
+    partial class PoprawkiFuneralCasket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,6 +67,7 @@ namespace ProjektCmentarz.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("DeceasedId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("MaterialId")
@@ -75,8 +79,7 @@ namespace ProjektCmentarz.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DeceasedId")
-                        .IsUnique()
-                        .HasFilter("[DeceasedId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("MaterialId");
 
