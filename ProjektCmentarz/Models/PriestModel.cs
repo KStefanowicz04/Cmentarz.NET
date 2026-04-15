@@ -26,6 +26,7 @@ namespace ProjektCmentarz.Models
         [Display(Name = "Dane kontaktowe")]
         [ForeignKey("ContactData")]
         public int ContactDataId { get; set; }
+        [Display(Name = "Dane kontaktowe")]
         public ContactData? PriestContactData { get; set; }
 
         // Parafia do której należy ksiądz; klucz obcy
@@ -33,6 +34,7 @@ namespace ProjektCmentarz.Models
         [ForeignKey("Parish")]
         [Required(ErrorMessage = "Parish is required")]
         public int ParishId { get; set; }
+        [Display(Name = "Parafia")]
         public Parish? Parish { get; set; }
 
         // Wykonane pogrzeby; lista może być pusta

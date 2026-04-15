@@ -1,0 +1,42 @@
+﻿@model ProjektCmentarz.Models.Grave
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Grave</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PlotId" class="control-label"></label>
+                <select asp-for="PlotId" class ="form-control" asp-items="ViewBag.PlotId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeceasedId" class="control-label"></label>
+                <select asp-for="DeceasedId" class ="form-control" asp-items="ViewBag.DeceasedId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BurialDepthId" class="control-label"></label>
+                <select asp-for="BurialDepthId" class ="form-control" asp-items="ViewBag.BurialDepthId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

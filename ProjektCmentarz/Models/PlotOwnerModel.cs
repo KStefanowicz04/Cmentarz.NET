@@ -23,6 +23,6 @@ namespace ProjektCmentarz.Models
         // Tablica z danymi kontatkowymi właściciela
         [ForeignKey("ContactData")]
         public int ContactDataId { get; set; }
-        public ContactData OwnerContactData { get; set; }
+        public ContactData? OwnerContactData { get; set; }
     }
 }

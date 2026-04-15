@@ -16,6 +16,6 @@ namespace ProjektCmentarz.Models
         // Osoba do której należy dana działka
         [ForeignKey("PlotOwner")]
         public int PlotOwnerId { get; set; }
-        public PlotOwner Owner { get; set; }
+        public PlotOwner? Owner { get; set; }
     }
 }

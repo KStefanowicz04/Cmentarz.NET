@@ -10,7 +10,8 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Przyczyna śmierci
-        [Required(ErrorMessage = "Cause of Death is required")]
+        [Display(Name = "Przyczyna śmierci")]
+        [Required(ErrorMessage = "Przyczyna śmierci jest wymagana.")]
         [StringLength(100)]
         public string Cause { get; set; }
     }

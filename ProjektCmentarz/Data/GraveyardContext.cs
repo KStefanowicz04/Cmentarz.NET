@@ -9,6 +9,7 @@ namespace ProjektCmentarz.Data
     public class GraveyardContext : DbContext
     {
         // Modele w bazie danych
+        public virtual DbSet<CauseOfDeath> CausesOfDeath { get; set; }
         public virtual DbSet<ContactData> ContactDatas { get; set; }
         public virtual DbSet<Cremation> Cremations { get; set; }
         public virtual DbSet<DeathCertificate> DeathCertificates { get; set; }
@@ -113,5 +114,9 @@ namespace ProjektCmentarz.Data
         }
     // Własny Context dla Cmentarza
 public DbSet<ProjektCmentarz.Models.Casket> Casket { get; set; } = default!;
+    // Własny Context dla Cmentarza
+public DbSet<ProjektCmentarz.Models.BurialDepth> BurialDepth { get; set; } = default!;
+    // Własny Context dla Cmentarza
+public DbSet<ProjektCmentarz.Models.CauseOfDeath> CauseOfDeath { get; set; } = default!;
     }
 }
