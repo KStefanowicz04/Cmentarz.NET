@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjektCmentarz.Data;
 
@@ -11,9 +12,11 @@ using ProjektCmentarz.Data;
 namespace ProjektCmentarz.Migrations
 {
     [DbContext(typeof(GraveyardContext))]
-    partial class GraveyardContextModelSnapshot : ModelSnapshot
+    [Migration("20260416122733_PoprawaFuneralHomeModel")]
+    partial class PoprawaFuneralHomeModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -359,13 +362,13 @@ namespace ProjektCmentarz.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("Surname")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("TransferId")
                         .HasColumnType("int");
@@ -418,13 +421,14 @@ namespace ProjektCmentarz.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("SectionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("SectionTypeId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("GraveyardSection");
+                    b.HasIndex("SectionTypeId");
+
+                    b.ToTable("Sections");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.MaintenanceRequest", b =>
@@ -653,6 +657,24 @@ namespace ProjektCmentarz.Migrations
                     b.ToTable("Reservations");
                 });
 
+            modelBuilder.Entity("ProjektCmentarz.Models.SectionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SectionType");
+                });
+
             modelBuilder.Entity("ProjektCmentarz.Models.Transfer", b =>
                 {
                     b.Property<int>("Id")
@@ -864,6 +886,17 @@ namespace ProjektCmentarz.Migrations
                     b.Navigation("Grave");
 
                     b.Navigation("Material");
+                });
+
+            modelBuilder.Entity("ProjektCmentarz.Models.GraveyardSection", b =>
+                {
+                    b.HasOne("ProjektCmentarz.Models.SectionType", "SectionType")
+                        .WithMany()
+                        .HasForeignKey("SectionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SectionType");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.MaintenanceRequest", b =>

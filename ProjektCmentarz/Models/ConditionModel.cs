@@ -11,7 +11,8 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Stan techniczny
-        [Required(ErrorMessage = "Condition is required")]
+        [Display(Name = "Stan techniczny")]
+        [Required(ErrorMessage = "Stan techniczny jest wymagany")]
         [StringLength(100)]
         public string ConditionType { get; set; }
     }

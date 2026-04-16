@@ -112,11 +112,15 @@ namespace ProjektCmentarz.Data
                 .HasForeignKey(o => o.ContactDataId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
+        // Własny Context dla Cmentarza
+        public DbSet<ProjektCmentarz.Models.Casket> Casket { get; set; } = default!;
+        // Własny Context dla Cmentarza
+        public DbSet<ProjektCmentarz.Models.BurialDepth> BurialDepth { get; set; } = default!;
+        // Własny Context dla Cmentarza
+        public DbSet<ProjektCmentarz.Models.CauseOfDeath> CauseOfDeath { get; set; } = default!;
+        // Własny Context dla Cmentarza
+        public DbSet<ProjektCmentarz.Models.Condition> Condition { get; set; } = default!;
     // Własny Context dla Cmentarza
-public DbSet<ProjektCmentarz.Models.Casket> Casket { get; set; } = default!;
-    // Własny Context dla Cmentarza
-public DbSet<ProjektCmentarz.Models.BurialDepth> BurialDepth { get; set; } = default!;
-    // Własny Context dla Cmentarza
-public DbSet<ProjektCmentarz.Models.CauseOfDeath> CauseOfDeath { get; set; } = default!;
+public DbSet<ProjektCmentarz.Models.GraveyardSection> GraveyardSection { get; set; } = default!;
     }
 }

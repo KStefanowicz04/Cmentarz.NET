@@ -18,7 +18,8 @@ namespace ProjektCmentarz.Models
         // Przyczyna śmierci
         [ForeignKey("CauseOfDeath")]
         [Required(ErrorMessage = "Cause of Death is required")]
-        public string CauseOfDeath { get; set; }
+        public int CauseOfDeathId { get; set; }
+        public CauseOfDeath? CauseOfDeath { get; set; }
 
         // Urząd który wystawił dokument - może należy dodać do tego encję słownikową?
         [Required(ErrorMessage = "Issuing authority is required")]
@@ -30,6 +31,6 @@ namespace ProjektCmentarz.Models
         [Required(ErrorMessage = "DeathCertificate must belong to a Deceased")]
         public int DeceasedId { get; set; }
         // Zmarły, którego dotyczy akt zgonu
-        public Deceased Deceased { get; set; }
+        public Deceased? Deceased { get; set; }
     }
 }

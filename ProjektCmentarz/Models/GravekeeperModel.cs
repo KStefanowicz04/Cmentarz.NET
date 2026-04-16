@@ -12,22 +12,25 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Imię grabarza
-        [Required(ErrorMessage = "Gravekeeper Name is required")]
-        [StringLength(40, MinimumLength = 2, ErrorMessage = "Name should be between 2 and 100 characters")]
+        [Display(Name = "Imię grabarza")]
+        [Required(ErrorMessage = "Imię grabarza jest wymagana")]
+        [StringLength(64, MinimumLength = 2, ErrorMessage = "Imię ma od 2 and 64 znaków")]
         public string FirstName { get; set; }
 
         // Nazwisko grabarza
-        [Required(ErrorMessage = "Gravekeeper Surname is required")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "Surname should be between 2 and 100 characters")]
+        [Display(Name = "Nazwisko grabarza")]
+        [Required(ErrorMessage = "Nazwisko grabarza jest wymagana")]
+        [StringLength(128, MinimumLength = 2, ErrorMessage = "Nazwisko ma od 2 do 128 znaków")]
         public string Surname { get; set; }
                 
         //Identyfikator danych kontaktowych, do których przypisany jest grabarz
         [Required]
         public int ContactDataId { get; set; }
-        //Dane kontaktowe, do których przypisany jest grabarz
+        // Dane kontaktowe, do których przypisany jest grabarz
+        [Display(Name = "Dane kontaktowe grabarza")]
         [Required]
         [ForeignKey("ContactDataId")]
-        public ContactData GravekeeperContactData { get; set; }
+        public ContactData? GravekeeperContactData { get; set; }
 
         // Wykonane pogrzeby; lista może być pusta
         public virtual ICollection<Funeral>? Funerals { get; set; }

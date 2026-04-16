@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjektCmentarz.Data;
 
@@ -11,9 +12,11 @@ using ProjektCmentarz.Data;
 namespace ProjektCmentarz.Migrations
 {
     [DbContext(typeof(GraveyardContext))]
-    partial class GraveyardContextModelSnapshot : ModelSnapshot
+    [Migration("20260416125126_PoprawaModeliSekcji")]
+    partial class PoprawaModeliSekcji
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -410,23 +413,6 @@ namespace ProjektCmentarz.Migrations
                     b.ToTable("Gravestones");
                 });
 
-            modelBuilder.Entity("ProjektCmentarz.Models.GraveyardSection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("SectionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GraveyardSection");
-                });
-
             modelBuilder.Entity("ProjektCmentarz.Models.MaintenanceRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -553,15 +539,10 @@ namespace ProjektCmentarz.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("GraveyardSectionId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PlotOwnerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GraveyardSectionId");
 
                     b.HasIndex("PlotOwnerId");
 
@@ -906,10 +887,6 @@ namespace ProjektCmentarz.Migrations
 
             modelBuilder.Entity("ProjektCmentarz.Models.Plot", b =>
                 {
-                    b.HasOne("ProjektCmentarz.Models.GraveyardSection", null)
-                        .WithMany("Plots")
-                        .HasForeignKey("GraveyardSectionId");
-
                     b.HasOne("ProjektCmentarz.Models.PlotOwner", "Owner")
                         .WithMany()
                         .HasForeignKey("PlotOwnerId")
@@ -997,11 +974,6 @@ namespace ProjektCmentarz.Migrations
             modelBuilder.Entity("ProjektCmentarz.Models.FuneralHome", b =>
                 {
                     b.Navigation("Funerals");
-                });
-
-            modelBuilder.Entity("ProjektCmentarz.Models.GraveyardSection", b =>
-                {
-                    b.Navigation("Plots");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Plot", b =>
