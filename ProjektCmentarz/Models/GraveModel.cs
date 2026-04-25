@@ -13,16 +13,16 @@ namespace ProjektCmentarz.Models
         // Działka na której jest dany grób; grób może należeć tylko do 1 działki
         [ForeignKey("Plot")]
         public int PlotId { get; set; }
-        public Plot GravePlot { get; set; }
+        public Plot? GravePlot { get; set; }
 
         // Relacja ze zmarłym w danym grobie
         [ForeignKey("Deceased")]
         public int DeceasedId { get; set; }
-        public Deceased GraveDeceased { get; set; }
+        public Deceased? GraveDeceased { get; set; }
 
         // Głębokość pochówku; klucz obcy encji słownikowej
         [ForeignKey("BurialDepth")]
         public int BurialDepthId { get; set; }
-        public BurialDepth BurialDepth { get; set; }
+        public BurialDepth? BurialDepth { get; set; }
     }
 }

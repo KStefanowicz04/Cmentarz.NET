@@ -9,16 +9,18 @@ namespace ProjektCmentarz.Models
         // Id kremacji; klucz główny 
         public int Id { get; set; }
 
-        // Data kremacji 
-        [Required(ErrorMessage = "Cremation date is required")]
+        // Data kremacji
+        [Display(Name = "Data kremacji")]
+        [Required(ErrorMessage = "Data kremacji jest wymagana")]
         [DataType(DataType.Date)]
         public DateTime CremationDate { get; set; }
 
-        // Klucz obcy do zmarłego, którego dotyczy kremacja 
+        // Klucz obcy do zmarłego, którego dotyczy kremacja
+        [Display(Name = "Nieboszczyk")]
         [ForeignKey("Deceased")]
-        [Required(ErrorMessage = "Cremation must belong to a Descased")]
+        [Required(ErrorMessage = "Kremacja wymaga Nieboszczyka, którego dotyczy")]
         public int DeceasedId { get; set; }
         // Zmarły, którego dotyczy kremacja 
-        public Deceased Deceased { get; set; }
+        public Deceased? Deceased { get; set; }
     }
 }

@@ -9,6 +9,7 @@ namespace ProjektCmentarz.Data
     public class GraveyardContext : DbContext
     {
         // Modele w bazie danych
+        public virtual DbSet<CauseOfDeath> CausesOfDeath { get; set; }
         public virtual DbSet<ContactData> ContactDatas { get; set; }
         public virtual DbSet<Cremation> Cremations { get; set; }
         public virtual DbSet<DeathCertificate> DeathCertificates { get; set; }
@@ -30,6 +31,7 @@ namespace ProjektCmentarz.Data
         public virtual DbSet<Priest> Priests { get; set; }
         public virtual DbSet<Reservation> Reservations { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
+        public virtual DbSet<User> Users { get; set; }  // Użytkownicy!
 
         // Konstruktor
         public GraveyardContext(DbContextOptions options) : base(options) { }
@@ -42,7 +44,15 @@ namespace ProjektCmentarz.Data
             modelBuilder.Entity<Deceased>()
                 .HasOne(d => d.Funeral)  // Nieboszczyk ma Pogrzeb
                 .WithOne(f => f.Deceased)  // Pogrzeb ma Nieboszczyka
-                .HasForeignKey<Funeral>(f => f.DeceasedId);  // Pogrzeb jest podrzędny
+                .HasForeignKey<Funeral>(f => f.DeceasedId)  // Pogrzeb jest podrzędny
+                .IsRequired(false);  // Nieboszczyk może istnieć w bazie bez pogrzebu
+
+            // Relacja 1:1 dla Trumna <-> Nieboszczyk (Trumna jest podrzędna)
+            modelBuilder.Entity<Deceased>()
+                .HasOne(d => d.Casket)  // Nieboszczyk ma Trumnę
+                .WithOne(f => f.Deceased)  // Trumna ma Nieboszczyka
+                .HasForeignKey<Casket>(f => f.DeceasedId)  // Trumna jest podrzędną
+                .IsRequired(false);  // Nieboszczyk może istnieć w bazie bez trumny
 
             // Relacja wiele:wielu dla Gravekeeper <-> Funeral
             modelBuilder.Entity<Funeral>()
@@ -89,18 +99,29 @@ namespace ProjektCmentarz.Data
                 .HasForeignKey(g => g.ContactDataId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 
+            // Przy usuwaniu właności, nie usuwamy grobu
             modelBuilder.Entity<Ownership>()
                 .HasOne(o => o.Grave)
                 .WithMany()
                 .HasForeignKey(o => o.GraveId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Przy usuwaniu właności nie usuwamy danych kontaktowych
             modelBuilder.Entity<Ownership>()
                 .HasOne(o => o.ContactData)
                 .WithMany()
                 .HasForeignKey(o => o.ContactDataId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
+        // Własny Context dla Cmentarza
+        public DbSet<ProjektCmentarz.Models.Casket> Casket { get; set; } = default!;
+        // Własny Context dla Cmentarza
+        public DbSet<ProjektCmentarz.Models.BurialDepth> BurialDepth { get; set; } = default!;
+        // Własny Context dla Cmentarza
+        public DbSet<ProjektCmentarz.Models.CauseOfDeath> CauseOfDeath { get; set; } = default!;
+        // Własny Context dla Cmentarza
+        public DbSet<ProjektCmentarz.Models.Condition> Condition { get; set; } = default!;
+    // Własny Context dla Cmentarza
+public DbSet<ProjektCmentarz.Models.GraveyardSection> GraveyardSection { get; set; } = default!;
     }
 }

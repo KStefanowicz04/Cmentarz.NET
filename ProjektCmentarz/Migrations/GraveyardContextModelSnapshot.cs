@@ -34,7 +34,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("GravekeeperId");
 
-                    b.ToTable("FuneralGravekeeper");
+                    b.ToTable("FuneralGravekeeper", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.BurialDepth", b =>
@@ -52,7 +52,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BurialDepth");
+                    b.ToTable("BurialDepth", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Casket", b =>
@@ -63,7 +63,7 @@ namespace ProjektCmentarz.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DeceasedId")
+                    b.Property<int?>("DeceasedId")
                         .HasColumnType("int");
 
                     b.Property<int>("MaterialId")
@@ -75,11 +75,30 @@ namespace ProjektCmentarz.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DeceasedId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DeceasedId] IS NOT NULL");
 
                     b.HasIndex("MaterialId");
 
-                    b.ToTable("Casket");
+                    b.ToTable("Casket", (string)null);
+                });
+
+            modelBuilder.Entity("ProjektCmentarz.Models.CauseOfDeath", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Cause")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CauseOfDeath", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Condition", b =>
@@ -97,7 +116,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Condition");
+                    b.ToTable("Condition", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.ContactData", b =>
@@ -132,7 +151,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ContactDatas");
+                    b.ToTable("ContactDatas", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Cremation", b =>
@@ -153,7 +172,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("DeceasedId");
 
-                    b.ToTable("Cremations");
+                    b.ToTable("Cremations", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.DeathCertificate", b =>
@@ -164,9 +183,8 @@ namespace ProjektCmentarz.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CauseOfDeath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CauseOfDeathId")
+                        .HasColumnType("int");
 
                     b.Property<int>("DeceasedId")
                         .HasColumnType("int");
@@ -181,9 +199,11 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CauseOfDeathId");
+
                     b.HasIndex("DeceasedId");
 
-                    b.ToTable("DeathCertificates");
+                    b.ToTable("DeathCertificates", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Deceased", b =>
@@ -197,6 +217,9 @@ namespace ProjektCmentarz.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("CasketId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DeathDate")
                         .HasColumnType("datetime2");
 
@@ -205,6 +228,9 @@ namespace ProjektCmentarz.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
+                    b.Property<int?>("FuneralId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -212,7 +238,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Deceaseds");
+                    b.ToTable("Deceaseds", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Funeral", b =>
@@ -249,7 +275,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("PriestId");
 
-                    b.ToTable("Funerals");
+                    b.ToTable("Funerals", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.FuneralHome", b =>
@@ -263,34 +289,15 @@ namespace ProjektCmentarz.Migrations
                     b.Property<int>("ContactDataId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FuneralHomeNameId")
-                        .HasColumnType("int");
+                    b.Property<string>("FuneralHomeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ContactDataId");
 
-                    b.HasIndex("FuneralHomeNameId");
-
-                    b.ToTable("FuneralHomes");
-                });
-
-            modelBuilder.Entity("ProjektCmentarz.Models.FuneralHomeName", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FuneralHomeName");
+                    b.ToTable("FuneralHomes", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Grave", b =>
@@ -318,7 +325,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("PlotId");
 
-                    b.ToTable("Graves");
+                    b.ToTable("Graves", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.GraveMaintenance", b =>
@@ -336,7 +343,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("MaintenanceGravekeeperId");
 
-                    b.ToTable("GraveMaintenances");
+                    b.ToTable("GraveMaintenances", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Gravekeeper", b =>
@@ -352,13 +359,13 @@ namespace ProjektCmentarz.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Surname")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<int?>("TransferId")
                         .HasColumnType("int");
@@ -369,7 +376,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("TransferId");
 
-                    b.ToTable("Gravekeepers");
+                    b.ToTable("Gravekeepers", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Gravestone", b =>
@@ -400,7 +407,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("MaterialId");
 
-                    b.ToTable("Gravestones");
+                    b.ToTable("Gravestones", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.GraveyardSection", b =>
@@ -411,14 +418,13 @@ namespace ProjektCmentarz.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("SectionTypeId")
-                        .HasColumnType("int");
+                    b.Property<string>("SectionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SectionTypeId");
-
-                    b.ToTable("Sections");
+                    b.ToTable("GraveyardSection", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.MaintenanceRequest", b =>
@@ -449,7 +455,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("GravekeepId");
 
-                    b.ToTable("MaintenanceRequests");
+                    b.ToTable("MaintenanceRequests", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Material", b =>
@@ -467,7 +473,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Materials");
+                    b.ToTable("Materials", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Ownership", b =>
@@ -499,7 +505,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("GraveId");
 
-                    b.ToTable("Ownerships");
+                    b.ToTable("Ownerships", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Parish", b =>
@@ -517,7 +523,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Parishes");
+                    b.ToTable("Parishes", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Payment", b =>
@@ -536,7 +542,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Plot", b =>
@@ -559,7 +565,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("PlotOwnerId");
 
-                    b.ToTable("Plots");
+                    b.ToTable("Plots", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.PlotOwner", b =>
@@ -587,7 +593,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("ContactDataId");
 
-                    b.ToTable("PlotOwners");
+                    b.ToTable("PlotOwners", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Priest", b =>
@@ -620,7 +626,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("ParishId");
 
-                    b.ToTable("Priests");
+                    b.ToTable("Priests", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Reservation", b =>
@@ -644,25 +650,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("PlotId");
 
-                    b.ToTable("Reservations");
-                });
-
-            modelBuilder.Entity("ProjektCmentarz.Models.SectionType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SectionType");
+                    b.ToTable("Reservations", (string)null);
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Transfer", b =>
@@ -693,7 +681,39 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("ToGraveId");
 
-                    b.ToTable("Transfers");
+                    b.ToTable("Transfers", (string)null);
+                });
+
+            modelBuilder.Entity("ProjektCmentarz.Models.User", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte[]>("Password")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("FuneralGravekeeper", b =>
@@ -715,9 +735,7 @@ namespace ProjektCmentarz.Migrations
                 {
                     b.HasOne("ProjektCmentarz.Models.Deceased", "Deceased")
                         .WithOne("Casket")
-                        .HasForeignKey("ProjektCmentarz.Models.Casket", "DeceasedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjektCmentarz.Models.Casket", "DeceasedId");
 
                     b.HasOne("ProjektCmentarz.Models.Material", "Material")
                         .WithMany()
@@ -743,11 +761,19 @@ namespace ProjektCmentarz.Migrations
 
             modelBuilder.Entity("ProjektCmentarz.Models.DeathCertificate", b =>
                 {
+                    b.HasOne("ProjektCmentarz.Models.CauseOfDeath", "CauseOfDeath")
+                        .WithMany()
+                        .HasForeignKey("CauseOfDeathId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProjektCmentarz.Models.Deceased", "Deceased")
                         .WithMany()
                         .HasForeignKey("DeceasedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CauseOfDeath");
 
                     b.Navigation("Deceased");
                 });
@@ -756,9 +782,7 @@ namespace ProjektCmentarz.Migrations
                 {
                     b.HasOne("ProjektCmentarz.Models.Deceased", "Deceased")
                         .WithOne("Funeral")
-                        .HasForeignKey("ProjektCmentarz.Models.Funeral", "DeceasedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjektCmentarz.Models.Funeral", "DeceasedId");
 
                     b.HasOne("ProjektCmentarz.Models.FuneralHome", null)
                         .WithMany("Funerals")
@@ -791,15 +815,7 @@ namespace ProjektCmentarz.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProjektCmentarz.Models.FuneralHomeName", "FuneralHomeName")
-                        .WithMany()
-                        .HasForeignKey("FuneralHomeNameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("FuneralHomeContactData");
-
-                    b.Navigation("FuneralHomeName");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Grave", b =>
@@ -880,17 +896,6 @@ namespace ProjektCmentarz.Migrations
                     b.Navigation("Grave");
 
                     b.Navigation("Material");
-                });
-
-            modelBuilder.Entity("ProjektCmentarz.Models.GraveyardSection", b =>
-                {
-                    b.HasOne("ProjektCmentarz.Models.SectionType", "SectionType")
-                        .WithMany()
-                        .HasForeignKey("SectionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SectionType");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.MaintenanceRequest", b =>
@@ -1016,11 +1021,9 @@ namespace ProjektCmentarz.Migrations
 
             modelBuilder.Entity("ProjektCmentarz.Models.Deceased", b =>
                 {
-                    b.Navigation("Casket")
-                        .IsRequired();
+                    b.Navigation("Casket");
 
-                    b.Navigation("Funeral")
-                        .IsRequired();
+                    b.Navigation("Funeral");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.FuneralHome", b =>

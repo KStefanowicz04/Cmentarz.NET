@@ -1,3 +1,4 @@
+ï»¿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using ProjektCmentarz.Data;
 
@@ -6,12 +7,33 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
-// W³asny serwis Context do po³¹czenia z baz¹ danych GraveyardDB
+// WÅ‚asny serwis Context do poÅ‚Ä…czenia z bazÄ… danych GraveyardDB
 builder.Services.AddDbContext<GraveyardContext>(options =>
-    // Korzystamy z SqlServer, pytamy o bazê GraveyardDB (to jest w appsettings.json)
+    // Korzystamy z SqlServer, pytamy o bazÄ™ GraveyardDB (to jest w appsettings.json)
     options.UseSqlServer(builder.Configuration.GetConnectionString("GraveyardDB")));
 
-var app = builder.Build();
+// Serwisy do logowania
+builder.Services.AddAntiforgery();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);  // 60 minut trwania
+    options.SlidingExpiration = true;  // Ponowienie wÅ‚Ä…czone
+    options.AccessDeniedPath = "/Forbidden/";
+    options.LoginPath = "/Login";
+});
+// Ustawienia
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/Home/Login";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+    options.LoginPath = "/Home/Login";
+});
+builder.Services.AddAuthorization();  // Autoryzacja
+builder.Services.AddMemoryCache();
+builder.Services.AddSession();
+
+
+var app = builder.Build(); 
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -26,7 +48,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication();  // Autentykacja
+app.UseAuthorization();  // Autoryzacja
+
+app.UseSession();  // Sesja
 
 app.MapRazorPages();
 

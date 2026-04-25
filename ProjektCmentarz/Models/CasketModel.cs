@@ -11,20 +11,22 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Materiał z którego wykonana jest trumna; klucz obcy
+        [Display(Name = "Materiał")]
         [ForeignKey("Material")]
-        [Required(ErrorMessage = "Casket material is required")]
+        [Required]
         public int MaterialId { get; set; }
-        public Material Material { get; set; }
+        public Material? Material { get; set; }
 
         // Cena
+        [Display(Name = "Cena")]
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
 
         // Klucz obcy do nieboszczyka danej trumny. Nieboszczyk jest nadrzędny!
+        [Display(Name = "Nieboszczyk")]
         [ForeignKey("Deceased")]
-        [Required(ErrorMessage = "A casket belongs to a Deceased")]
-        public int DeceasedId { get; set; }
-        public Deceased Deceased { get; set; }
+        public int? DeceasedId { get; set; }
+        public Deceased? Deceased { get; set; }
     }
 }

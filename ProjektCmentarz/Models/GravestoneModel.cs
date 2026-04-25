@@ -14,26 +14,32 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Data postawienia nagrobka 
+        [Display(Name = "Data postawienia nagrobka")]
         [DataType(DataType.Date)]
         public DateTime InstallationDate { get; set; }
 
         // Stan techniczny nagrobka; klucz obcy
+        [Display(Name = "Stan techniczny nagrobka")]
         [ForeignKey("Condition")]
         [Required(ErrorMessage = "Gravestone condition is required")]
         public int ConditionId { get; set; }
-        public Condition Condition { get; set; }
+        [Display(Name = "Stan techniczny nagrobka")]
+        public Condition? Condition { get; set; }
 
         // Materiał z którego wykonany jest nagrobek; klucz obcy
+        [Display(Name = "Materiał")]
         [ForeignKey("Material")]
         [Required(ErrorMessage = "Gravestone material is required")]
         public int MaterialId { get; set; }
-        public Material Material { get; set; }
+        [Display(Name = "Materiał")]
+        public Material? Material { get; set; }
 
-        // Klucz obcy do grobu, na którym znajduje się nagrobek 
+        // Grób do którego jest przypisany nagrobek 
+        [Display(Name = "Grób")]
         [ForeignKey("Grave")]
         [Required(ErrorMessage = "Gravestone must belong to a Grave")]
         public int GraveId { get; set; }
-        // Grób do którego jest przypisany nagrobek 
-        public Grave Grave { get; set; }
+        [Display(Name = "Grób")]
+        public Grave? Grave { get; set; }
     }
 }

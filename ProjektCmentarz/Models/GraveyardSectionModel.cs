@@ -11,10 +11,8 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Nazwa sekcji; klucz obcy na encję słownikową
-        [ForeignKey("SectionType")]
         [Required(ErrorMessage = "Section type is required")]
-        public int SectionTypeId { get; set; }
-        public SectionType SectionType { get; set; }
+        public string SectionType { get; set; }
 
         // Lista działek w danej sekcji; może być pusta - sekcja może nie zawierać żadnych działek
         public ICollection<Plot>? Plots { get; set; }

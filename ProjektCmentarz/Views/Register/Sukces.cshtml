@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Rejestracja";
+}
+
+<h1>Rejestracja zakończyła się sukcesem</h1>
+
+<div>
+    <a href="/Home">Powrót na stronę główną</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -10,6 +10,7 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Nazwa parafii
+        [Display(Name = "Nazwa Parafii")]
         [Required(ErrorMessage = "Parish name is requires")]
         [StringLength(100)]
         public string Name { get; set; }
