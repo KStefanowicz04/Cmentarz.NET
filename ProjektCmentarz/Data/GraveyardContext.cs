@@ -31,6 +31,7 @@ namespace ProjektCmentarz.Data
         public virtual DbSet<Priest> Priests { get; set; }
         public virtual DbSet<Reservation> Reservations { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
+        public virtual DbSet<User> Users { get; set; }  // Użytkownicy!
 
         // Konstruktor
         public GraveyardContext(DbContextOptions options) : base(options) { }

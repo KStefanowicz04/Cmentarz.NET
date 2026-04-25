@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjektCmentarz.Data;
 
@@ -11,9 +12,11 @@ using ProjektCmentarz.Data;
 namespace ProjektCmentarz.Migrations
 {
     [DbContext(typeof(GraveyardContext))]
-    partial class GraveyardContextModelSnapshot : ModelSnapshot
+    [Migration("20260425103622_DodanoUserLoginRegister")]
+    partial class DodanoUserLoginRegister
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("GravekeeperId");
 
-                    b.ToTable("FuneralGravekeeper", (string)null);
+                    b.ToTable("FuneralGravekeeper");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.BurialDepth", b =>
@@ -52,7 +55,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BurialDepth", (string)null);
+                    b.ToTable("BurialDepth");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Casket", b =>
@@ -80,7 +83,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("MaterialId");
 
-                    b.ToTable("Casket", (string)null);
+                    b.ToTable("Casket");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.CauseOfDeath", b =>
@@ -98,7 +101,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CauseOfDeath", (string)null);
+                    b.ToTable("CauseOfDeath");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Condition", b =>
@@ -116,7 +119,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Condition", (string)null);
+                    b.ToTable("Condition");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.ContactData", b =>
@@ -151,7 +154,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ContactDatas", (string)null);
+                    b.ToTable("ContactDatas");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Cremation", b =>
@@ -172,7 +175,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("DeceasedId");
 
-                    b.ToTable("Cremations", (string)null);
+                    b.ToTable("Cremations");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.DeathCertificate", b =>
@@ -203,7 +206,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("DeceasedId");
 
-                    b.ToTable("DeathCertificates", (string)null);
+                    b.ToTable("DeathCertificates");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Deceased", b =>
@@ -238,7 +241,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Deceaseds", (string)null);
+                    b.ToTable("Deceaseds");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Funeral", b =>
@@ -275,7 +278,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("PriestId");
 
-                    b.ToTable("Funerals", (string)null);
+                    b.ToTable("Funerals");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.FuneralHome", b =>
@@ -297,7 +300,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("ContactDataId");
 
-                    b.ToTable("FuneralHomes", (string)null);
+                    b.ToTable("FuneralHomes");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Grave", b =>
@@ -325,7 +328,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("PlotId");
 
-                    b.ToTable("Graves", (string)null);
+                    b.ToTable("Graves");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.GraveMaintenance", b =>
@@ -343,7 +346,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("MaintenanceGravekeeperId");
 
-                    b.ToTable("GraveMaintenances", (string)null);
+                    b.ToTable("GraveMaintenances");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Gravekeeper", b =>
@@ -376,7 +379,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("TransferId");
 
-                    b.ToTable("Gravekeepers", (string)null);
+                    b.ToTable("Gravekeepers");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Gravestone", b =>
@@ -407,7 +410,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("MaterialId");
 
-                    b.ToTable("Gravestones", (string)null);
+                    b.ToTable("Gravestones");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.GraveyardSection", b =>
@@ -424,7 +427,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GraveyardSection", (string)null);
+                    b.ToTable("GraveyardSection");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.MaintenanceRequest", b =>
@@ -455,7 +458,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("GravekeepId");
 
-                    b.ToTable("MaintenanceRequests", (string)null);
+                    b.ToTable("MaintenanceRequests");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Material", b =>
@@ -473,7 +476,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Materials", (string)null);
+                    b.ToTable("Materials");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Ownership", b =>
@@ -505,7 +508,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("GraveId");
 
-                    b.ToTable("Ownerships", (string)null);
+                    b.ToTable("Ownerships");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Parish", b =>
@@ -523,7 +526,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Parishes", (string)null);
+                    b.ToTable("Parishes");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Payment", b =>
@@ -542,7 +545,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Plot", b =>
@@ -565,7 +568,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("PlotOwnerId");
 
-                    b.ToTable("Plots", (string)null);
+                    b.ToTable("Plots");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.PlotOwner", b =>
@@ -593,7 +596,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("ContactDataId");
 
-                    b.ToTable("PlotOwners", (string)null);
+                    b.ToTable("PlotOwners");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Priest", b =>
@@ -626,7 +629,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("ParishId");
 
-                    b.ToTable("Priests", (string)null);
+                    b.ToTable("Priests");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Reservation", b =>
@@ -650,7 +653,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("PlotId");
 
-                    b.ToTable("Reservations", (string)null);
+                    b.ToTable("Reservations");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Transfer", b =>
@@ -681,7 +684,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasIndex("ToGraveId");
 
-                    b.ToTable("Transfers", (string)null);
+                    b.ToTable("Transfers");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.User", b =>
@@ -713,7 +716,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("FuneralGravekeeper", b =>
