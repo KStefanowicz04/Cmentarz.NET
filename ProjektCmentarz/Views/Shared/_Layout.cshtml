@@ -31,17 +31,32 @@
                         </li>
                     </ul>
                 </div>
-                @* Przekierowanie na stronę logowania i stronę rejestracji po prawej stronie nagłówka *@
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Register" asp-action="">Rejestracja</a>
-                        </li>
-                    </ul>
-                </div>
+                @* Jeśli użytkownik NIE jest zalogowany, po prawej stronie nagłówka pojawiaja się
+                przekierowania na stronę logowania i stronę rejestracji *@
+                @if (User.Identity.IsAuthenticated == false) {
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Register" asp-action="">Rejestracja</a>
+                            </li>
+                        </ul>
+                    </div>
+                    }
+                @* Jeśli użytkownik jest zalogowany, w tym samym miejscu pojawia się przekierowanie na stronę wylogowania *@
+                else
+                {
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Wyloguj się</a>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                
             </div>
         </nav>
     </header>
