@@ -30,6 +30,7 @@ namespace ProjektCmentarz.Data
         public virtual DbSet<PlotOwner> PlotOwners { get; set; }
         public virtual DbSet<Priest> Priests { get; set; }
         public virtual DbSet<Reservation> Reservations { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
         public virtual DbSet<User> Users { get; set; }  // Użytkownicy!
 
@@ -113,15 +114,9 @@ namespace ProjektCmentarz.Data
                 .HasForeignKey(o => o.ContactDataId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
-        // Własny Context dla Cmentarza
         public DbSet<ProjektCmentarz.Models.Casket> Casket { get; set; } = default!;
-        // Własny Context dla Cmentarza
         public DbSet<ProjektCmentarz.Models.BurialDepth> BurialDepth { get; set; } = default!;
-        // Własny Context dla Cmentarza
-        public DbSet<ProjektCmentarz.Models.CauseOfDeath> CauseOfDeath { get; set; } = default!;
-        // Własny Context dla Cmentarza
         public DbSet<ProjektCmentarz.Models.Condition> Condition { get; set; } = default!;
-    // Własny Context dla Cmentarza
-public DbSet<ProjektCmentarz.Models.GraveyardSection> GraveyardSection { get; set; } = default!;
+        public DbSet<ProjektCmentarz.Models.GraveyardSection> GraveyardSection { get; set; } = default!;
     }
 }
