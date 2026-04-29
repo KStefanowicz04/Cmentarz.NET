@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjektCmentarz.Data;
 
@@ -11,9 +12,11 @@ using ProjektCmentarz.Data;
 namespace ProjektCmentarz.Migrations
 {
     [DbContext(typeof(GraveyardContext))]
-    partial class GraveyardContextModelSnapshot : ModelSnapshot
+    [Migration("20260428174939_DodanoModelRol")]
+    partial class DodanoModelRol
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,7 +101,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CausesOfDeath");
+                    b.ToTable("CauseOfDeath");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Condition", b =>
@@ -668,7 +671,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Transfer", b =>

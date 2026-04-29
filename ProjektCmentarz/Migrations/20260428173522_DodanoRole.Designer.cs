@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjektCmentarz.Data;
 
@@ -11,9 +12,11 @@ using ProjektCmentarz.Data;
 namespace ProjektCmentarz.Migrations
 {
     [DbContext(typeof(GraveyardContext))]
-    partial class GraveyardContextModelSnapshot : ModelSnapshot
+    [Migration("20260428173522_DodanoRole")]
+    partial class DodanoRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,7 +101,7 @@ namespace ProjektCmentarz.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CausesOfDeath");
+                    b.ToTable("CauseOfDeath");
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Condition", b =>
@@ -653,24 +656,6 @@ namespace ProjektCmentarz.Migrations
                     b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("ProjektCmentarz.Models.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-                });
-
             modelBuilder.Entity("ProjektCmentarz.Models.Transfer", b =>
                 {
                     b.Property<int>("Id")
@@ -724,6 +709,10 @@ namespace ProjektCmentarz.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -732,21 +721,6 @@ namespace ProjektCmentarz.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.Property<int>("RolesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsersUserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RolesId", "UsersUserId");
-
-                    b.HasIndex("UsersUserId");
-
-                    b.ToTable("RoleUser");
                 });
 
             modelBuilder.Entity("FuneralGravekeeper", b =>
@@ -1050,21 +1024,6 @@ namespace ProjektCmentarz.Migrations
                     b.Navigation("TransferFromGrave");
 
                     b.Navigation("TransferToGrave");
-                });
-
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.HasOne("ProjektCmentarz.Models.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjektCmentarz.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjektCmentarz.Models.Deceased", b =>

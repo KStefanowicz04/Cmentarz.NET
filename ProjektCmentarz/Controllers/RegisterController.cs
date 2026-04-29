@@ -41,7 +41,9 @@ namespace ProjektCmentarz.Controllers
                 FirstName = registerModel.Name,
                 Surname = registerModel.Surname,
                 Email = registerModel.Email,
-                Password = HashPassword(registerModel.Password)  // Hasło zostanie zapisane w bazie jako hash
+                Password = HashPassword(registerModel.Password),  // Hasło zostanie zapisane w bazie jako hash
+                // Domyślnie każdy użytkownik otrzymuje rolę "Użytkownik"
+                Roles = new List<Role> { await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == "Użytkownik") }
             };
 
             // Dodanie użytkownika do bazy

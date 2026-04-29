@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjektCmentarz.Models
 {
-    // Użytkownik
-    public class User
+    // Model służący do edytowania danych użytkownika
+    public class UserEdit
     {
         // ID użytkownika; klucz główny
         [Key]
@@ -14,13 +14,13 @@ namespace ProjektCmentarz.Models
 
         // Imię użytkownika
         [Display(Name = "Imię")]
-        [Required(ErrorMessage = "Imię użytkownika jest wymagana.")]
+        [Required(ErrorMessage = "Imię użytkownika jest wymagane.")]
         [StringLength(100, MinimumLength = 1, ErrorMessage = "Imię ma od 1 do 100 znaków.")]
         public string FirstName { get; set; }
 
         // Nazwisko użytkownika
         [Display(Name = "Nazwisko")]
-        [Required(ErrorMessage = "Nazwisko jest wymagana.")]
+        [Required(ErrorMessage = "Nazwisko jest wymagane.")]
         [StringLength(100, MinimumLength = 1, ErrorMessage = "Nazwisko ma od 1 do 100 znaków.")]
         public string Surname { get; set; }
 
@@ -30,12 +30,7 @@ namespace ProjektCmentarz.Models
         [StringLength(100, MinimumLength = 1, ErrorMessage = "Email ma od 1 do 100 znaków.")]
         public string Email { get; set; }
 
-        // Zahashowane hasło
-        [Display(Name = "Hasło")]
-        [Required(ErrorMessage = "Hasło jest wymagane")]
-        public byte[] Password { get; set; }
-
         // Role użytkownika (domyślnie każdy użytkownik ma tylko zwykłą rolę "User")
-        public ICollection<Role>? Roles { get; set; } = new List<Role>();
+        public List<int> RoleIds { get; set; } = new();
     }
 }

@@ -22,7 +22,7 @@ namespace ProjektCmentarz.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.ToListAsync());
+            return View(await _context.Users.Include(u => u.Roles).ToListAsync());
         }
 
         // GET: Users/Details/5
@@ -68,52 +68,75 @@ namespace ProjektCmentarz.Controllers
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var user = await _context.Users
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.UserId == id);
 
-            var user = await _context.Users.FindAsync(id);
             if (user == null)
-            {
                 return NotFound();
-            }
+
+            var model = new UserEdit
+            {
+                UserId = user.UserId,
+                FirstName = user.FirstName,
+                Surname = user.Surname,
+                Email = user.Email,
+                RoleIds = user.Roles.Select(r => r.Id).ToList()
+            };
+
+            ViewBag.Roles = new MultiSelectList(
+                await _context.Roles.ToListAsync(),
+                "Id",
+                "RoleName",
+                model.RoleIds
+            );
+
             return View(user);
         }
 
         // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,FirstName,Surname,Email,Password")] User user)
+        public async Task<IActionResult> Edit(int id, UserEdit model)
         {
-            if (id != user.UserId)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                ViewBag.Roles = new MultiSelectList(
+                    await _context.Roles.ToListAsync(),
+                    "Id",
+                    "RoleName",
+                    model.RoleIds
+                );
+                return View(model);
             }
 
-            if (ModelState.IsValid)
+            var user = await _context.Users
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.UserId == id);
+
+            if (user == null)
+                return NotFound();
+
+            // Update basic fields
+            user.FirstName = model.FirstName;
+            user.Surname = model.Surname;
+            user.Email = model.Email;
+
+            // Update roles
+            user.Roles.Clear();
+
+            if (model.RoleIds != null)
             {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.UserId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var roles = await _context.Roles
+                    .Where(r => model.RoleIds.Contains(r.Id))
+                    .ToListAsync();
+
+                foreach (var role in roles)
+                    user.Roles.Add(role);
             }
-            return View(user);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Users/Delete/5

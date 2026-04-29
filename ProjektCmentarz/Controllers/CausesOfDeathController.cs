@@ -10,22 +10,22 @@ using ProjektCmentarz.Models;
 
 namespace ProjektCmentarz.Controllers
 {
-    public class CauseOfDeathController : Controller
+    public class CausesOfDeathController : Controller
     {
         private readonly GraveyardContext _context;
 
-        public CauseOfDeathController(GraveyardContext context)
+        public CausesOfDeathController(GraveyardContext context)
         {
             _context = context;
         }
 
-        // GET: CauseOfDeath
+        // GET: CausesOfDeath
         public async Task<IActionResult> Index()
         {
-            return View(await _context.CauseOfDeath.ToListAsync());
+            return View(await _context.CausesOfDeath.ToListAsync());
         }
 
-        // GET: CauseOfDeath/Details/5
+        // GET: CausesOfDeath/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace ProjektCmentarz.Controllers
                 return NotFound();
             }
 
-            var causeOfDeath = await _context.CauseOfDeath
+            var causesOfDeath = await _context.CausesOfDeath
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (causeOfDeath == null)
+            if (causesOfDeath == null)
             {
                 return NotFound();
             }
 
-            return View(causeOfDeath);
+            return View(causesOfDeath);
         }
 
-        // GET: CauseOfDeath/Create
+        // GET: CausesOfDeath/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: CauseOfDeath/Create
+        // POST: CausesOfDeath/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Cause")] CauseOfDeath causeOfDeath)
+        public async Task<IActionResult> Create([Bind("Id,Cause")] CauseOfDeath causesOfDeath)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(causeOfDeath);
+                _context.Add(causesOfDeath);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(causeOfDeath);
+            return View(causesOfDeath);
         }
 
-        // GET: CauseOfDeath/Edit/5
+        // GET: CausesOfDeath/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace ProjektCmentarz.Controllers
                 return NotFound();
             }
 
-            var causeOfDeath = await _context.CauseOfDeath.FindAsync(id);
-            if (causeOfDeath == null)
+            var causesOfDeath = await _context.CausesOfDeath.FindAsync(id);
+            if (causesOfDeath == null)
             {
                 return NotFound();
             }
-            return View(causeOfDeath);
+            return View(causesOfDeath);
         }
 
-        // POST: CauseOfDeath/Edit/5
+        // POST: CausesOfDeath/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Cause")] CauseOfDeath causeOfDeath)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Cause")] CauseOfDeath causesOfDeath)
         {
-            if (id != causeOfDeath.Id)
+            if (id != causesOfDeath.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace ProjektCmentarz.Controllers
             {
                 try
                 {
-                    _context.Update(causeOfDeath);
+                    _context.Update(causesOfDeath);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CauseOfDeathExists(causeOfDeath.Id))
+                    if (!CauseOfDeathExists(causesOfDeath.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace ProjektCmentarz.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(causeOfDeath);
+            return View(causesOfDeath);
         }
 
-        // GET: CauseOfDeath/Delete/5
+        // GET: CausesOfDeath/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,25 +124,25 @@ namespace ProjektCmentarz.Controllers
                 return NotFound();
             }
 
-            var causeOfDeath = await _context.CauseOfDeath
+            var causesOfDeath = await _context.CausesOfDeath
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (causeOfDeath == null)
+            if (causesOfDeath == null)
             {
                 return NotFound();
             }
 
-            return View(causeOfDeath);
+            return View(causesOfDeath);
         }
 
-        // POST: CauseOfDeath/Delete/5
+        // POST: CausesOfDeath/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var causeOfDeath = await _context.CauseOfDeath.FindAsync(id);
-            if (causeOfDeath != null)
+            var causesOfDeath = await _context.CausesOfDeath.FindAsync(id);
+            if (causesOfDeath != null)
             {
-                _context.CauseOfDeath.Remove(causeOfDeath);
+                _context.CausesOfDeath.Remove(causesOfDeath);
             }
 
             await _context.SaveChangesAsync();
@@ -151,7 +151,7 @@ namespace ProjektCmentarz.Controllers
 
         private bool CauseOfDeathExists(int id)
         {
-            return _context.CauseOfDeath.Any(e => e.Id == id);
+            return _context.CausesOfDeath.Any(e => e.Id == id);
         }
     }
 }
