@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging.Signing;
 using ProjektCmentarz.Data;
 using ProjektCmentarz.Models;
 using System;
@@ -39,7 +40,7 @@ namespace ProjektCmentarz.Controllers
                 return View(loginData);
 
             // Porównujemy Emaile Users w bazie z Emailem podanym w danym powyżej LoginModel 'loginData'
-            var user = _context.Users.SingleOrDefault(u => u.Email == loginData.Email);
+            var user = _context.Users.Include(u => u.Roles).SingleOrDefault(u => u.Email == loginData.Email);
 
             // Użytkownik o danym Emailu nie istnieje w bazie
             if (user == null)
@@ -68,6 +69,12 @@ namespace ProjektCmentarz.Controllers
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            // Każda rola użytkownika otrzymuje własny Claim
+            foreach (var usrRole in user.Roles)
+            {
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, usrRole.RoleName));
+            }
+
             var principal = new ClaimsPrincipal(claimsIdentity);
 
             var authProperties = new AuthenticationProperties
