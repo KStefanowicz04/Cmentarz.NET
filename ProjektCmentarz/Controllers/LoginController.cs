@@ -75,8 +75,6 @@ namespace ProjektCmentarz.Controllers
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, usrRole.RoleName));
             }
 
-
-
             var principal = new ClaimsPrincipal(claimsIdentity);
 
             var authProperties = new AuthenticationProperties
