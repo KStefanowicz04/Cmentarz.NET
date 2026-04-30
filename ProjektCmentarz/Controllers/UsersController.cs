@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,8 @@ namespace ProjektCmentarz.Controllers
         }
 
         // GET: Users
+        // Tylko admini mają dostęp do strony o użytkownikach
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Users.Include(u => u.Roles).ToListAsync());
@@ -97,6 +100,7 @@ namespace ProjektCmentarz.Controllers
         // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        // Korzystamy z modelu UserEdit, który nie ma pola hasła, żeby nie można było go edytować.
         public async Task<IActionResult> Edit(int id, UserEdit model)
         {
             if (!ModelState.IsValid)
@@ -110,6 +114,7 @@ namespace ProjektCmentarz.Controllers
                 return View(model);
             }
 
+            // Znajdujemy danego użytownika
             var user = await _context.Users
                 .Include(u => u.Roles)
                 .FirstOrDefaultAsync(u => u.UserId == id);
@@ -117,14 +122,13 @@ namespace ProjektCmentarz.Controllers
             if (user == null)
                 return NotFound();
 
-            // Update basic fields
+            // Aktualizacja zwykłych danych
             user.FirstName = model.FirstName;
             user.Surname = model.Surname;
             user.Email = model.Email;
 
-            // Update roles
+            // Aktualizacja roli użytkownika
             user.Roles.Clear();
-
             if (model.RoleIds != null)
             {
                 var roles = await _context.Roles
