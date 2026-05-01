@@ -1,0 +1,13 @@
+﻿@model ProjektCmentarz.Models.User
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Profil</h1>
+
+<p>Imię: @Model.FirstName</p>
+<p>Nazwisko: @Model.Surname</p>
+<p>Email: @Model.Email</p>
+
+<a class="btn btn-primary" href="/UserProfile/Edit">Edytuj profil</a>

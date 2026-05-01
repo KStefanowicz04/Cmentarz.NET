@@ -45,10 +45,16 @@
                         </ul>
                     </div>
                     }
-                @* Jeśli użytkownik jest zalogowany, w tym samym miejscu pojawia się przekierowanie na stronę wylogowania *@
+                @* Jeśli użytkownik jest zalogowany, w tym samym miejscu pojawia się przekierowanie
+                na stronę profilu użytkownika oraz przycisk do strony wylogowania *@
                 else
                 {
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="UserProfile" asp-action="Index"></a>
+                            </li>
+                        </ul>
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Wyloguj się</a>
