@@ -78,5 +78,44 @@ namespace ProjektCmentarz.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
+
+        // Zmiana hasła
+        // GET: /UserProfile/ChangePassword
+        public async Task<IActionResult> ChangePassword()
+        {
+            return View();
+        }
+
+        // POST: /UserProfile/ChangePassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(UserEditPassword editPasswordModel)
+        {
+            if (!ModelState.IsValid)
+                return View(editPasswordModel);
+
+            int userId = int.Parse(User.FindFirst("UserId").Value);
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return NotFound();
+
+            // Porównanie podanego obecnego hasła z bazą po zahashowaniu
+            var hashedOldPassword = LoginController.HashPassword(editPasswordModel.OldPassword);
+            if (!hashedOldPassword.SequenceEqual(user.Password))
+            {
+                ModelState.AddModelError("", "Obecne hasło jest nieprawidłowe.");
+                return View(editPasswordModel);
+            }
+
+            // Jeśli stare hasło zgadza się z bazą danych, zapisujemy nowe hasło
+            user.Password = LoginController.HashPassword(editPasswordModel.NewPassword);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
     }
 }

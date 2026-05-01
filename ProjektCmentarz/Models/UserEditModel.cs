@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjektCmentarz.Models
 {
-    // Model służący do edytowania danych użytkownika
+    // Model służący do edytowania danych użytkownika przez admina
     public class UserEdit
     {
         // ID użytkownika; klucz główny
