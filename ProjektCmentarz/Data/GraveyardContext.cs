@@ -46,14 +46,16 @@ namespace ProjektCmentarz.Data
                 .HasOne(d => d.Funeral)  // Nieboszczyk ma Pogrzeb
                 .WithOne(f => f.Deceased)  // Pogrzeb ma Nieboszczyka
                 .HasForeignKey<Funeral>(f => f.DeceasedId)  // Pogrzeb jest podrzędny
-                .IsRequired(false);  // Nieboszczyk może istnieć w bazie bez pogrzebu
+                .IsRequired(false)  // Nieboszczyk może istnieć w bazie bez pogrzebu
+                .OnDelete(DeleteBehavior.Cascade);  // Pogrzeb jest usuwany przy usunięciu nieboszczyka
 
             // Relacja 1:1 dla Trumna <-> Nieboszczyk (Trumna jest podrzędna)
             modelBuilder.Entity<Deceased>()
                 .HasOne(d => d.Casket)  // Nieboszczyk ma Trumnę
                 .WithOne(f => f.Deceased)  // Trumna ma Nieboszczyka
                 .HasForeignKey<Casket>(f => f.DeceasedId)  // Trumna jest podrzędną
-                .IsRequired(false);  // Nieboszczyk może istnieć w bazie bez trumny
+                .IsRequired(false)  // Nieboszczyk może istnieć w bazie bez trumny
+                .OnDelete(DeleteBehavior.Cascade);  // Trumna jest usuwana przy usunięciu nieboszczyka
 
             // Relacja wiele:wielu dla Gravekeeper <-> Funeral
             modelBuilder.Entity<Funeral>()
