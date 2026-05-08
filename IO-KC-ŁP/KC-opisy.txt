@@ -1,0 +1,124 @@
+1. DIAGRAM PRZYPADKÓW UŻYCIA 
+
+4.1.1. Opisy tekstowe wszystkich aktorów:
+--Admin (Administrator / Pracownik cmentarza):
+Opis: Główny użytkownik systemu posiadający pełne uprawnienia. Odpowiada za wprowadzanie danych o zmarłych, zarządzanie kwaterami, ewidencjonowanie opłat oraz nadzór nad terminami ważności grobów.
+Rola: Zarządzanie bazą danych, generowanie raportów i obsługa zgłoszeń.
+
+--Użytkownik (Odwiedzający / Klient):
+Opis: Osoba korzystająca z publicznej części systemu. Zazwyczaj jest to rodzina zmarłego lub osoba szukająca informacji o lokalizacji grobu.
+Rola: Przeglądanie mapy, wyszukiwanie informacji, weryfikacja ważności opłat oraz kontakt z administratorem.
+
+4.1.2. Opisy tekstowe wybranych przypadków użycia
+
+1. Opis przypadku użycia „Rejestracja osoby pochowanej”
+1.1 Uczestniczący aktorzy
+    -Admin
+
+1.2. Podstawowy ciąg zdarzeń
+  -Admin wybiera opcję dodania nowego pochówku dla konkretnej kwatery.
+  -System wyświetla formularz składający się z pól:
+    -Dane zmarłego: imię, nazwisko, data urodzenia, data zgonu.
+    -Dane pochówku: data pochówku, rodzaj grobu.
+    -Weryfikacja miejsca (przypadek użycia „Weryfikacja dostępności kwatery” – include).
+  -Admin wypełnia pola tekstowe formularza.
+  -Admin zatwierdza formularz przyciskiem „Zapisz pochówek”.
+  -System weryfikuje poprawność danych:
+    -imię, nazwisko – co najmniej 2 znaki, tylko litery.
+    -data zgonu – data z przeszłości, późniejsza niż data urodzenia.
+    -data pochówku – nie wcześniejsza niż data zgonu.
+  -System zapisuje dane w bazie danych, wiążąc osobę zmarłą z wybraną kwaterą.
+  -System informuje Admina o poprawnym zapisaniu danych i aktualizuje status kwatery na „zajęta”.
+
+1.3. Alternatywne ciągi zdarzeń
+ a) System stwierdza zajętość kwatery:
+      -System wyświetla komunikat, że kwatera osiągnęła maksymalną pojemność.
+      -Admin wybiera inną kwaterę lub przerywa proces.
+          b) Dane są niepoprawne (np. błędna data):
+      -System wskazuje pole z błędem (np. data zgonu w przyszłości).
+      -Admin poprawia dane i ponownie zatwierdza.
+
+1.4. Zależności czasowe
+a) częstotliwość: kilka razy dziennie.
+b) spiętrzenia: brak danych o okresowości.
+c) typowy czas: 3–5 minut.
+d) maksymalny czas: 15 minut (przy konieczności weryfikacji dokumentacji papierowej).
+
+1.5. Wartości uzyskiwane przez aktora
+  -Trwałe zapisanie osoby zmarłej w ewidencji cmentarnej.
+  -Prawidłowe przypisanie kwatery i aktualizacja mapy.
+
+2. Opis przypadku użycia „Zapalenie wirtualnego znicza”
+
+2.1. Uczestniczący aktorzy
+-Użytkownik
+
+2.2. Podstawowy ciąg zdarzeń
+-Użytkownik wyszukuje konkretny grób w systemie (przypadek użycia „Wyszukiwanie miejsca pochówku”).
+-System wyświetla profil zmarłego wraz z opcją „Zapal wirtualny znicz” (relacja extend).
+-Użytkownik wybiera tę opcję.
+-System wyświetla formularz składający się z pól:
+-Podpis (imię lub pseudonim).
+-Wybór rodzaju znicza (ikona z listy).
+-Krótka treść wspomnienia (pole opcjonalne).
+-Użytkownik zatwierdza wybór przyciskiem „Zapal znicz”.
+-System weryfikuje poprawność wprowadzonych danych:
+-Podpis – musi zawierać co najmniej 2 znaki.
+-Treść wspomnienia – maksymalnie 100 znaków.
+-System zapisuje informację w bazie danych i ustawia czas wyświetlania znicza na profilu.
+-System informuje o poprawnym dodaniu znicza i odświeża widok profilu zmarłego.
+
+2.3. Alternatywne ciągi zdarzeń
+a) Użytkownik rezygnuje z operacji:
+-Użytkownik zamyka okno formularza przyciskiem „Anuluj”.
+-System przerywa proces i wraca do widoku profilu bez zapisu danych.
+b) Przekroczenie limitu znaków w treści:
+-System wyświetla komunikat o błędzie i wskazuje pole z zbyt długim tekstem.
+-Użytkownik poprawia treść i ponownie zatwierdza formularz.
+
+2.4. Zależności czasowe
+a) częstotliwość wykonania: wysoka, zależna od liczby odwiedzających stronę.
+b) przewidywane spiętrzenia: święta państwowe, rocznice oraz Dzień Wszystkich Świętych.
+c) typowy czas realizacji: poniżej 1 minuty.
+d) maksymalny czas realizacji: 3 minuty.
+
+2.5. Wartości uzyskiwane przez aktora po zakończeniu przypadku użycia
+-Symboliczne upamiętnienie osoby zmarłej w przestrzeni cyfrowej.
+-Potwierdzenie wyświetlenia znaku pamięci na profilu wybranej kwatery.
+
+3. Opis przypadku użycia „Wyszukiwanie miejsca pochówku”
+
+3.1. Uczestniczący aktorzy
+-Użytkownik
+-Admin
+
+3.2. Podstawowy ciąg zdarzeń
+-Użytkownik (lub Admin) otwiera wyszukiwarkę publiczną na stronie głównej systemu.
+-System wyświetla formularz wyszukiwania z polami:
+-Nazwisko zmarłego (pole wymagane).
+-Imię zmarłego (opcjonalne).
+-Rok zgonu (opcjonalny).
+-Aktor wpisuje nazwisko poszukiwanej osoby.
+-Aktor zatwierdza wyszukiwanie przyciskiem „Szukaj”.
+-System przeszukuje bazę danych w celu odnalezienia rekordów spełniających kryteria.
+-System wyświetla listę pasujących wyników zawierającą imię, nazwisko oraz numer kwatery.
+-Aktor wybiera interesującą go osobę z listy.
+-System wyświetla szczegóły lokalizacji i wskazuje grób na mapie (przypadek użycia „Przeglądanie mapy interaktywnej”).
+-Aktor może opcjonalnie wybrać funkcję „Zapal wirtualny znicz” (extend).
+
+3.3. Alternatywne ciągi zdarzeń
+a) Brak wyników w bazie danych:
+-System wyświetla komunikat: „Nie znaleziono osoby o podanych danych”.
+-Aktor może spróbować wyszukać ponownie, wpisując samo nazwisko lub sprawdzając pisownię.
+b) Zbyt duża liczba wyników (np. popularne nazwisko):
+-System wyświetla listę stron z wynikami i prosi o doprecyzowanie danych (imię lub rok).
+
+3.4. Zależności czasowe
+a) częstotliwość: bardzo wysoka (ciągła praca systemu).
+b) spiętrzenia: okresy świąteczne oraz dni wolne od pracy.
+c) typowy czas: poniżej 1 minuty.
+d) maksymalny czas: 3 minuty (przy bardzo dużym obciążeniu serwera).
+
+3.5. Wartości uzyskiwane przez aktora
+-Uzyskanie dokładnej informacji o miejscu spoczynku bliskiej osoby.
+-Oszczędność czasu przy lokalizowaniu grobu na dużym terenie cmentarza.
