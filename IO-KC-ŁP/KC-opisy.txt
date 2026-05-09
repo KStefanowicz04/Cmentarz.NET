@@ -122,3 +122,18 @@ d) maksymalny czas: 3 minuty (przy bardzo dużym obciążeniu serwera).
 3.5. Wartości uzyskiwane przez aktora
 -Uzyskanie dokładnej informacji o miejscu spoczynku bliskiej osoby.
 -Oszczędność czasu przy lokalizowaniu grobu na dużym terenie cmentarza.
+
+
+3. DIAGRAM PRZEBIEGU
+ 4.3. Opis komunikatów diagramu interakcji (sekwencji)
+    Poniższy opis przedstawia wymianę komunikatów pomiędzy aktorem a obiektami systemowymi w procesie rejestracji nowego pochówku:
+ 1. otworzFormularz(): Admin inicjuje proces, co powoduje utworzenie i wyświetlenie obiektu interfejsu użytkownika (:RejestracjaForm).
+ 2. wprowadzDane(): Admin wprowadza do pól formularza szczegółowe dane zmarłego (imię, nazwisko, daty) oraz wybiera numer kwatery.
+ 3. zatwierdz(): Admin potwierdza chęć zapisu danych poprzez kliknięcie przycisku zatwierdzającego w formularzu.
+ 4. przekazDane(): Obiekt formularza przesyła zebrane dane do kontrolera logiki biznesowej (:ZarzadzanieCmentarzem) w celu ich przetworzenia.
+ 5.sprawdzDostepnosc(nr): Kontroler wysyła zapytanie do bazy danych, aby zweryfikować, czy wybrana kwatera jest wolna i może przyjąć nowy pochówek.
+ 6. <> wolna: Baza danych zwraca informację zwrotna potwierdzającą dostępność miejsca (komunikat zwrotny wewnątrz ramki optymistycznej opt).
+ 7. zapiszPochowek(): Kontroler zleca bazie danych utworzenie nowego rekordu osoby zmarłej i powiązanie go z wybraną kwaterą.
+ 8. aktualizujMape(): Kontroler wysyła polecenie aktualizacji statusu graficznego kwatery na mapie cmentarza (zmiana statusu na "zajęta").
+ 9. potwierdzenieSukcesu(): Po poprawnym zapisie w bazie, kontroler przesyła informację zwrotną do formularza o pomyślnym zakończeniu operacji.
+ 10.wyswietlKomunikat(): Interfejs wyświetla Adminowi finalne powiadomienie o sukcesie, po czym obiekt formularza ulega destrukcji
