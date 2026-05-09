@@ -20,9 +20,32 @@ namespace ProjektCmentarz.Controllers
         }
 
         // GET: Deceased
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchFirstName, string searchSurname, DateTime? searchDate)
         {
-            return View(await _context.Deceaseds.ToListAsync());
+            
+            var deceaseds = from d in _context.Deceaseds
+                            select d;
+            
+            if (!string.IsNullOrEmpty(searchFirstName))
+            {
+                deceaseds = deceaseds.Where(s => s.FirstName.Contains(searchFirstName));
+            }
+
+            if (!string.IsNullOrEmpty(searchSurname))
+            {
+                deceaseds = deceaseds.Where(s => s.Surname.Contains(searchSurname));
+            }
+         
+            if (searchDate.HasValue)
+            {
+                deceaseds = deceaseds.Where(s => s.DeathDate.Date == searchDate.Value.Date);
+            }
+         
+            ViewData["CurrentFirstName"] = searchFirstName;
+            ViewData["CurrentSurname"] = searchSurname;
+            ViewData["CurrentDate"] = searchDate?.ToString("yyyy-MM-dd");
+          
+            return View(await deceaseds.OrderByDescending(d => d.DeathDate).ToListAsync());
         }
 
         // GET: Deceased/Details/5
