@@ -10,7 +10,7 @@ namespace ProjektCmentarz.Models
         [Key]
         public int Id { get; set; }
 
-        // Nazwa sekcji; klucz obcy na encję słownikową
+        // Nazwa sekcji
         [Required(ErrorMessage = "Section type is required")]
         public string SectionType { get; set; }
 
