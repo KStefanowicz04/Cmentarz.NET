@@ -15,10 +15,13 @@ namespace ProjektCmentarz.Controllers
     public class RegisterController : Controller
     {
         private readonly GraveyardContext _context;
+        private readonly String _ocrApiKey;
 
-        public RegisterController(GraveyardContext context)
+        // Dodatkowo podajemy config, bo tam jest klucz API dla OCR-Space
+        public RegisterController(GraveyardContext context, IConfiguration config)
         {
             _context = context;
+            _ocrApiKey = config["OCR:apikey"];
         }
 
         // GET: Register
@@ -34,6 +37,31 @@ namespace ProjektCmentarz.Controllers
         {
             if (!ModelState.IsValid)
                 return View(registerModel);
+
+            // Wykorzystanie API OCR Space do odczytania słów z podanego przez użytkownika zdjęcia
+            var client = new HttpClient();
+            var url = "https://api.ocr.space/parse/image";  // Interfejs od OCR Space do odczytywania obrazów
+            var form = new MultipartFormDataContent();
+            form.Add(new StringContent(_ocrApiKey), "apikey");  // Klucz API zarejestrowany na moim EMailu
+
+            // Odczytanie informacji z podanego przez użytkownika zdjęcia
+            using (var stream = registerModel.PolImage.OpenReadStream())
+            {
+                form.Add(new StreamContent(stream), "file", registerModel.PolImage.FileName);
+                form.Add(new StringContent("pol"), "language");  // Język polski
+
+                // Wysłanie formularza i odpowiedź
+                var response = await client.PostAsync(url, form);
+                var json = await response.Content.ReadAsStringAsync();
+
+                // Jeśli podane zdjęcie zawiera słowo "POLSAT", uznajemy że to zdjęcie przedstawia Paszport Polsatu.
+                // Jeśli nie, użytkownik nie może się zarejestrować.
+                if (!json.Contains("POLSAT", StringComparison.OrdinalIgnoreCase))
+                {
+                    ModelState.AddModelError("", "Zdjęcie musi przedstawiać Paszportu POLSATu!");
+                    return View(registerModel);
+                }
+            }
 
             // Utworzenie nowego użytkownika User o danych podanych w registerModel
             var user = new User

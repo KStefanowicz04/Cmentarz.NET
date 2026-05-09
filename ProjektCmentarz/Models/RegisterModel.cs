@@ -28,5 +28,10 @@ namespace ProjektCmentarz.Models
         [Required(ErrorMessage = "Hasło jest wymagane")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        // Podczas rejestracji użytkownik musi podać zdjęcie swojego paszportu polsatu
+        [Display(Name = "Paszport Polsatu")]
+        [Required(ErrorMessage = "Paszport Polsatu jest wymagany")]
+        public IFormFile PolImage { get; set; }
     }
 }
