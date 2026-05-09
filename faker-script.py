@@ -148,8 +148,107 @@ for inscryption_string in inscryption_strings:
         )
 
 conn.commit()
-print(f"Wypełniono słownik CausesOfDeath!")
+print(f"Wypełniono słownik GravestoneInscryptions!")
 
+# Wypełnienie tabeli słownikowej Materials
+material_strings = [
+    'Marmur',
+    'Granit',
+    'Szkło',
+    'Ceramika',
+    'Stal',
+    'Złoto',
+    'Dąb',
+    'Brzoza',
+    'Baobab',
+    'Buk',
+    'Topola',
+    'Wierzba',
+    'Węgiel',
+    'Bizmut',
+    'Bazalt',
+    'Kwarc',
+    'Linoleum',
+    'Sosna',
+    'Cegła',
+    'Pustak',
+    'Sklejka',
+    'Plastik'
+]
+# Wartości już umieszczone w tabeli nie zostaną dodane ponownie
+cursor.execute("SELECT Type FROM Materials")
+existing = {row[0] for row in cursor.fetchall()}
+# Wypełnienie
+for material_string in material_strings:
+    if material_string not in existing:
+        cursor.execute(
+            """
+            INSERT INTO Materials (Type)
+            VALUES (?)
+            """,
+            material_string
+        )
+
+conn.commit()
+print(f"Wypełniono słownik Materials!")
+
+# Wypełnienie tabeli słownikowej Parishes
+parish_strings = [
+    'Parafia Św. Alll-Mera',
+    'Parafia Imienia Gro-gorotha',
+    'Parafia Imienia G. Brzęczyszczykiewicza',
+    'Parafia Imienia Adama Miauczyńskiego',
+    'Parafia Serca Azathotha',
+    'Niezależna Organizacja Spełniająca Rolę Parafii Piątego Kościoła Czwartkizmu w Mieście Białystok',
+    'Parafia pod przewodnictwem Marii Konopnickiej',
+    'Parafia Wschodzącego Słońca',
+    'Parafia Trzech Stokrotek',
+    'Parafia Sensatów',
+    'Parafia Świętego Słowa Eminema',
+    'Parafia Organizacji Freie Deutsche Jugend',
+    'Parafia Funfli Kopyrtających Gitowców',
+    'Parafia Taty Kazika'
+]
+# Wartości już umieszczone w tabeli nie zostaną dodane ponownie
+cursor.execute("SELECT Name FROM Parishes")
+existing = {row[0] for row in cursor.fetchall()}
+# Wypełnienie
+for parish_string in parish_strings:
+    if parish_string not in existing:
+        cursor.execute(
+            """
+            INSERT INTO Parishes (Name)
+            VALUES (?)
+            """,
+            parish_string
+        )
+
+conn.commit()
+print(f"Wypełniono słownik Parishes!")
+
+# Wypełnienie tabeli słownikowej Roles
+role_strings = [
+    'Admin',
+    'Moderator',
+    'Pracownik',
+    'Użytkownik',
+]
+# Wartości już umieszczone w tabeli nie zostaną dodane ponownie
+cursor.execute("SELECT RoleName FROM Roles")
+existing = {row[0] for row in cursor.fetchall()}
+# Wypełnienie
+for role_string in role_strings:
+    if role_string not in existing:
+        cursor.execute(
+            """
+            INSERT INTO Roles (RoleName)
+            VALUES (?)
+            """,
+            role_string
+        )
+
+conn.commit()
+print(f"Wypełniono słownik Roles!")
 
 
 
