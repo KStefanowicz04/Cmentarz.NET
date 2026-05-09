@@ -511,6 +511,43 @@ if current_count < N:
 def hash_password(password: str) -> bytes:
     return hashlib.sha256(password.encode("utf-8")).digest()
 
+## Dodanie użytkownika admin, jesli jeszcze nie ma go w bazie.
+cursor.execute(
+    """
+    SELECT * FROM Users
+    WHERE Email = 'admin'
+    """
+)
+row = cursor.fetchone()
+if (not row):
+    print("Admin nie jest w bazie danych. Tworzenie admina.")
+    ## Dodanie admina
+    password = hash_password('admin')
+    cursor.execute(
+        """
+        INSERT INTO Users (FirstName, Surname, Email, Password)
+        OUTPUT INSERTED.UserId
+        VALUES (?, ?, ?, ?)
+        """,
+        'admin', 'admin', 'admin', password
+    )
+    admin_id = cursor.fetchone()[0]
+
+    ## Dodanie Roli Admin
+    # Zebranie ID roli "Admin" w bazie
+    cursor.execute("SELECT Id FROM Roles WHERE RoleName = 'Admin'")
+    admin_role_id = cursor.fetchone()[0]
+    cursor.execute(
+        """
+        INSERT INTO RoleUser (RolesId, UsersUserId)
+        VALUES (?, ?)
+        """,
+        admin_role_id, admin_id
+    )
+    conn.commit()
+    print(f"Wstawiono admina!")
+
+
 ## Liczenie liczby użytkowników; w bazie będzie znajdować się najwyżej N użytkowników
 cursor.execute("SELECT COUNT(*) FROM Users")
 current_count = cursor.fetchone()[0]

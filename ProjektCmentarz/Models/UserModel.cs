@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjektCmentarz.Models
 {
     // Użytkownik
+    [Index(nameof(Email), IsUnique = true)]  // Email musi być unikatowy
     public class User
     {
         // ID użytkownika; klucz główny
