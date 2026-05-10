@@ -12,6 +12,9 @@
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
         <form asp-action="Index" method="post">
+            @* Wysłanie Form powoduje przekierowanie użytkownika do poprzednio odwiedzonej strony *@
+            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>

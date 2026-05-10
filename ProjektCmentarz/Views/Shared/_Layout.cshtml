@@ -42,9 +42,12 @@
                 @if (User.Identity.IsAuthenticated == false) {
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav ms-auto">
+                            @* Zalogowanie; zapisuje obecną stronę, do której wróci użytkownik po zalogowaniu *@
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="">Login</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action=""
+                                   asp-route-returnUrl="@Context.Request.Path">Login</a>
                             </li>
+                            @* Rejestracja *@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Register" asp-action="">Rejestracja</a>
                             </li>
@@ -57,13 +60,14 @@
                 {
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav ms-auto">
+                            @* Profil użytkownika *@
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="UserProfile" asp-action="Index"></a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="UserProfile" asp-action="Index">Profil</a>
                             </li>
-                        </ul>
-                        <ul class="navbar-nav ms-auto">
+                            @* Wylogowanie *@
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Wyloguj się</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout"
+                                   asp-route-returnUrl="@Context.Request.Path">Wyloguj się</a>
                             </li>
                         </ul>
                     </div>

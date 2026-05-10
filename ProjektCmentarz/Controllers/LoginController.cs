@@ -26,15 +26,17 @@ namespace ProjektCmentarz.Controllers
         }
 
         // GET: Login
-        public IActionResult Index()
+        public IActionResult Index(string returnUrl = null)
         {
+            // Wejście na stronę /Login przekierowuje na poprzednio odwiedzoną stronę po zalogowaniu.
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
         // POST: Login
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(LoginModel loginData)
+        public async Task<ActionResult> Index(LoginModel loginData, string returnUrl = null)
         {
             if (!ModelState.IsValid)
                 return View(loginData);
@@ -86,6 +88,9 @@ namespace ProjektCmentarz.Controllers
             // Logowanie
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProperties);
 
+            // Jeśli podano returnLogin, użytkownik zostanie tam przekierowany po zalogowaniu
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
 
             return RedirectToAction("Index", "Home");
         }
@@ -102,9 +107,14 @@ namespace ProjektCmentarz.Controllers
         // GET: Logout
         // Wylogowuje użytkownika
         [Route("/Logout")]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout(string returnUrl = null)
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Jeśli podano returnLogin, użytkownik zostanie tam przekierowany po wylogowaniu
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+
             return RedirectToAction("Index", "Home");
         }
     }
