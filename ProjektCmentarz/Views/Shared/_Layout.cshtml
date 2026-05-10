@@ -23,9 +23,15 @@
                 @* Zakładki; linki do różnych ważnych stron po lewej stronie nagłówka *@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        @* Home *@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        @* Lista nieboszczyków *@
+                          <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Deceased" asp-action="Index">Nieboszczycy</a>
+                        </li>
+                        @* Prywatność *@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
