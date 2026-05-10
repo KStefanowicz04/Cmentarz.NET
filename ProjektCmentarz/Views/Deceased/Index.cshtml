@@ -1,63 +1,90 @@
 ﻿@model IEnumerable<ProjektCmentarz.Models.Deceased>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista Zmarłych";
 }
 
-<h1>Index</h1>
+<h1>Ewidencja zmarłych</h1>
+
+@* ---  Licznik rekordów --- *@
+<div class="alert alert-secondary">
+    Liczba osób w bazie: <strong>@Model.Count()</strong>
+</div>
+
+@* --- Formularz wyszukiwania --- *@
+<div class="card mb-4 shadow-sm">
+    <div class="card-body bg-light">
+        <form asp-action="Index" method="get">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Imię lub Nazwisko</label>
+                    <input type="text" name="searchString" class="form-control" placeholder="Wpisz frazę..." />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Data urodzenia</label>
+                    <input type="date" name="searchDate" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Data zgonu</label>
+                    <input type="date" name="searchDeathDate" class="form-control" />
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Szukaj</button>
+                </div>
+            </div>
+            <div class="mt-2 text-end">
+                <a asp-action="Index" class="btn btn-sm btn-link text-secondary">Wyczyść filtry</a>
+            </div>
+        </form>
+    </div>
+</div>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @* --- TYLKO ADMIN może widzieć dodawać nowego zmarłego --- *@
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success">Dodaj nową osobę</a>
+    }
 </p>
-<table class="table">
-    <thead>
+
+<table class="table table-hover">
+    <thead class="table-dark">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Surname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BirthDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeathDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CasketId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FuneralId)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+            <th>@Html.DisplayNameFor(model => model.Surname)</th>
+            <th>@Html.DisplayNameFor(model => model.BirthDate)</th>
+            <th>@Html.DisplayNameFor(model => model.DeathDate)</th>
+            <th>@Html.DisplayNameFor(model => model.CasketId)</th>
+            <th>@Html.DisplayNameFor(model => model.FuneralId)</th>
+            <th>Akcje</th>
         </tr>
     </thead>
     <tbody>
+
 @foreach (var item in Model) {
         <tr>
+            <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Surname)</td>
+            <td>@item.BirthDate.ToShortDateString()</td>
+            <td>@item.DeathDate.ToShortDateString()</td>
+            <td>@Html.DisplayFor(modelItem => item.CasketId)</td>
+            <td>@Html.DisplayFor(modelItem => item.FuneralId)</td>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Surname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BirthDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeathDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CasketId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FuneralId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @* --- TYLKO ADMIN może widzieć "Edit" --- *@
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> @:|
+                }
+                
+                @* KAŻDY może widzieć "Details" *@
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                
+                @* --- TYLKO ADMIN może widzieć "Delete" --- *@
+                @if (User.IsInRole("Admin"))
+               {
+                <span class="mx-1">|</span>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">Delete</a>
+    }
             </td>
         </tr>
 }

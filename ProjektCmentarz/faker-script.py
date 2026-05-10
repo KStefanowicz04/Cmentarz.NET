@@ -7,19 +7,62 @@ import hashlib
 
 fake = Faker('pl_PL')
 
+# Wypełnienie tabeli Users losowymi zwykłymi użytkownikami. Dodaj również użytkownika admin z rolą Admin.
+# Bez zalogowania na to konto dostęp do niektórych stron jest ograniczony.
+## Funkcja do hashowania hasła
+def hash_password(password: str) -> bytes:
+    return hashlib.sha256(password.encode("utf-8")).digest()
+
+
 ## Liczba nowych rekordów do dodania
 N = 100
 
 # Połączenie z bazą danych
 conn = pyodbc.connect(
-    "DRIVER={ODBC Driver 18 for SQL Server};"
-    "SERVER=(localdb)\MSSQLLocalDB;"
-    "DATABASE=GraveyardDB;"
-    "Trusted_Connection=yes;"
+    'DRIVER={ODBC Driver 17 for SQL Server};'
+    'SERVER=(localdb)\\MSSQLLocalDB;'
+    'DATABASE=GraveyardDB;'
+    'Trusted_Connection=yes;'
 )
 cursor = conn.cursor()
 if conn:
     print("Połączono!")
+
+    ## Dodanie użytkownika admin, jesli jeszcze nie ma go w bazie.
+cursor.execute(
+    """
+    SELECT * FROM Users
+    WHERE Email = 'admin'
+    """
+)
+row = cursor.fetchone()
+if (not row):
+    print("Admin nie jest w bazie danych. Tworzenie admina.")
+    ## Dodanie admina
+    password = hash_password('admin')
+    cursor.execute(
+        """
+        INSERT INTO Users (FirstName, Surname, Email, Password)
+        OUTPUT INSERTED.UserId
+        VALUES (?, ?, ?, ?)
+        """,
+        'admin', 'admin', 'admin', password
+    )
+    admin_id = cursor.fetchone()[0]
+
+    ## Dodanie Roli Admin
+    # Zebranie ID roli "Admin" w bazie
+    cursor.execute("SELECT Id FROM Roles WHERE RoleName = 'Admin'")
+    admin_role_id = cursor.fetchone()[0]
+    cursor.execute(
+        """
+        INSERT INTO RoleUser (RolesId, UsersUserId)
+        VALUES (?, ?)
+        """,
+        admin_role_id, admin_id
+    )
+    conn.commit()
+    print(f"Wstawiono admina!")
 
 
 ## Encje słownikowe
@@ -135,18 +178,18 @@ inscryption_strings = [
     'Nareszcie sobie odpocznę',
 ]
 # Wartości już umieszczone w tabeli nie zostaną dodane ponownie
-cursor.execute("SELECT Inscryption FROM GravestoneInscryptions")
-existing = {row[0] for row in cursor.fetchall()}
+#cursor.execute("SELECT Inscryption FROM GravestoneInscryptions")
+#existing = {row[0] for row in cursor.fetchall()}
 # Wypełnienie
-for inscryption_string in inscryption_strings:
-    if inscryption_string not in existing:
-        cursor.execute(
-            """
-            INSERT INTO GravestoneInscryptions (Inscryption)
-            VALUES (?)
-            """,
-            inscryption_string
-        )
+#for inscryption_string in inscryption_strings:
+    #if inscryption_string not in existing:
+     #   cursor.execute(
+      #      """
+       #     INSERT INTO GravestoneInscryptions (Inscryption)
+        #    VALUES (?)
+         #   """,
+          #  inscryption_string
+       # )
 
 conn.commit()
 print(f"Wypełniono słownik GravestoneInscryptions!")
@@ -378,7 +421,7 @@ if current_count < N:
         ## Wybrana zostanie losowa sekcja cmentarza
         cursor.execute("SELECT Id FROM GraveyardSection")
         graveyard_section_ids = [row[0] for row in cursor.fetchall()]
-        graveyard_section_id = random.choice(graveyard_section_ids)
+        graveyard_section_id = 1
 
         cursor.execute(
             """
@@ -505,47 +548,8 @@ if current_count < N:
     print(f"Wstawiono {i+1} nieboszczyków, pogrzebów, grobów!")
 
 
-# Wypełnienie tabeli Users losowymi zwykłymi użytkownikami. Dodaj również użytkownika admin z rolą Admin.
-# Bez zalogowania na to konto dostęp do niektórych stron jest ograniczony.
-## Funkcja do hashowania hasła
-def hash_password(password: str) -> bytes:
-    return hashlib.sha256(password.encode("utf-8")).digest()
 
-## Dodanie użytkownika admin, jesli jeszcze nie ma go w bazie.
-cursor.execute(
-    """
-    SELECT * FROM Users
-    WHERE Email = 'admin'
-    """
-)
-row = cursor.fetchone()
-if (not row):
-    print("Admin nie jest w bazie danych. Tworzenie admina.")
-    ## Dodanie admina
-    password = hash_password('admin')
-    cursor.execute(
-        """
-        INSERT INTO Users (FirstName, Surname, Email, Password)
-        OUTPUT INSERTED.UserId
-        VALUES (?, ?, ?, ?)
-        """,
-        'admin', 'admin', 'admin', password
-    )
-    admin_id = cursor.fetchone()[0]
 
-    ## Dodanie Roli Admin
-    # Zebranie ID roli "Admin" w bazie
-    cursor.execute("SELECT Id FROM Roles WHERE RoleName = 'Admin'")
-    admin_role_id = cursor.fetchone()[0]
-    cursor.execute(
-        """
-        INSERT INTO RoleUser (RolesId, UsersUserId)
-        VALUES (?, ?)
-        """,
-        admin_role_id, admin_id
-    )
-    conn.commit()
-    print(f"Wstawiono admina!")
 
 
 ## Liczenie liczby użytkowników; w bazie będzie znajdować się najwyżej N użytkowników
