@@ -127,13 +127,13 @@ namespace ProjektCmentarz.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteConfirmed(int id) 
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var deceased = await _context.Deceaseds.FindAsync(id);
             if (deceased != null)
             {
                 _context.Deceaseds.Remove(deceased);
-                await _context.SaveChangesAsync(); 
+                await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
         }
