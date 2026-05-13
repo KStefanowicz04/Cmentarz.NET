@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjektCmentarz.Data;
 using ProjektCmentarz.Models;
+using X.PagedList;
 
 namespace ProjektCmentarz.Controllers
 {
@@ -21,15 +22,16 @@ namespace ProjektCmentarz.Controllers
         }
 
         // GET: Deceased
-        public async Task<IActionResult> Index(string searchString, DateTime? searchDate, DateTime? searchDeathDate)
+        public async Task<IActionResult> Index(string searchString, DateTime? searchDate, DateTime? searchDeathDate, int? page)
         {
-            var deceasedQuery = from d in _context.Deceaseds
-                                select d;
+            var deceasedQuery = _context.Deceaseds.AsQueryable();
 
             // Filtrowanie tekstowe (Imię lub Nazwisko)
             if (!string.IsNullOrEmpty(searchString))
             {
-                deceasedQuery = deceasedQuery.Where(s => s.FirstName.Contains(searchString) || s.Surname.Contains(searchString));
+                deceasedQuery = deceasedQuery.Where(s =>
+                    s.FirstName.Contains(searchString) ||
+                    s.Surname.Contains(searchString));
             }
 
             // Filtrowanie po dacie urodzenia
@@ -44,7 +46,19 @@ namespace ProjektCmentarz.Controllers
                 deceasedQuery = deceasedQuery.Where(s => s.DeathDate.Date == searchDeathDate.Value.Date);
             }
 
-            return View(await deceasedQuery.ToListAsync());
+
+            // Stronicowanie
+            int pageSize = 30;  // Liczba rekordów na stronę
+            int pageNumber = page ?? 1;  // Numer obecnej strony
+
+            // Asynchroniczne pobranie danych z bazy
+            var items = await deceasedQuery
+                .OrderBy(s => s.Surname)
+                .ToListAsync();
+
+            var pagedList = new PagedList<Deceased>(items, pageNumber, pageSize);
+
+            return View(pagedList);
         }
 
         // GET: Deceased/Details/5
