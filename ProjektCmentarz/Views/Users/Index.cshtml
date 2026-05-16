@@ -24,6 +24,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Roles)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserContactData)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -40,6 +43,9 @@
             </td>
             <td>
                     @string.Join(", ", item.Roles.Select(r => r.RoleName))
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserContactData)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |

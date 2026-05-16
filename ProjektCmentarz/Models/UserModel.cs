@@ -39,5 +39,9 @@ namespace ProjektCmentarz.Models
 
         // Role użytkownika (domyślnie każdy użytkownik ma tylko zwykłą rolę "User")
         public ICollection<Role>? Roles { get; set; } = new List<Role>();
+
+        // ContactData użytkownika
+        public int ContactDataId { get; set; }
+        public ContactData UserContactData { get; set; }
     }
 }

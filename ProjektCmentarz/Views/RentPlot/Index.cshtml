@@ -1,35 +1,22 @@
 ﻿@model IEnumerable<ProjektCmentarz.Models.Plot>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Wynajmij działkę";
 }
 
-<h1>Index</h1>
+<h1>Wynajmij działkę</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Owner)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Owner.FirstName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="row">
+    @foreach (var plot in Model)
+    {
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Działka numer @plot.Id</h4>
+                    <p>Sekcja: @plot.GraveyardSection?.SectionType</p>
+                    <a asp-action="Details" asp-route-id="@plot.Id" class="text-danger">Wynajmij</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

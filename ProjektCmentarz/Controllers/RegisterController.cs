@@ -64,6 +64,11 @@ namespace ProjektCmentarz.Controllers
             }
 
             // Utworzenie nowego użytkownika User o danych podanych w registerModel
+            // Potrzebne jest nowe ContactData; jest ono domyślnie puste
+            ContactData userCD = new ContactData { };
+            _context.ContactDatas.Add(userCD);
+            _context.SaveChangesAsync();
+
             var user = new User
             {
                 FirstName = registerModel.Name,
@@ -71,7 +76,10 @@ namespace ProjektCmentarz.Controllers
                 Email = registerModel.Email,
                 Password = HashPassword(registerModel.Password),  // Hasło zostanie zapisane w bazie jako hash
                 // Domyślnie każdy użytkownik otrzymuje rolę "Użytkownik"
-                Roles = new List<Role> { await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == "Użytkownik") }
+                Roles = new List<Role> { await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == "Użytkownik") },
+                // Przypisanie pustego ContactData
+                ContactDataId = userCD.Id,
+                UserContactData = userCD
             };
 
             // Dodanie użytkownika do bazy

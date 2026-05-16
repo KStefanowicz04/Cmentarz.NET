@@ -371,7 +371,7 @@ if current_count < (N):
 
     for i in range(remaining):
         ## Połowie działek zostanie przypisany właściciel 
-        if (i > (N//2)):
+        if (i < (N//2)):
             ## Wybrany zostanie losowy właściciel działki
             cursor.execute("SELECT Id FROM PlotOwners")
             contact_data_ids = [row[0] for row in cursor.fetchall()]
@@ -393,7 +393,7 @@ if current_count < (N):
             conn.commit()
             print(f"Wstawiono {i+1} działek!")
         ## Połowa działek zostanie dodana bez właściciela
-        elif i <= (N//2) and i > 0:
+        elif i >= (N//2) and i < N:
             ## Dana działka NIE MA właściciela
 
             ## Wybrana zostanie losowa sekcja cmentarza
@@ -544,13 +544,18 @@ if (not row):
     print("Admin nie jest w bazie danych. Tworzenie admina.")
     ## Dodanie admina
     password = hash_password('admin')
+
+    cursor.execute("INSERT INTO ContactDatas DEFAULT VALUES")
+    cursor.execute("SELECT SCOPE_IDENTITY()")
+    contact_data_id = int(cursor.fetchone()[0])
+
     cursor.execute(
         """
-        INSERT INTO Users (FirstName, Surname, Email, Password)
+        INSERT INTO Users (FirstName, Surname, Email, Password, ContactDataId)
         OUTPUT INSERTED.UserId
-        VALUES (?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?)
         """,
-        'admin', 'admin', 'admin', password
+        'admin', 'admin', 'admin', password, contact_data_id
     )
     admin_id = cursor.fetchone()[0]
 
@@ -588,16 +593,21 @@ if current_count < N:
         ## Hashowanie hasła (jest i musi być TEN SAM SPOSÓB co w Kontrolerze do Logowania i Kontrolerze do Rejestracji)
         password = hash_password(password_string)
 
-        print(f"Imie: {name}, Nazwisko: {surname}, EMail: {email,} Hasło: {password_string}, Hash: {password}\n")
+        # print(f"Imie: {name}, Nazwisko: {surname}, EMail: {email,} Hasło: {password_string}, Hash: {password}\n")
+
+        ## Użytkownicy mają przypisane domyślnie puste ContactData do swojego konta
+        cursor.execute("INSERT INTO ContactDatas DEFAULT VALUES")
+        cursor.execute("SELECT SCOPE_IDENTITY()")
+        contact_data_id = int(cursor.fetchone()[0])
 
         ## Dodanie użytkownika
         cursor.execute(
             """
-            INSERT INTO Users (FirstName, Surname, Email, Password)
+            INSERT INTO Users (FirstName, Surname, Email, Password, ContactDataId)
             OUTPUT INSERTED.UserId
-            VALUES (?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?)
             """,
-            name, surname, email, password
+            name, surname, email, password, contact_data_id
         )
         user_id = cursor.fetchone()[0]
 

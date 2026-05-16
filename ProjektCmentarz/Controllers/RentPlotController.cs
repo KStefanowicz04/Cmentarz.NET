@@ -1,83 +1,79 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ProjektCmentarz.Data;
+using ProjektCmentarz.Models;
 
 namespace ProjektCmentarz.Controllers
 {
     public class RentPlotController : Controller
     {
-        // GET: RentPlot
-        public ActionResult Index()
+        private readonly GraveyardContext _context;
+
+        public RentPlotController(GraveyardContext context)
         {
-            return View();
+            _context = context;
+        }
+
+        // GET: RentPlot
+        // Strona dostępna tylko dla zalogowanych
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            // Ta strona wyświetla tylko działki wolne, czyli takie które nie mają właściciela ani żadnych grobów.
+            var freePlots = await _context.Plots
+                .Include(p => p.Graves)
+                .Include(p => p.Owner)
+                .Include(p => p.GraveyardSection)
+                .Where(p => p.Owner == null && (p.Graves == null || !p.Graves.Any()))
+                .ToListAsync();
+
+            return View(freePlots);
         }
 
         // GET: RentPlot/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int plot_id)
         {
+            // ID Użytkownika który chcec wynająć daną działkę jest pobierane z Claimu UserID przypisanego przy logowaniu
+            int userId = int.Parse(User.FindFirst("UserId").Value);
+
+            // Wybieramy użytkownika z bazy danych o tym samym ID co zalogowany użytkownik
+            var user = await _context.Users
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (user == null)
+                return NotFound();
+
+
+
+            // Próba znalezienie rekordu PlotOwner danego użytkownika
+            var owner = _context.PlotOwners.FirstOrDefault(o => o.UserId == userId);
+
+            // Jeśli dany użytkownik nie ma swojego PlotOwner, zostanie on utworzony.
+            if (owner == null)
+            {
+                owner = new PlotOwner
+                {
+                    FirstName = user.FirstName,
+                    Surname = user.Surname,
+                    UserId = userId,
+                    ContactDataId = user.ContactDataId
+                };
+
+                _context.PlotOwners.Add(owner);
+                _context.SaveChanges();
+            }
+
+            // Przypisanie Id Właściciela do jego Działki
+            var plot = _context.Plots.Find(plot_id);
+            plot.PlotOwnerId = owner.Id;
+
+            _context.SaveChanges();
+
             return View();
         }
 
-        // GET: RentPlot/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: RentPlot/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: RentPlot/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: RentPlot/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: RentPlot/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: RentPlot/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

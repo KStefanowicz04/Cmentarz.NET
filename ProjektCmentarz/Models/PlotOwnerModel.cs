@@ -24,5 +24,9 @@ namespace ProjektCmentarz.Models
         [ForeignKey("ContactData")]
         public int ContactDataId { get; set; }
         public ContactData? OwnerContactData { get; set; }
+
+        // Opcjonalnie, do Właściciela może być przypisane Id Użytkownika aplikacji
+        public int? UserId { get; set; }
+        public User? user { get; set; }
     }
 }
