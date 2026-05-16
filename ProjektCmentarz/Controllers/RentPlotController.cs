@@ -32,8 +32,25 @@ namespace ProjektCmentarz.Controllers
             return View(freePlots);
         }
 
+
         // GET: RentPlot/Details/5
-        public async Task<IActionResult> Details(int plot_id)
+        public async Task<IActionResult> Details(int id)
+        {
+            // Podstrona Details przedstawiająca informacje o danej działce
+            var plot = await _context.Plots
+                .Include(p => p.GraveyardSection)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (plot == null)
+                return NotFound();
+
+            return View(plot);
+        }
+
+        // POST: RentPlot/Details/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Confirm(int id)
         {
             // ID Użytkownika który chcec wynająć daną działkę jest pobierane z Claimu UserID przypisanego przy logowaniu
             int userId = int.Parse(User.FindFirst("UserId").Value);
@@ -51,7 +68,7 @@ namespace ProjektCmentarz.Controllers
             // Próba znalezienie rekordu PlotOwner danego użytkownika
             var owner = _context.PlotOwners.FirstOrDefault(o => o.UserId == userId);
 
-            // Jeśli dany użytkownik nie ma swojego PlotOwner, zostanie on utworzony.
+            // Jeśli dany użytkownik nie ma swojego PlotOwner, zostanie on utworzony
             if (owner == null)
             {
                 owner = new PlotOwner
@@ -63,16 +80,15 @@ namespace ProjektCmentarz.Controllers
                 };
 
                 _context.PlotOwners.Add(owner);
-                _context.SaveChanges();
+                _context.SaveChangesAsync();
             }
 
             // Przypisanie Id Właściciela do jego Działki
-            var plot = _context.Plots.Find(plot_id);
+            var plot = await _context.Plots.FindAsync(id);
             plot.PlotOwnerId = owner.Id;
+            _context.SaveChangesAsync();
 
-            _context.SaveChanges();
-
-            return View();
+            return RedirectToAction("Index");
         }
 
     }
