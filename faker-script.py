@@ -361,35 +361,56 @@ if current_count < N:
 
 
 
-# Wypełnienie tabeli Plots losowymi danymi: właściciel działki, sekcja cmentarza
-## Liczenie liczby Działek; w bazie będzie znajdować się najwyżej N Działek
+# Wypełnienie tabeli Plots losowymi danymi: właściciel działki (lub jego brak), sekcja cmentarza
+## Liczenie liczby Działek; w bazie będzie znajdować się najwyżej (N/2) zajętych Działek
 cursor.execute("SELECT COUNT(*) FROM Plots")
 current_count = cursor.fetchone()[0]
 
-if current_count < N:
-    remaining = N - current_count
+if current_count < (N):
+    remaining = (N) - current_count
 
     for i in range(remaining):
-        ## Wybrany zostanie losowy właściciel działki
-        cursor.execute("SELECT Id FROM PlotOwners")
-        contact_data_ids = [row[0] for row in cursor.fetchall()]
-        contact_data_id = random.choice(contact_data_ids)
+        ## Połowie działek zostanie przypisany właściciel 
+        if (i > (N//2)):
+            ## Wybrany zostanie losowy właściciel działki
+            cursor.execute("SELECT Id FROM PlotOwners")
+            contact_data_ids = [row[0] for row in cursor.fetchall()]
+            contact_data_id = random.choice(contact_data_ids)
 
-        ## Wybrana zostanie losowa sekcja cmentarza
-        cursor.execute("SELECT Id FROM GraveyardSection")
-        graveyard_section_ids = [row[0] for row in cursor.fetchall()]
-        graveyard_section_id = random.choice(graveyard_section_ids)
+            ## Wybrana zostanie losowa sekcja cmentarza
+            cursor.execute("SELECT Id FROM GraveyardSection")
+            graveyard_section_ids = [row[0] for row in cursor.fetchall()]
+            graveyard_section_id = random.choice(graveyard_section_ids)
 
-        cursor.execute(
-            """
-            INSERT INTO Plots (PlotOwnerId, GraveyardSectionId)
-            VALUES (?, ?)
-            """,
-            contact_data_id, graveyard_section_id
-        )
+            cursor.execute(
+                """
+                INSERT INTO Plots (PlotOwnerId, GraveyardSectionId)
+                VALUES (?, ?)
+                """,
+                contact_data_id, graveyard_section_id
+            )
 
-        conn.commit()
-        print(f"Wstawiono {i+1} działek!")
+            conn.commit()
+            print(f"Wstawiono {i+1} działek!")
+        ## Połowa działek zostanie dodana bez właściciela
+        elif i <= (N//2) and i > 0:
+            ## Dana działka NIE MA właściciela
+
+            ## Wybrana zostanie losowa sekcja cmentarza
+            cursor.execute("SELECT Id FROM GraveyardSection")
+            graveyard_section_ids = [row[0] for row in cursor.fetchall()]
+            graveyard_section_id = random.choice(graveyard_section_ids)
+
+            cursor.execute(
+                """
+                INSERT INTO Plots (GraveyardSectionId)
+                VALUES (?)
+                """,
+                graveyard_section_id
+            )
+
+            conn.commit()
+            print(f"Wstawiono {i+1} działek bez właściciela!")
 
 
 

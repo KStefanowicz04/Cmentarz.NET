@@ -15,9 +15,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Owner)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GraveyardSection)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -26,9 +23,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Owner.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GraveyardSection.SectionType)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

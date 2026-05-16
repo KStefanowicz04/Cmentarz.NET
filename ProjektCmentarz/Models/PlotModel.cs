@@ -15,7 +15,12 @@ namespace ProjektCmentarz.Models
 
         // Osoba do której należy dana działka
         [ForeignKey("PlotOwner")]
-        public int PlotOwnerId { get; set; }
+        public int? PlotOwnerId { get; set; }
         public PlotOwner? Owner { get; set; }
+
+        // Sekcja cmentarza w której leży działka
+        [ForeignKey("GraveyardSection")]
+        public int GraveyardSectionId { get; set; }
+        public GraveyardSection? GraveyardSection { get; set; }
     }
 }

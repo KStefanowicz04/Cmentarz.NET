@@ -22,7 +22,7 @@ namespace ProjektCmentarz.Controllers
         // GET: Plots
         public async Task<IActionResult> Index()
         {
-            var graveyardContext = _context.Plots.Include(p => p.Owner);
+            var graveyardContext = _context.Plots.Include(p => p.GraveyardSection).Include(p => p.Owner);
             return View(await graveyardContext.ToListAsync());
         }
 
@@ -35,6 +35,7 @@ namespace ProjektCmentarz.Controllers
             }
 
             var plot = await _context.Plots
+                .Include(p => p.GraveyardSection)
                 .Include(p => p.Owner)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (plot == null)
@@ -48,6 +49,7 @@ namespace ProjektCmentarz.Controllers
         // GET: Plots/Create
         public IActionResult Create()
         {
+            ViewData["GraveyardSectionId"] = new SelectList(_context.Sections, "Id", "SectionType");
             ViewData["PlotOwnerId"] = new SelectList(_context.PlotOwners, "Id", "FirstName");
             return View();
         }
@@ -57,7 +59,7 @@ namespace ProjektCmentarz.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PlotOwnerId")] Plot plot)
+        public async Task<IActionResult> Create([Bind("Id,PlotOwnerId,GraveyardSectionId")] Plot plot)
         {
             if (ModelState.IsValid)
             {
@@ -65,6 +67,7 @@ namespace ProjektCmentarz.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["GraveyardSectionId"] = new SelectList(_context.Sections, "Id", "SectionType", plot.GraveyardSectionId);
             ViewData["PlotOwnerId"] = new SelectList(_context.PlotOwners, "Id", "FirstName", plot.PlotOwnerId);
             return View(plot);
         }
@@ -82,6 +85,7 @@ namespace ProjektCmentarz.Controllers
             {
                 return NotFound();
             }
+            ViewData["GraveyardSectionId"] = new SelectList(_context.Sections, "Id", "SectionType", plot.GraveyardSectionId);
             ViewData["PlotOwnerId"] = new SelectList(_context.PlotOwners, "Id", "FirstName", plot.PlotOwnerId);
             return View(plot);
         }
@@ -91,7 +95,7 @@ namespace ProjektCmentarz.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PlotOwnerId")] Plot plot)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,PlotOwnerId,GraveyardSectionId")] Plot plot)
         {
             if (id != plot.Id)
             {
@@ -118,6 +122,7 @@ namespace ProjektCmentarz.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["GraveyardSectionId"] = new SelectList(_context.Sections, "Id", "SectionType", plot.GraveyardSectionId);
             ViewData["PlotOwnerId"] = new SelectList(_context.PlotOwners, "Id", "FirstName", plot.PlotOwnerId);
             return View(plot);
         }
@@ -131,6 +136,7 @@ namespace ProjektCmentarz.Controllers
             }
 
             var plot = await _context.Plots
+                .Include(p => p.GraveyardSection)
                 .Include(p => p.Owner)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (plot == null)
