@@ -36,25 +36,66 @@ namespace ProjektCmentarz.Controllers
             // Wybieramy użytkownika z bazy danych o tym samym ID co zalogowany użytkownik
             var user = await _context.Users
                 .Include(u => u.Roles)
+                .Include(u => u.UserContactData)
                 .FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (user == null)
                 return NotFound();
 
-            return View(user);
+
+            // Wybieramy rekord Właściciela powiązanego z danym użytkownikiem
+            var owner = await _context.PlotOwners.FirstOrDefaultAsync(o => o.UserId == userId);
+
+            // Działki należące do danego Właściciela idą do Listy
+            List<Plot> ownedPlots = new List<Plot>();
+            if (owner != null)
+            {
+                ownedPlots = await _context.Plots
+                    .Include(p => p.GraveyardSection)
+                    .Where(p => p.PlotOwnerId == owner.Id)
+                    .ToListAsync();
+            }
+
+            // Dane o użytkowniku przesyłamy dalej
+            var userProfileData = new UserProfileIndex
+            {
+                User = user,
+                UserCD = user.UserContactData,
+                UserPlots = ownedPlots
+            };
+
+            return View(userProfileData);
         }
 
-        // Edytowanie swoich własnych danych przez Użytkownika.
+        // Edytowanie swoich własnych danych przez Użytkownika
         // GET: /UserProfile/Edit
         public async Task<IActionResult> Edit()
         {
             int userId = int.Parse(User.FindFirst("UserId").Value);
 
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _context.Users
+                .Include(u => u.UserContactData)
+                .FirstOrDefaultAsync(u => u.UserId == userId);
+
             if (user == null)
                 return NotFound();
 
-            return View(user);
+            // Korzystamy z UserProfileEditModel
+            var UserEditModel = new UserProfileEdit
+            {
+                UserId = user.UserId,
+                FirstName = user.FirstName,
+                Surname = user.Surname,
+                Email = user.Email,
+                PhoneNumber = user.UserContactData?.PhoneNumber,
+                ContactEMail = user.UserContactData?.EMail,
+                CityName = user.UserContactData?.CityName,
+                StreetName = user.UserContactData?.StreetName,
+                ZipCode = user.UserContactData?.ZipCode
+            };
+
+
+            return View(UserEditModel);
         }
 
         // POST: /UserProfile/Edit
@@ -65,14 +106,24 @@ namespace ProjektCmentarz.Controllers
             if (!ModelState.IsValid)
                 return View(userProfileModel);
 
-            var user = await _context.Users.FindAsync(userProfileModel.UserId);
+            var user = await _context.Users
+                .Include(u => u.UserContactData)
+                .FirstOrDefaultAsync(u => u.UserId == userProfileModel.UserId);
+
             if (user == null)
                 return NotFound();
 
-            // Zmiana podstawowych danych, tu nie można zmienić hasła
+            // Zmiana podstawowych danych, tu nie można zmienić hasła!
             user.FirstName = userProfileModel.FirstName;
             user.Surname = userProfileModel.Surname;
             user.Email = userProfileModel.Email;
+
+            // Zmiana danych kontaktowych
+            user.UserContactData.PhoneNumber = userProfileModel.PhoneNumber;
+            user.UserContactData.EMail = userProfileModel.ContactEMail;
+            user.UserContactData.CityName = userProfileModel.CityName;
+            user.UserContactData.StreetName= userProfileModel.StreetName;
+            user.UserContactData.ZipCode = userProfileModel.ZipCode;
 
             await _context.SaveChangesAsync();
 

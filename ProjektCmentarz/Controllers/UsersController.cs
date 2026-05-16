@@ -25,6 +25,7 @@ namespace ProjektCmentarz.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
+            // Wybieramy zalogowanego Użytkownika z bazy danych
             return View(await _context.Users.Include(u => u.Roles).ToListAsync());
         }
 

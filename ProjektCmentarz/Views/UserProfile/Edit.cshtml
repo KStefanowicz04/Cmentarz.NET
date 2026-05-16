@@ -1,14 +1,16 @@
-﻿@model ProjektCmentarz.Models.User
+﻿@model ProjektCmentarz.Models.UserProfileEdit
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edytuj dane</h1>
+<h1>Edytuj swoje dane</h1>
 
 <form asp-action="Edit" method="post">
     <input type="hidden" asp-for="UserId" />
 
+    @* Informacje podstawowe dla modelu User *@
+    <h3>Dane</h3>
     <div class="form-group">
         <label asp-for="FirstName"></label>
         <input asp-for="FirstName" class="form-control" />
@@ -22,10 +24,40 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Email"></label>
+        <label asp-for="Email"></label> 
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
+
+
+    @* Informacje dla modelu ContactData użytkownika *@
+    <h3>Dane kontaktowe</h3>
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ContactEMail"></label>
+        <input asp-for="ContactEMail" class="form-control" />
+        <span asp-validation-for="ContactEMail" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CityName"></label>
+        <input asp-for="CityName" class="form-control" />
+        <span asp-validation-for="CityName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="StreetName"></label>
+        <input asp-for="StreetName" class="form-control" />
+        <span asp-validation-for="StreetName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ZipCode"></label>
+        <input asp-for="ZipCode" class="form-control" />
+        <span asp-validation-for="ZipCode" class="text-danger"></span>
+    </div>
+
 
     <button type="submit" class="btn btn-success">Zapisz</button>
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })

@@ -16,7 +16,7 @@ namespace ProjektCmentarz.Models
 
         // Email
         [Display(Name = "Email")]
-        [StringLength(40, MinimumLength = 3, ErrorMessage = "Phone number should be between 3 and 40 characters")]
+        [StringLength(40, MinimumLength = 3, ErrorMessage = "Email should be between 3 and 40 characters")]
         public string? EMail { get; set; }
 
         // Adres

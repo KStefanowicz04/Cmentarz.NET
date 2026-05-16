@@ -1,4 +1,4 @@
-﻿@model ProjektCmentarz.Models.User
+﻿@model ProjektCmentarz.Models.UserProfileIndex
 
 @{
     ViewData["Title"] = "Index";
@@ -6,11 +6,41 @@
 
 <h1>Profil</h1>
 
-@* Informacje o danym użytkowniku *@
+@* Najważniejsze informacje o danym użytkowniku *@
 <div>
-    <p>Imię: @Model.FirstName</p>
-    <p>Nazwisko: @Model.Surname</p>
-    <p>Email: @Model.Email</p>
+    <h3>Dane</h3>
+    <p>Imię: @Model.User.FirstName</p>
+    <p>Nazwisko: @Model.User.Surname</p>
+    <p>Email: @Model.User.Email</p>
+</div>
+
+@* Informacje kontaktowe danego użytkownika *@
+<div>
+    <h3>Dane kontaktowe</h3>
+    @if (!string.IsNullOrWhiteSpace(Model.UserCD?.PhoneNumber))
+    {
+        <p>Telefon: @Model.UserCD?.PhoneNumber</p>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.UserCD?.EMail))
+    {
+        <p>Email Kontaktowy: @Model.UserCD?.EMail</p>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.UserCD?.CityName))
+    {
+        <p>Miasto: @Model.UserCD?.CityName</p>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.UserCD?.StreetName))
+    {
+        <p>Ulica: @Model.UserCD?.StreetName</p>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.UserCD?.ZipCode))
+    {
+        <p>Kod: @Model.UserCD?.ZipCode</p>
+    }
 </div>
 
 @* Edytowanie profilu *@
@@ -19,7 +49,21 @@
     <a class="btn btn-primary" href="/UserProfile/ChangePassword">Zmień hasło</a>
 </div>
 
-@* Działki użytkownika *@
+@* Działki użytkownika, jeśli jakieś ma *@
 <div>
-    
+    @if (Model.UserPlots.Any())
+    {
+        <h3>Wynajęte działki</h3>
+        <div class="row">
+            @foreach (var plot in Model.UserPlots)
+            {
+                <div class="col-md-3 mb-3">
+                    <div class="card p-3 shadow-sm">
+                        <h4>Działka numer @plot.Id</h4>
+                        <p><strong>Sekcja:</strong> @plot.GraveyardSection.SectionType</p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
 </div>
