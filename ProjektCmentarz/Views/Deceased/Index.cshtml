@@ -11,8 +11,49 @@
 
 @* ---  Licznik rekordów --- *@
 <div class="alert alert-secondary">
-    Liczba osób w bazie: <strong>@Model.Count()</strong>
+    Liczba osób w bazie: <strong>@Model.TotalItemCount</strong>
 </div>
+
+@* --- PANEL GENEROWANIA RAPORTU EXCEL (TYLKO DLA ADMINA) --- *@
+@if (User.IsInRole("Admin"))
+{
+    <div class="card mb-4 shadow-sm" style="border-left: 5px solid #198754;">
+        <div class="card-body bg-light">
+            <h5 class="text-success mb-3"><i class="fas fa-file-excel"></i> Generowanie Raportu Miesięcznego</h5>
+
+            <form asp-controller="Report" asp-action="DownloadMonthlyReport" method="get" class="row g-3 align-items-center">
+                <div class="col-md-5">
+                    <label class="form-label fw-bold">Wybierz miesiąc</label>
+                    <select name="month" class="form-select">
+                        <option value="1">Styczeń</option>
+                        <option value="2">Luty</option>
+                        <option value="3">Marzec</option>
+                        <option value="4">Kwiecień</option>
+                        <option value="5" selected>Maj</option>
+                        <option value="6">Czerwiec</option>
+                        <option value="7">Lipiec</option>
+                        <option value="8">Sierpień</option>
+                        <option value="9">Wrzesień</option>
+                        <option value="10">Październik</option>
+                        <option value="11">Listopad</option>
+                        <option value="12">Grudzień</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Wpisz rok (dowolny z bazy)</label>
+                    <input type="number" name="year" class="form-control" value="@DateTime.Now.Year" min="1900" max="2100" required />
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end" style="height: 58px;">
+                    <button type="submit" class="btn btn-success w-100">
+                        Pobierz Excel (.xlsx)
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+}
 
 @* --- Formularz wyszukiwania --- *@
 <div class="card mb-4 shadow-sm">
@@ -63,34 +104,34 @@
         </tr>
     </thead>
     <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Surname)</td>
+                <td>@item.BirthDate.ToShortDateString()</td>
+                <td>@item.DeathDate.ToShortDateString()</td>
+                <td>@Html.DisplayFor(modelItem => item.CasketId)</td>
+                <td>@Html.DisplayFor(modelItem => item.FuneralId)</td>
+                <td>
+                    @* --- TYLKO ADMIN może widzieć "Edit" --- *@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> @:|
+                    }
 
-@foreach (var item in Model) {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
-            <td>@Html.DisplayFor(modelItem => item.Surname)</td>
-            <td>@item.BirthDate.ToShortDateString()</td>
-            <td>@item.DeathDate.ToShortDateString()</td>
-            <td>@Html.DisplayFor(modelItem => item.CasketId)</td>
-            <td>@Html.DisplayFor(modelItem => item.FuneralId)</td>
-            <td>
-                @* --- TYLKO ADMIN może widzieć "Edit" --- *@
-                @if (User.IsInRole("Admin"))
-                {
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> @:|
-                }
-                
-                @* KAŻDY może widzieć "Details" *@
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                
-                @* --- TYLKO ADMIN może widzieć "Delete" --- *@
-                @if (User.IsInRole("Admin"))
-               {
-                <span class="mx-1">|</span>
-                <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">Delete</a>
-    }
-            </td>
-        </tr>
-}
+                    @* KAŻDY może widzieć "Details" *@
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+
+                    @* --- TYLKO ADMIN może widzieć "Delete" --- *@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <span class="mx-1">|</span>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
