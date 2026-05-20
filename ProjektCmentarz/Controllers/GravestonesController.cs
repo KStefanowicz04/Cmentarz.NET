@@ -22,7 +22,7 @@ namespace ProjektCmentarz.Controllers
         // GET: Gravestones
         public async Task<IActionResult> Index()
         {
-            var graveyardContext = _context.Gravestones.Include(g => g.Condition).Include(g => g.Grave).Include(g => g.Material);
+            var graveyardContext = _context.Gravestones.Include(g => g.Grave).Include(g => g.Material);
             return View(await graveyardContext.ToListAsync());
         }
 
@@ -35,7 +35,6 @@ namespace ProjektCmentarz.Controllers
             }
 
             var gravestone = await _context.Gravestones
-                .Include(g => g.Condition)
                 .Include(g => g.Grave)
                 .Include(g => g.Material)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -50,7 +49,6 @@ namespace ProjektCmentarz.Controllers
         // GET: Gravestones/Create
         public IActionResult Create()
         {
-            ViewData["ConditionId"] = new SelectList(_context.Condition, "Id", "ConditionType");
             ViewData["GraveId"] = new SelectList(_context.Graves, "Id", "Id");
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Type");
             return View();
@@ -61,7 +59,7 @@ namespace ProjektCmentarz.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,InstallationDate,ConditionId,MaterialId,GraveId")] Gravestone gravestone)
+        public async Task<IActionResult> Create([Bind("Id,InstallationDate,MaterialId,GraveId")] Gravestone gravestone)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +67,6 @@ namespace ProjektCmentarz.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ConditionId"] = new SelectList(_context.Condition, "Id", "ConditionType", gravestone.ConditionId);
             ViewData["GraveId"] = new SelectList(_context.Graves, "Id", "Id", gravestone.GraveId);
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Type", gravestone.MaterialId);
             return View(gravestone);
@@ -88,7 +85,6 @@ namespace ProjektCmentarz.Controllers
             {
                 return NotFound();
             }
-            ViewData["ConditionId"] = new SelectList(_context.Condition, "Id", "ConditionType", gravestone.ConditionId);
             ViewData["GraveId"] = new SelectList(_context.Graves, "Id", "Id", gravestone.GraveId);
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Type", gravestone.MaterialId);
             return View(gravestone);
@@ -99,7 +95,7 @@ namespace ProjektCmentarz.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,InstallationDate,ConditionId,MaterialId,GraveId")] Gravestone gravestone)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,InstallationDate,MaterialId,GraveId")] Gravestone gravestone)
         {
             if (id != gravestone.Id)
             {
@@ -126,7 +122,6 @@ namespace ProjektCmentarz.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ConditionId"] = new SelectList(_context.Condition, "Id", "ConditionType", gravestone.ConditionId);
             ViewData["GraveId"] = new SelectList(_context.Graves, "Id", "Id", gravestone.GraveId);
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Type", gravestone.MaterialId);
             return View(gravestone);
@@ -141,7 +136,6 @@ namespace ProjektCmentarz.Controllers
             }
 
             var gravestone = await _context.Gravestones
-                .Include(g => g.Condition)
                 .Include(g => g.Grave)
                 .Include(g => g.Material)
                 .FirstOrDefaultAsync(m => m.Id == id);

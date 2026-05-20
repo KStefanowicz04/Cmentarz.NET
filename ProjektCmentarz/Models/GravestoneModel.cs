@@ -18,14 +18,6 @@ namespace ProjektCmentarz.Models
         [DataType(DataType.Date)]
         public DateTime InstallationDate { get; set; }
 
-        // Stan techniczny nagrobka; klucz obcy
-        [Display(Name = "Stan techniczny nagrobka")]
-        [ForeignKey("Condition")]
-        [Required(ErrorMessage = "Gravestone condition is required")]
-        public int ConditionId { get; set; }
-        [Display(Name = "Stan techniczny nagrobka")]
-        public Condition? Condition { get; set; }
-
         // Materiał z którego wykonany jest nagrobek; klucz obcy
         [Display(Name = "Materiał")]
         [ForeignKey("Material")]
