@@ -1,0 +1,36 @@
+Historia:
+S - encja słownikowa
+NI - Not Implemented - encja nie wykorzystana w programie
+NF - Not Filled - encja nie wypełniona Fakerem
+
+Encje:
+1. BurialDepth S
+2. Casket 
+3. CauseOfDeath S
+4. Condition S NI
+5. ContactData
+6. Cremation NI
+7. DeathCertificate
+8. Deceased
+9. FuneralHome
+10. Funeral
+11. Gravekeeper NI
+12. GraveMaintenance NI
+13. Grave
+14. GravestoneInscryption NF
+15. Gravestone NI
+16. GraveyardSection S
+17. MaintenanceRequest NI
+18. Material S
+19. Ownership NI
+20. Parish S
+21. Payment NI
+22. Plot
+23. PlotOwner
+24. Priest
+25. Reservation NI
+26. TaskStatus NI
+27. Transfer NI
+28. Urn NI
+29. User
+30. WorkTask NI
