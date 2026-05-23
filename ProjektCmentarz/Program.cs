@@ -7,6 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.DocInclusionPredicate((docName, apiDesc) =>
+    {
+        return apiDesc.RelativePath != null && apiDesc.RelativePath.StartsWith("api/");
+    });
+});
+
 // Własny serwis Context do połączenia z bazą danych GraveyardDB
 builder.Services.AddDbContext<GraveyardContext>(options =>
     // Korzystamy z SqlServer, pytamy o bazę GraveyardDB (to jest w appsettings.json)
@@ -35,6 +45,14 @@ builder.Services.AddSession();
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Projekt Cmentarz API V1");
+    });
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
