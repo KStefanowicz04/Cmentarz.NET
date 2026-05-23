@@ -31,9 +31,16 @@
                           <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Deceased" asp-action="Index">Nieboszczycy</a>
                         </li>
-                        @* Prywatność *@
+                        @* Wykupienie działek - tylko dla zalogowanych*@
+                        @if (User.Identity.IsAuthenticated == true)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Plots" asp-action="Index">Działki</a>
+                                </li>
+                            }
+                        @* Dostęp do API *@
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="swagger" asp-action="index">API</a>
                         </li>
                     </ul>
                 </div>
