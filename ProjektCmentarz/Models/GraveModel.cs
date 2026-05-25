@@ -20,6 +20,11 @@ namespace ProjektCmentarz.Models
         public int DeceasedId { get; set; }
         public Deceased? GraveDeceased { get; set; }
 
+        // Relacja z kamieniem nagrobkowym
+        [ForeignKey("Gravestone")]
+        public int GravestoneId { get; set; }
+        public Gravestone? GraveGravestone { get; set; }
+
         // Głębokość pochówku; klucz obcy encji słownikowej
         [ForeignKey("BurialDepth")]
         public int BurialDepthId { get; set; }

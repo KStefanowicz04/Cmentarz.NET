@@ -80,13 +80,13 @@ namespace ProjektCmentarz.Controllers
                 };
 
                 _context.PlotOwners.Add(owner);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
 
             // Przypisanie Id Właściciela do jego Działki
             var plot = await _context.Plots.FindAsync(id);
             plot.PlotOwnerId = owner.Id;
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }

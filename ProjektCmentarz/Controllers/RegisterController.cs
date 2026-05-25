@@ -67,7 +67,7 @@ namespace ProjektCmentarz.Controllers
             // Potrzebne jest nowe ContactData; jest ono domyślnie puste
             ContactData userCD = new ContactData { };
             _context.ContactDatas.Add(userCD);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             var user = new User
             {

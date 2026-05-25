@@ -18,7 +18,6 @@ namespace ProjektCmentarz.Models
 
         // Miejsce odbycia pogrzebu (działka); klucz obcy
         [Display(Name = "Działka")]
-        [ForeignKey("Plot")]
         [Required(ErrorMessage = "A Funeral requires a place")]
         public int PlotId { get; set; }
         [Display(Name = "Działka")]

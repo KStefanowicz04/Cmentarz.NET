@@ -14,7 +14,7 @@ namespace ProjektCmentarz.Models
         public ICollection<Grave>? Graves { get; set; }
 
         // Osoba do której należy dana działka
-        [ForeignKey("PlotOwner")]
+        [ForeignKey("Owner")]
         public int? PlotOwnerId { get; set; }
         public PlotOwner? Owner { get; set; }
 
@@ -22,5 +22,8 @@ namespace ProjektCmentarz.Models
         [ForeignKey("GraveyardSection")]
         public int GraveyardSectionId { get; set; }
         public GraveyardSection? GraveyardSection { get; set; }
+
+        // Lista grobów na danej działce; opcjonalne
+        public ICollection<Funeral>? Funerals { get; set; }
     }
 }

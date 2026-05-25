@@ -84,7 +84,16 @@ namespace ProjektCmentarz.Data
                 .HasForeignKey(g => g.ContactDataId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Relacja Funeral <-> Plot
+            modelBuilder.Entity<Funeral>()
+                .HasOne(f => f.FuneralPlot)
+                .WithMany(p => p.Funerals)
+                .HasForeignKey(f => f.PlotId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
+
+
         public DbSet<ProjektCmentarz.Models.Casket> Casket { get; set; } = default!;
         public DbSet<ProjektCmentarz.Models.BurialDepth> BurialDepth { get; set; } = default!;
         public DbSet<ProjektCmentarz.Models.GraveyardSection> GraveyardSection { get; set; } = default!;

@@ -26,6 +26,14 @@ namespace ProjektCmentarz.Models
         [Display(Name = "Materiał")]
         public Material? Material { get; set; }
 
+        // Opis na nagrobku; klucz obcy
+        [Display(Name = "Opis")]
+        [ForeignKey("GravestoneInscryption")]
+        [Required(ErrorMessage = "Gravestone inscryption is required")]
+        public int GravestoneInscryptionId { get; set; }
+        [Display(Name = "Opis")]
+        public GravestoneInscryption? GravestoneInscryption { get; set; }
+
         // Grób do którego jest przypisany nagrobek 
         [Display(Name = "Grób")]
         [ForeignKey("Grave")]

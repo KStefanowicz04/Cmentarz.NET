@@ -14,8 +14,8 @@ Encje:
 8. Funeral
 9. Gravekeeper NI
 10. Grave
-11. GravestoneInscryption S NF
-12. Gravestone NI
+11. GravestoneInscryption S
+12. Gravestone
 13. GraveyardSection S
 14. Material S
 15. Parish S
