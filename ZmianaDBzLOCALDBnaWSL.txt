@@ -1,0 +1,41 @@
+Stawianie bazy danych na WSL:
+W konsoli Dockera najpierw trzeba pobrać najnowszą wersję SQLServer:
+	docker pull mcr.microsoft.com/mssql/server:2025-latest
+potem utworzyć i uruchomić kontener:
+	docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Haslo123!" -p 1433:1433 -v sqlvolume:/var/opt/mssql --name sqlserver -d mcr.microsoft.com/mssql/server:2025-latest
+
+'-v sqlvolume:/var/opt/mssql' sprawia, że baza zapisuje się gdy Docker się wyłączy.
+
+
+I teraz są 2 opcje:
+Można albo zrobić backup starej bazy danych na Windowsie wraz z jej zawartością i załadować to wszystko do nowej bazy danych na WSL.
+Albo można tylko postawić bazę na WSL, połączyć się z nią w Visual Studio, dodać wszystkie tabele poprzez 'update-database' w konsoli, i uruchomić Fakera żeby wypełnić bazę od nowa.
+Tak czy inaczej, NAJLEPIEJ ZROBIĆ update-database ŻEBY NA PEWNO ZŁAPAŁO NOWĄ BAZĘ.
+
+Poniżej jak zrobić i wczytać backup:
+
+
+Najpierw należy zrobić backup bazy postawionej na Windowsie:
+W SQL Server Management Studio
+PPM w bazę danych (nie w MSSQLLocalDB) -> Tasks -> Back up...
+Wybierz bazę, Backup Style = Full, Back Up to: Disk i zapamiętaj gdzie zapisał się backup
+
+Po uruchomienie Kontenera z SQLServer w Dockerze i załadowaniu się SQLServer, trzeba skopiować plik .bak do kontenera. W konsoli w Dockerze:
+docker cp (ŚCIEŻKA DO \GraveyardDB.bak) sqlserver:/var/opt/mssql/data/
+
+Łączenie z SQLServer na WSL w SQL Server  Management Studio 
+Connect (czyli Connect Object Explorer...)
+	Server Name: localhost,1433
+	Authentication: SQL Server Authentication
+	User Name: sa
+	Password: Haslo123!
+	Zaznaczyć "Trust Server Certificate"
+
+Następnie New Query SQL Server Management Studio:
+	RESTORE DATABASE GraveyardDB
+	FROM DISK = '/var/opt/mssql/data/GraveyardDB.bak'
+	WITH MOVE 'GraveyardDB' TO '/var/opt/mssql/data/GraveyardDB.mdf',
+     		MOVE 'GraveyardDB_log' TO '/var/opt/mssql/data/GraveyardDB_log.ldf',
+     		REPLACE;
+
+To stawia bazę danych na WSL.

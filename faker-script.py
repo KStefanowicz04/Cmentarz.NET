@@ -13,9 +13,11 @@ N = 100
 # Połączenie z bazą danych
 conn = pyodbc.connect(
     "DRIVER={ODBC Driver 18 for SQL Server};"
-    "SERVER=(localdb)\MSSQLLocalDB;"
+    "SERVER=localhost,1433;"
     "DATABASE=GraveyardDB;"
-    "Trusted_Connection=yes;"
+    "UID=sa;"
+    "PWD=Haslo123!;"
+    "Encrypt=no;"
 )
 cursor = conn.cursor()
 if conn:
