@@ -10,6 +10,9 @@ namespace ProjektCmentarz.Models
         [Key]
         public int Id { get; set; }
 
+        // Cena działki
+        public int PlotValue { get; set; }
+
         // Lista grobów na danej działce; może być pusta, co oznacza brak grobów na danej działce
         public ICollection<Grave>? Graves { get; set; }
 

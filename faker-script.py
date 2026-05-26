@@ -480,7 +480,7 @@ if current_count < N:
 
 
 
-# Wypełnienie tabeli Plots losowymi danymi: właściciel działki (lub jego brak), sekcja cmentarza
+# Wypełnienie tabeli Plots losowymi danymi: cena, właściciel działki (lub jego brak), sekcja cmentarza
 ## Liczenie liczby Działek; w bazie będzie znajdować się najwyżej (N/2) zajętych Działek
 cursor.execute("SELECT COUNT(*) FROM Plots")
 current_count = cursor.fetchone()[0]
@@ -491,6 +491,9 @@ if current_count < (N):
     for i in range(remaining):
         ## Połowie działek zostanie przypisany właściciel 
         if (i < (N//2)):
+            ## Wylosowana zostanie wartość działki
+            plot_value = randint(200, 10000);
+
             ## Wybrany zostanie losowy właściciel działki
             cursor.execute("SELECT Id FROM PlotOwners")
             contact_data_ids = [row[0] for row in cursor.fetchall()]
@@ -503,10 +506,10 @@ if current_count < (N):
 
             cursor.execute(
                 """
-                INSERT INTO Plots (PlotOwnerId, GraveyardSectionId)
-                VALUES (?, ?)
+                INSERT INTO Plots (PlotValue, PlotOwnerId, GraveyardSectionId)
+                VALUES (?, ?, ?)
                 """,
-                contact_data_id, graveyard_section_id
+                plot_value, contact_data_id, graveyard_section_id
             )
 
             conn.commit()
@@ -515,6 +518,9 @@ if current_count < (N):
         elif i >= (N//2) and i < N:
             ## Dana działka NIE MA właściciela
 
+            ## Wylosowana zostanie wartość działki
+            plot_value = randint(200, 10000);
+
             ## Wybrana zostanie losowa sekcja cmentarza
             cursor.execute("SELECT Id FROM GraveyardSection")
             graveyard_section_ids = [row[0] for row in cursor.fetchall()]
@@ -522,10 +528,10 @@ if current_count < (N):
 
             cursor.execute(
                 """
-                INSERT INTO Plots (GraveyardSectionId)
-                VALUES (?)
+                INSERT INTO Plots (PlotValue, GraveyardSectionId)
+                VALUES (?, ?)
                 """,
-                graveyard_section_id
+                plot_value, graveyard_section_id
             )
 
             conn.commit()
@@ -537,6 +543,7 @@ if current_count < (N):
 # Również tworzy nowy Casket i wypełnia losowymi danymi: materiał, cena
 # Również tworzy nowy Funeral i wypełnia losowymi danymi: data odbycia pogrzebu, nieboszczyk, ksiądz, dom pogrzebowy, działka odbycia pogrzebu
 # Również tworzy nowy Grave i wypełnia losowymi danymi: działka, nieboszczyk, głębokość grobu
+# Również tworzy DeathCertificate i wypełnia losowymi danymi: data wydania, zakład pogrzebowy, id nieboszczyka, powód śmierci
 ## Liczenie liczby Nieboszczyków; w bazie będzie znajdować się najwyżej N Nieboszczyków
 cursor.execute("SELECT COUNT(*) FROM Deceaseds")
 current_count = cursor.fetchone()[0]
@@ -673,7 +680,6 @@ if current_count < N:
 
 
 
-
         ## Przypisanie FuneralId i GraveId do Deceased
         cursor.execute(
             """
@@ -684,9 +690,29 @@ if current_count < N:
             (casket_id, funeral_id, deceased_id)
         )
 
+        ## Utworzenie losowego Certyfikatu do danego nieboszczyka
+        # Data wydania certyfikatu
+        issue_date = death_date + timedelta(days=randint(0, 7))
+        # Losowy dom pogrzebowy
+        cursor.execute("SELECT Id FROM FuneralHomes")
+        funeralhome_ids = [row[0] for row in cursor.fetchall()]
+        funeralhome_id = random.choice(funeralhome_ids)
+        # Losowa przyczyna śmierci
+        cursor.execute("SELECT Id FROM CausesOfDeath")
+        cod_ids = [row[0] for row in cursor.fetchall()]
+        cod_id = random.choice(cod_ids)
+
+        cursor.execute(
+            """
+            INSERT INTO DeathCertificates (IssueDate, Issuer, DeceasedId, CauseOfDeathId)
+            VALUES (?, ?, ?, ?)
+            """,
+            issue_date, funeralhome_id, deceased_id, cod_id
+        )
+
 
     conn.commit()
-    print(f"Wstawiono {i+1} nieboszczyków, pogrzebów, grobów!")
+    print(f"Wstawiono {i+1} nieboszczyków, pogrzebów, grobów, certyfikatów!")
 
 
 # Wypełnienie tabeli Users losowymi zwykłymi użytkownikami. Dodaj również użytkownika admin z rolą Admin.

@@ -38,7 +38,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     options.LoginPath = "/Home/Login";
 });
-builder.Services.AddAuthorization();  // Autoryzacja
+builder.Services.AddAuthorization();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 
@@ -53,6 +53,9 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Projekt Cmentarz API V1");
     });
 }
+
+// Załadowanie kluczy dla Stripe
+Stripe.StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -8,19 +8,19 @@ Encje:
 2. Casket 
 3. CauseOfDeath S
 4. ContactData
-5. DeathCertificate
+5. DeathCertificate NI - dodać na stronie detali o danym nieboszczyku!
 6. Deceased
 7. FuneralHome
-8. Funeral
-9. Gravekeeper NI
-10. Grave
-11. GravestoneInscryption S
+8. Funeral NI
+9. Gravekeeper NI - na stronie pogrzebu, może na stronie działki?
+10. Grave NI
+11. GravestoneInscryption S NI
 12. Gravestone
 13. GraveyardSection S
 14. Material S
 15. Parish S
-16. Payment NI
-17. Plot
+16. Payment NI!!!
+17. Plot partial-NI
 18. PlotOwner
 19. Priest
 20. User

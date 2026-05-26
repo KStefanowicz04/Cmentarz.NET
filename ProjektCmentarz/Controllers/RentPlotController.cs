@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using ProjektCmentarz.Data;
 using ProjektCmentarz.Models;
@@ -47,6 +49,7 @@ namespace ProjektCmentarz.Controllers
             return View(plot);
         }
 
+        // Wybiera id Działki i PlotOwner dla danego Użytkownika
         // POST: RentPlot/Details/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -59,15 +62,12 @@ namespace ProjektCmentarz.Controllers
             var user = await _context.Users
                 .Include(u => u.Roles)
                 .FirstOrDefaultAsync(u => u.UserId == userId);
-
             if (user == null)
                 return NotFound();
 
 
-
             // Próba znalezienie rekordu PlotOwner danego użytkownika
             var owner = _context.PlotOwners.FirstOrDefault(o => o.UserId == userId);
-
             // Jeśli dany użytkownik nie ma swojego PlotOwner, zostanie on utworzony
             if (owner == null)
             {
@@ -83,12 +83,26 @@ namespace ProjektCmentarz.Controllers
                 await _context.SaveChangesAsync();
             }
 
+
+
             // Przypisanie Id Właściciela do jego Działki
             var plot = await _context.Plots.FindAsync(id);
-            plot.PlotOwnerId = owner.Id;
+            if (plot == null)
+                return NotFound();
+
+            // Utworzenie nowej płatności; zostanie usunięta z bazy jeśli płatność przez Stripe nie powiedzie się.
+            var payment = new Payment
+            {
+                PlotId = plot.Id,
+                PlotOwnerId = owner.Id,
+                Price = plot.PlotValue,
+                PaymentDate = null
+            };
+            _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            // Opłatą zajmuje się PaymentController
+            return RedirectToAction("Pay", "Payments", new { id = payment.Id });
         }
 
     }
