@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using ProjektCmentarz.Data;
 using ProjektCmentarz.Models;
+using X.PagedList;
 
 namespace ProjektCmentarz.Controllers
 {
@@ -21,17 +22,39 @@ namespace ProjektCmentarz.Controllers
         // GET: RentPlot
         // Strona dostępna tylko dla zalogowanych
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, int? sectionId, int? page)
         {
+            // Sekcje do dropdownu wyszukiwania
+            ViewBag.Sections = await _context.GraveyardSection
+                .OrderBy(gs => gs.Id)
+                .ToListAsync();
+
             // Ta strona wyświetla tylko działki wolne, czyli takie które nie mają właściciela ani żadnych grobów.
-            var freePlots = await _context.Plots
+            var freePlotsQuery = _context.Plots
                 .Include(p => p.Graves)
                 .Include(p => p.Owner)
                 .Include(p => p.GraveyardSection)
                 .Where(p => p.Owner == null && (p.Graves == null || !p.Graves.Any()))
+                .AsQueryable();
+
+            // Filtrowanie po sekcji cmentarza wybranej z dropdownu
+            if (sectionId.HasValue)
+            {
+                freePlotsQuery = freePlotsQuery.Where(p => p.GraveyardSectionId == sectionId.Value);
+            }
+
+            // Stronicowanie
+            int pageSize = 16;  // Liczba rekordów na stronę
+            int pageNumber = page ?? 1;  // Numer obecnej strony
+
+            // Asynchroniczne pobranie danych z bazy
+            var items = await freePlotsQuery
+                .OrderBy(p => p.GraveyardSectionId)
                 .ToListAsync();
 
-            return View(freePlots);
+            var pagedList = new PagedList<Plot>(items, pageNumber, pageSize);
+
+            return View(pagedList);
         }
 
 
