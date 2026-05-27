@@ -14,6 +14,7 @@
     <p>Email: @Model.User.Email</p>
 </div>
 
+
 @* Informacje kontaktowe danego użytkownika *@
 <div>
     <h3>Dane kontaktowe</h3>
@@ -49,21 +50,80 @@
     <a class="btn btn-primary" href="/UserProfile/ChangePassword">Zmień hasło</a>
 </div>
 
-@* Działki użytkownika, jeśli jakieś ma *@
-<div>
-    @if (Model.UserPlots.Any())
-    {
-        <h3>Wynajęte działki</h3>
-        <div class="row">
-            @foreach (var plot in Model.UserPlots)
-            {
-                <div class="col-md-3 mb-3">
-                    <div class="card p-3 shadow-sm">
-                        <h4>Działka numer @plot.Id</h4>
-                        <p><strong>Sekcja:</strong> @plot.GraveyardSection.SectionType</p>
+
+@* Zakładki na profilu *@
+<ul class="nav nav-tabs" id="profileTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="plots-tab" data-bs-toggle="tab" data-bs-target="#plots" type="button" role="tab">
+            Wynajęte działki
+        </button>
+    </li>
+
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments" type="button" role="tab">
+            Dokonane płatności
+        </button>
+    </li>
+</ul>
+
+@* Zawartość zakładek *@
+<div class="tab-content mt-3" id="profileTabsContent">
+
+    @* Zakładka 'Działki' *@
+    <div class="tab-pane fade show active" id="plots" role="tabpanel">
+        @* Działki należące do użytkownika, jeśli jakieś ma *@
+        @if (Model.UserPlots.Any())
+        {
+            <div class="row">
+                @foreach (var plot in Model.UserPlots)
+                {
+                    <div class="col-md-3 mb-3">
+                        <div class="card p-3 shadow-sm">
+                            <h4>Działka numer @plot.Id</h4>
+                            <p><strong>Sekcja:</strong> @plot.GraveyardSection.SectionType</p>
+                            <p><strong>Cena:</strong> @plot.PlotValue zł</p>
+                        </div>
                     </div>
-                </div>
-            }
-        </div>
-    }
+                }
+            </div>
+        }
+        @* Użytkownik nie ma przypisanych działek *@
+        else
+        {
+            <p>Brak działek.</p>
+        }
+    </div>
+
+    @* Zakładka 'Płatności' *@
+    <div class="tab-pane fade" id="payments" role="tabpanel">
+        @* Płatności wykonane przez użytkownika, jeśli jakieś ma *@
+        @if (Model.UserPayments.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Działka</th>
+                        <th>Kwota</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var payment in Model.UserPayments)
+                    {
+                        <tr>
+                            <td>@payment.PaymentDate?.ToString("yyyy-MM-dd")</td>
+                            <td>@payment.PlotId</td>
+                            <td>@payment.Price zł</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        @* Użytkownik nie wykonał żadnych płatności *@
+        else
+        {
+            <p>Brak płatności.</p>
+        }
+    </div>
+
 </div>

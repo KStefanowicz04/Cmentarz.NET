@@ -7,9 +7,6 @@ import hashlib
 
 fake = Faker('pl_PL')
 
-## Liczba nowych rekordów do dodania
-N = 100
-
 # Połączenie z bazą danych
 conn = pyodbc.connect(
     "DRIVER={ODBC Driver 18 for SQL Server};"
@@ -22,6 +19,26 @@ conn = pyodbc.connect(
 cursor = conn.cursor()
 if conn:
     print("Połączono!")
+
+
+## Funkcja do hashowania hasła
+def hash_password(password: str) -> bytes:
+    return hashlib.sha256(password.encode("utf-8")).digest()
+
+
+
+## Liczba rekordów wstawianych do tabel bazy danych zależy od poniższych zmiennych
+# Mnożnik rekordów; 1 to wartość podstawowa, np. 1.5 to 50% więcej rekordów, 0.5 to 50% mniej rekordów
+multiplier = 1
+N_priests = int(20 * multiplier)
+N_plots = int(200 * multiplier)
+N_plotowners = int(N_plots/4)
+N_deceased = int(N_plots/2)
+N_users = 50 * multiplier  ## Ta zmienna nie uwzględnia użytkowników utworzonych przy tworzeniu PlotOwner!
+
+
+
+
 
 
 ## Encje słownikowe
@@ -330,25 +347,6 @@ print(f"Wypełniono słownik Roles!")
 
 
 ## Zwykłe tabele
-## NIE POTRZEBNE. Wszystkie tabele które wymagają jakiegoś ContactData tworzą je same
-# # Wypełnienie tabeli ContactData losowymi danymi kontaktowymi: #telefonu, email, miasto, ulica, kod pocztowy
-# for i in range(N):
-#     phone = fake.phone_number()
-#     email = fake.email()
-#     city = fake.city()
-#     street = fake.street_address()
-#     post_code = fake.postcode()
-
-#     cursor.execute(
-#         """
-#         INSERT INTO ContactDatas (PhoneNumber, EMail, CityName, StreetName, ZipCode)
-#         VALUES (?, ?, ?, ?, ?)
-#         """,
-#         phone, email, city, street, post_code
-#     )
-
-# conn.commit()
-# print(f"Wstawiono {i+1} danych kontaktowych!")
 
 # Wypełnienie tabeli FuneralHomes
 home_strings = [
@@ -400,8 +398,8 @@ print(f"Wypełniono tabelę FuneralHomes!")
 cursor.execute("SELECT COUNT(*) FROM Priests")
 current_count = cursor.fetchone()[0]
 
-if current_count < N:
-    remaining = N - current_count
+if current_count < N_priests:
+    remaining = N_priests - current_count
 
     for i in range(remaining):
         name = fake.first_name()
@@ -440,13 +438,18 @@ if current_count < N:
 
 
 
-# Wypełnienie tabeli PlotOwners losowymi danymi: imie, nazwisko, nowe ContactData
-## Liczenie liczby Właścicieli; w bazie będzie znajdować się najwyżej N Właścicieli
+## Wypełnienie tabeli PlotOwners losowymi danymi: imie, nazwisko, nowe ContactData
+## Również tworzy konto User dla danego właściciela
+# Liczenie liczby Właścicieli; w bazie będzie znajdować się najwyżej N Właścicieli
 cursor.execute("SELECT COUNT(*) FROM PlotOwners")
 current_count = cursor.fetchone()[0]
 
-if current_count < N:
-    remaining = N - current_count
+if current_count < N_plotowners:
+    remaining = N_plotowners - current_count
+
+    # Zebranie ID roli "Użytkownik" w bazie
+    cursor.execute("SELECT Id FROM Roles WHERE RoleName = N'Użytkownik'")
+    uzytkownik_role_id = cursor.fetchone()[0]
 
     for i in range(remaining):
         name = fake.first_name()
@@ -470,72 +473,120 @@ if current_count < N:
         cursor.execute(
             """
             INSERT INTO PlotOwners (FirstName, Surname, ContactDataId)
+            OUTPUT INSERTED.Id
             VALUES (?, ?, ?)
             """,
             name, surname, contact_data_id
         )
+        plotowner_id = cursor.fetchone()[0]
+
+
+
+        ## Utworzenie Usera dla danego Użytkownika
+        ## Hashowanie hasła (jest i musi być TEN SAM SPOSÓB co w Kontrolerze do Logowania i Kontrolerze do Rejestracji)
+        password = hash_password(surname)
+        ## Dodanie użytkownika
+        cursor.execute(
+            """
+            INSERT INTO Users (FirstName, Surname, Email, Password, ContactDataId)
+            OUTPUT INSERTED.UserId
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            name, surname, email, password, contact_data_id
+        )
+        user_id = cursor.fetchone()[0]
+
+        ## Dodanie roli Użytkownik dla danego użytkownika
+        cursor.execute(
+            """
+            INSERT INTO RoleUser (RolesId, UsersUserId)
+            VALUES (?, ?)
+            """,
+            uzytkownik_role_id, user_id
+        )
+
+
+        ## Dodanie UserId do PlotOwner
+        cursor.execute(
+            """
+            UPDATE PlotOwners
+            SET UserId = ?
+            WHERE Id = ?
+            """,
+            (user_id, plotowner_id)
+        )
+
 
     conn.commit()
     print(f"Wstawiono {i+1} właścicieli działek!")
 
 
 
-# Wypełnienie tabeli Plots losowymi danymi: cena, właściciel działki (lub jego brak), sekcja cmentarza
+# Wypełnienie tabeli Plots losowymi danymi: cena, sekcja cmentarza
 ## Liczenie liczby Działek; w bazie będzie znajdować się najwyżej (N/2) zajętych Działek
 cursor.execute("SELECT COUNT(*) FROM Plots")
 current_count = cursor.fetchone()[0]
 
-if current_count < (N):
-    remaining = (N) - current_count
+if current_count < N_plots:
+    remaining = N_plots - current_count
 
     for i in range(remaining):
-        ## Połowie działek zostanie przypisany właściciel 
-        if (i < (N//2)):
-            ## Wylosowana zostanie wartość działki
-            plot_value = randint(200, 10000);
+        ## Wylosowana zostanie wartość działki
+        plot_value = randint(200, 10000);
 
-            ## Wybrany zostanie losowy właściciel działki
-            cursor.execute("SELECT Id FROM PlotOwners")
-            contact_data_ids = [row[0] for row in cursor.fetchall()]
-            contact_data_id = random.choice(contact_data_ids)
+        ## Wybrana zostanie losowa sekcja cmentarza
+        cursor.execute("SELECT Id FROM GraveyardSection")
+        graveyard_section_ids = [row[0] for row in cursor.fetchall()]
+        graveyard_section_id = random.choice(graveyard_section_ids)
 
-            ## Wybrana zostanie losowa sekcja cmentarza
-            cursor.execute("SELECT Id FROM GraveyardSection")
-            graveyard_section_ids = [row[0] for row in cursor.fetchall()]
-            graveyard_section_id = random.choice(graveyard_section_ids)
+        cursor.execute(
+            """
+            INSERT INTO Plots (PlotValue, GraveyardSectionId)
+            VALUES (?, ?)
+            """,
+            plot_value, graveyard_section_id
+        )
 
-            cursor.execute(
-                """
-                INSERT INTO Plots (PlotValue, PlotOwnerId, GraveyardSectionId)
-                VALUES (?, ?, ?)
-                """,
-                plot_value, contact_data_id, graveyard_section_id
-            )
+        conn.commit()
+        print(f"Wstawiono {i+1} działek!")
 
-            conn.commit()
-            print(f"Wstawiono {i+1} działek!")
-        ## Połowa działek zostanie dodana bez właściciela
-        elif i >= (N//2) and i < N:
-            ## Dana działka NIE MA właściciela
 
-            ## Wylosowana zostanie wartość działki
-            plot_value = randint(200, 10000);
+## Każdy właściciel otrzyma działkę
+# Pobranie wszystkich właścicieli BEZ działek
+cursor.execute(
+    """
+    SELECT po.Id
+    FROM PlotOwners po
+    LEFT JOIN Plots p ON po.Id = p.PlotOwnerId
+    WHERE p.Id is NULL
+    """
+)
+owner_ids = [row[0] for row in cursor.fetchall()]
+# Pobranie wszystkich działek
+cursor.execute("SELECT Id FROM Plots")
+plot_ids = [row[0] for row in cursor.fetchall()]
+# Wylosowanie działek dla właścicieli
+random.shuffle(plot_ids)
+assigned_plots = plot_ids[:len(owner_ids)]
 
-            ## Wybrana zostanie losowa sekcja cmentarza
-            cursor.execute("SELECT Id FROM GraveyardSection")
-            graveyard_section_ids = [row[0] for row in cursor.fetchall()]
-            graveyard_section_id = random.choice(graveyard_section_ids)
+i=0
+# Przypisanie działek właścicielom
+for owner_id, plot_id in zip(owner_ids, assigned_plots):
+    cursor.execute(
+        """
+        UPDATE Plots
+        SET PlotOwnerId = ?
+        WHERE Id = ?
+        """,
+        owner_id, plot_id
+    )
+    i = i+1
 
-            cursor.execute(
-                """
-                INSERT INTO Plots (PlotValue, GraveyardSectionId)
-                VALUES (?, ?)
-                """,
-                plot_value, graveyard_section_id
-            )
+conn.commit()
+print(f"Przypisano działki {i} właścicielom.")
 
-            conn.commit()
-            print(f"Wstawiono {i+1} działek bez właściciela!")
+
+
 
 
 
@@ -548,8 +599,8 @@ if current_count < (N):
 cursor.execute("SELECT COUNT(*) FROM Deceaseds")
 current_count = cursor.fetchone()[0]
 
-if current_count < N:
-    remaining = N - current_count
+if current_count < N_deceased:
+    remaining = N_deceased - current_count
 
     for i in range(remaining):
         ## Tworzenie nieboszczyka
@@ -717,9 +768,6 @@ if current_count < N:
 
 # Wypełnienie tabeli Users losowymi zwykłymi użytkownikami. Dodaj również użytkownika admin z rolą Admin.
 # Bez zalogowania na to konto dostęp do niektórych stron jest ograniczony.
-## Funkcja do hashowania hasła
-def hash_password(password: str) -> bytes:
-    return hashlib.sha256(password.encode("utf-8")).digest()
 
 ## Dodanie użytkownika admin, jesli jeszcze nie ma go w bazie.
 cursor.execute(
@@ -767,8 +815,8 @@ if (not row):
 cursor.execute("SELECT COUNT(*) FROM Users")
 current_count = cursor.fetchone()[0]
 
-if current_count < N:
-    remaining = N - current_count
+if current_count < N_users:
+    remaining = N_users - current_count
 
     # Zebranie ID roli "Użytkownik" w bazie
     cursor.execute("SELECT Id FROM Roles WHERE RoleName = N'Użytkownik'")
@@ -778,9 +826,8 @@ if current_count < N:
         name = fake.first_name()
         surname = fake.last_name()
         email = f"{name.lower()}.{surname.lower()}@example.com"
-        password_string = fake.word()
         ## Hashowanie hasła (jest i musi być TEN SAM SPOSÓB co w Kontrolerze do Logowania i Kontrolerze do Rejestracji)
-        password = hash_password(password_string)
+        password = hash_password(surname)
 
         # print(f"Imie: {name}, Nazwisko: {surname}, EMail: {email,} Hasło: {password_string}, Hash: {password}\n")
 

@@ -1,4 +1,8 @@
-﻿@model IEnumerable<ProjektCmentarz.Models.Plot>
+﻿@model X.PagedList.IPagedList<ProjektCmentarz.Models.Plot>
+
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+
 
 @{
     ViewData["Title"] = "Wynajmij działkę";
@@ -48,3 +52,26 @@
         </div>
     }
 </div>
+
+
+
+@Html.PagedListPager(
+    Model,
+    page => Url.Action("Index", new
+    {
+        page,
+        searchString = Context.Request.Query["searchString"],
+        searchSection = Context.Request.Query["sectionId"],
+    }),
+    new PagedListRenderOptions
+    {
+        DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+        DisplayLinkToLastPage = PagedListDisplayMode.Always,
+        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        MaximumPageNumbersToDisplay = 5,
+        UlElementClasses = new[] { "pagination" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" }
+    }
+)

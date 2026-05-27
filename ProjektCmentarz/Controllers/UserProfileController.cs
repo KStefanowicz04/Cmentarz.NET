@@ -47,21 +47,30 @@ namespace ProjektCmentarz.Controllers
             var owner = await _context.PlotOwners.FirstOrDefaultAsync(o => o.UserId == userId);
 
             // Działki należące do danego Właściciela idą do Listy
+            // Płatności należące do danego Właściciela idą do Listy
             List<Plot> ownedPlots = new List<Plot>();
+            List<Payment> payments = new List<Payment>();
             if (owner != null)
             {
                 ownedPlots = await _context.Plots
                     .Include(p => p.GraveyardSection)
                     .Where(p => p.PlotOwnerId == owner.Id)
                     .ToListAsync();
+
+                payments = await _context.Payments
+                    .Include(p => p.Plot)
+                    .Where(p => p.PlotOwnerId == owner.Id)
+                    .ToListAsync();
             }
+
 
             // Dane o użytkowniku przesyłamy dalej
             var userProfileData = new UserProfileIndex
             {
                 User = user,
                 UserCD = user.UserContactData,
-                UserPlots = ownedPlots
+                UserPlots = ownedPlots,
+                UserPayments = payments
             };
 
             return View(userProfileData);

@@ -14,7 +14,10 @@ namespace ProjektCmentarz.Models
         // ContactData należące do użytkownika
         public ContactData UserCD { get; set; }
 
-        // Działki należące do danego użytkownika
+        // Działki należące do danego użytkownika (poprzez PlotOwner)
         public List<Plot> UserPlots { get; set; }
+
+        // Płatności wykonane przez danego użytkownika (poprzez PlotOwner)
+        public List<Payment> UserPayments { get; set; }
     }
 }
