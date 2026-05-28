@@ -1,35 +1,48 @@
-﻿@model IEnumerable<ProjektCmentarz.Models.GraveyardSection>
-
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+    ViewData["Title"] = "Mapa";
 }
 
-<h1>Index</h1>
+<h2>Interaktywna mapa cmentarza</h2>
+<h4>Wybierz sekcję cmentarza</h4>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.SectionType)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SectionType)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+@* Obrazek przedstawiający mapę cmentarza z pokolorowanymi sekcjami *@
+<svg viewBox="0 0 1312 1628" width="50%">
+    <image href="Content/Images/MapaCmentarzaSektory.png" width="1312" height="1628" fill-opacity="0" />
+
+    @* Sekcja Chrześcijańska *@
+    <a asp-action="Details" asp-route-id="1">
+        <polygon points="122,512 534,257 545,291 393,635 509,792 381,882" fill-opacity="0" />
+    </a>
+    @* Sekcja Protestancka *@
+    <a asp-action="Details" asp-route-id="2">
+        <polygon points="752,876,1076,650,1173,773,1170,807,888,1028" fill-opacity="0" />
+    </a>
+    @* Sekcja Żołnierzy Radzieckich *@
+    <a asp-action="Details" asp-route-id="3">
+        <polygon points="700,1064,800,972,868,1060,768,1124" fill-opacity="0" />
+    </a>
+    @* Sekcja Islamska *@
+    <a asp-action="Details" asp-route-id="4">
+        <polygon points="570,1178,686,1084,900,1368,800,1466" fill-opacity="0"/>
+    </a>
+    @* Sekcja Czwartkicka *@
+    <a asp-action="Details" asp-route-id="5">
+        <polygon points="594,852,674,814,782,964,706,1024" fill-opacity="0" />
+    </a>
+    @* Sekcja Buddyska *@
+    <a asp-action="Details" asp-route-id="6">
+        <polygon points="542,249,761,126,923,256,878,360,807,370,780,336,688,393,613,314,562,302" fill-opacity="0" />
+    </a>
+    @* Sekcja Konfuzjańska *@
+    <a asp-action="Details" asp-route-id="7">
+        <polygon points="398,900,526,800,690,1030,555,1158" fill-opacity="0" />
+    </a>
+    @* Sekcja Chińska *@
+    <a asp-action="Details" asp-route-id="8">
+        <polygon points="560,630,726,518,914,744,730,866" fill-opacity="0" />
+    </a>
+    @* Sekcja Prawosławna *@
+    <a asp-action="Details" asp-route-id="9">
+        <polygon points="732,500,888,400,1076,634,920,740" fill-opacity="0" />
+    </a>
+</svg>

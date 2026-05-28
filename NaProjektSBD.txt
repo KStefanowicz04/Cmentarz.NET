@@ -6,6 +6,9 @@
 2. Implementacja:
 	Gdzie jest kursor, procedura, funkcja, pakiet (w SQLServer to 'schema'), trigger w bazie danych.
 		Musi być przynajmniej po 1 z każdego tematu przed kolokwium.
+	Procedury, jeśli nie są wykorzystywane nigdzie w samej aplikacji, można zrobić dla analityków;
+		Konto analityk, który korzysta z danej procedury.
+	Trigger może być na login
 	Endpointy - OpenAPI - np. strona z jakąś prostą tabelką wystarczy
 
 3. Optymalizacja
@@ -16,6 +19,19 @@
 	Przedstawienie aplikacji
 	Pytania prowadzącego
 	Napisać dużo w dokumentacji, to będzie mniej pytań
+
+Admin w DB to NIE konto 'admin' w aplikacji!
+W DB nie korzystamy z konta 'sa' (server admin) tylko z admina bazy danych (np. 'db admin').
+Konta 'dev'/'developer' - tyle, ile programistów w bazie danych
+Konto 'server' - konto z którego korzysta aplikacja/backend/.NET
+Ewentualnie konto 'migrator' do migracji
+Ewentualnie konto 'data analyst', opcjonalnie
+
+Role w APLIKACJI to nie role w BAZIE DANYCH.
+Gdy Admin/Moderator/Użytkownik wprowadza zmiany poprzez aplikację,
+	o tych zmianach decyduje Serwer, korzystając ze swojego konta DB 'server'
+
+Byle serwer korzytał z konta DB 'server' i te inne konta były w bazie danych. Nie musimy ich używać.
 
 Terminy prezentacji projektu: 11/06/2026 albo 18.06.2026
 Przesłać przynajmniej 2 dni przed prezentacją!

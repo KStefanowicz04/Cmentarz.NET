@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="wwwroot\Content\Images\MapaCmentarzaOrg.png" />
+    <None Remove="wwwroot\Content\Images\MapaCmentarzaSektory.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Content\Images\Mapa-Sekcje-KRD.txt" />
+    <None Include="wwwroot\Content\Images\MapaCmentarzaSektory.png~" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.24" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.24">
@@ -24,10 +34,6 @@
     <PackageReference Include="Stripe.net" Version="51.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
     <PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.9" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Content\Images\" />
   </ItemGroup>
 
 </Project>

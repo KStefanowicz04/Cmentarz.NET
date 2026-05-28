@@ -1,0 +1,63 @@
+Koordynaty sekcji (clockwise, zaczynając od lewego górnego rogu sekcji):
+Format: (widthxheight)
+	Sekcja Chrześcijańska (niebieski):
+		122x512	
+		534x257
+		545x291
+		393x635
+		509x792
+		381x882
+		
+	Sekcja Protestancka (zielony):
+		752x876
+		1076x650
+		1173x773
+		1170x807
+		888x1028
+
+	Sekcja Żołnierzy Radzieckich (ciemny czerwony):
+		700x1064
+		800x972
+		868x1060
+		768x1124
+
+	Sekcja Islamska (żółty):
+		570x1178
+		686x1084
+		900x1368
+		800x1466
+
+	Sekcja Czwartkicka (limonkowy):
+		594x852
+		674x814
+		782x964
+		706x1024
+
+	Sekcja Buddyska (jasno-niebieski):
+		542x249
+		761x126
+		923x256
+		878x360
+		807x370
+		780x336
+		688x393
+		613x314
+		562x302
+
+	Sekcja Konfuzjańska (fioletowy):
+		398x900
+		526x800
+		690x1030
+		555x1158
+
+	Sekcja Chińska (czerwony):
+		560x630
+		726x518
+		914x744
+		730x866
+
+	Sekcja Prawosławna (pomarańczowy):
+		732x500
+		888x400
+		1076x634
+		920x740

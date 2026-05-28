@@ -22,7 +22,7 @@ namespace ProjektCmentarz.Controllers
         // GET: GraveyardSections
         public async Task<IActionResult> Index()
         {
-            return View(await _context.GraveyardSection.ToListAsync());
+            return View(await _context.Sections.ToListAsync());
         }
 
         // GET: GraveyardSections/Details/5
@@ -33,7 +33,7 @@ namespace ProjektCmentarz.Controllers
                 return NotFound();
             }
 
-            var graveyardSection = await _context.GraveyardSection
+            var graveyardSection = await _context.Sections
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (graveyardSection == null)
             {
@@ -73,7 +73,7 @@ namespace ProjektCmentarz.Controllers
                 return NotFound();
             }
 
-            var graveyardSection = await _context.GraveyardSection.FindAsync(id);
+            var graveyardSection = await _context.Sections.FindAsync(id);
             if (graveyardSection == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace ProjektCmentarz.Controllers
                 return NotFound();
             }
 
-            var graveyardSection = await _context.GraveyardSection
+            var graveyardSection = await _context.Sections
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (graveyardSection == null)
             {
@@ -139,10 +139,10 @@ namespace ProjektCmentarz.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var graveyardSection = await _context.GraveyardSection.FindAsync(id);
+            var graveyardSection = await _context.Sections.FindAsync(id);
             if (graveyardSection != null)
             {
-                _context.GraveyardSection.Remove(graveyardSection);
+                _context.Sections.Remove(graveyardSection);
             }
 
             await _context.SaveChangesAsync();
@@ -151,7 +151,7 @@ namespace ProjektCmentarz.Controllers
 
         private bool GraveyardSectionExists(int id)
         {
-            return _context.GraveyardSection.Any(e => e.Id == id);
+            return _context.Sections.Any(e => e.Id == id);
         }
     }
 }
