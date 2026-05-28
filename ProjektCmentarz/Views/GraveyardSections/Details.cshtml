@@ -1,24 +1,51 @@
 ﻿@model ProjektCmentarz.Models.GraveyardSection
 
+@using X.PagedList
+@using X.PagedList.Mvc.Core
 @{
-    ViewData["Title"] = "Details";
+    var plots = (IPagedList<ProjektCmentarz.Models.Plot>)ViewBag.Plots;
 }
 
-<h1>Details</h1>
+@{
+    ViewData["Title"] = $"{@Model.SectionType}";
+}
 
+
+<h1>@Model.SectionType</h1>
 <div>
-    <h4>GraveyardSection</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SectionType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SectionType)
-        </dd>
-    </dl>
+    <a asp-action="Index">Mapa Cmentarza</a>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<h2>Działki w sekcji</h2>
+
+@* Działki *@
+<div class="row">
+    @foreach (var plot in plots)
+    {
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Działka numer @plot.Id</h4>
+                    <p>Sekcja: @plot.GraveyardSection?.SectionType</p>
+                    <a asp-controller="Plots" asp-action="Details" asp-route-id="@plot.Id" class="text-danger">Sprawdź</a>
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
+@* Stronicowanie *@
+@Html.PagedListPager(
+    plots,
+    page => Url.Action("Details", new { id = Model.Id, page }),
+    new PagedListRenderOptions
+    {
+        DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+        DisplayLinkToLastPage = PagedListDisplayMode.Always,
+        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        MaximumPageNumbersToDisplay = 5,
+        UlElementClasses = new[] { "pagination" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" }
+    }
+)
