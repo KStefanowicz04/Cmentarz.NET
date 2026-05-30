@@ -195,7 +195,8 @@ inscryption_strings = [
     'Powróci za 400 lat',
     'Nie może krzyczeć',
     'Gdzieś się podział',
-    'Padłeś? Powstań. Kanapka z chlebem.'
+    'Padłeś? Powstań. Kanapka z chlebem.',
+    'Rozpoczęte dzieło i coś się zacięło',
 ]
 # Wartości już umieszczone w tabeli nie zostaną dodane ponownie
 cursor.execute("SELECT Inscryption FROM GravestoneInscryptions")
