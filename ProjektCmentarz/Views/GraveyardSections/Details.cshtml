@@ -25,7 +25,8 @@
             <div class="card">
                 <div class="card-body">
                     <h4>Działka numer @plot.Id</h4>
-                    <p>Sekcja: @plot.GraveyardSection?.SectionType</p>
+                    <p>@plot.GraveyardSection?.SectionType</p>
+                    <p>Właściciel: @plot.Owner.FirstName @plot.Owner.Surname</p>
                     <a asp-controller="Plots" asp-action="Details" asp-route-id="@plot.Id" class="text-danger">Sprawdź</a>
                 </div>
             </div>

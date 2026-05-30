@@ -1,30 +1,68 @@
 ﻿@model ProjektCmentarz.Models.Plot
+@using X.PagedList
+@using X.PagedList.Mvc.Core
 
 @{
-    ViewData["Title"] = "Details";
+    var graves = (IPagedList<ProjektCmentarz.Models.Grave>)ViewBag.Graves;
 }
 
-<h1>Details</h1>
+@{
+    ViewData["Title"] = $"Działka";
+}
+
+<h1>Działka @Html.DisplayFor(model => model.Id)</h1>
+<h3>@Html.DisplayFor(model => model.GraveyardSection.SectionType)</h3>
 
 <div>
-    <h4>Plot</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Owner)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Owner.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GraveyardSection)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GraveyardSection.SectionType)
-        </dd>
-    </dl>
+    <p>Właściciel: @Html.DisplayFor(model => model.Owner.FirstName) @Html.DisplayFor(model => model.Owner.Surname)</p>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="GraveyardSections" asp-action="Details" asp-route-id="@Model?.GraveyardSectionId">
+        @Html.DisplayFor(model => model.GraveyardSection.SectionType)</a>
 </div>
+
+
+@* Groby *@
+@* Jeśli na danej działce nie występują groby, nic się nie wyświetli *@
+@if (graves == null | !graves.Any())
+{
+    <h2>Brak grobów na działce!</h2>
+}
+@* W przeciwnym wypadku, wyświetl groby na działce *@
+else
+{
+    <h2>Groby na Działce</h2>
+    <div class="row">
+        @foreach (var grave in graves)
+        {
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Grób numer @grave.Id</h4>
+                        <p>Nieboszczyk: @grave.GraveDeceased.FirstName @grave.GraveDeceased.Surname</p>
+                        <a asp-controller="Graves" asp-action="Details" asp-route-id="@grave.Id" class="text-danger">Sprawdź</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+
+
+    @* Stronicowanie *@
+    @Html.PagedListPager(
+        graves,
+        page => Url.Action("Details", new { id = Model.Id, page }),
+        new PagedListRenderOptions
+        {
+            DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+            DisplayLinkToLastPage = PagedListDisplayMode.Always,
+            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+            MaximumPageNumbersToDisplay = 5,
+            UlElementClasses = new[] { "pagination" },
+            LiElementClasses = new[] { "page-item" },
+            PageClasses = new[] { "page-link" }
+        }
+    )
+}

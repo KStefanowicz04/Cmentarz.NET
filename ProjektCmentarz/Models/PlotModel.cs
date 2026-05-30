@@ -13,9 +13,6 @@ namespace ProjektCmentarz.Models
         // Cena działki
         public int PlotValue { get; set; }
 
-        // Lista grobów na danej działce; może być pusta, co oznacza brak grobów na danej działce
-        public ICollection<Grave>? Graves { get; set; }
-
         // Osoba do której należy dana działka
         [ForeignKey("Owner")]
         public int? PlotOwnerId { get; set; }
@@ -26,7 +23,10 @@ namespace ProjektCmentarz.Models
         public int GraveyardSectionId { get; set; }
         public GraveyardSection? GraveyardSection { get; set; }
 
-        // Lista grobów na danej działce; opcjonalne
+        // Lista grobów na danej działce; może być pusta, co oznacza brak grobów na danej działce
+        public ICollection<Grave>? Graves { get; set; }
+
+        // Lista pogrzebów na danej działce; opcjonalne
         public ICollection<Funeral>? Funerals { get; set; }
     }
 }
