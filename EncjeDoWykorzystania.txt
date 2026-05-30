@@ -19,7 +19,7 @@ Encje:
 13. GraveyardSection S
 14. Material S
 15. Parish S
-16. Payment NI!!!
+16. Payment
 17. Plot partial-NI
 18. PlotOwner
 19. Priest
