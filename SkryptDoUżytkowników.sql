@@ -40,6 +40,11 @@ ALTER ROLE db_datawriter ADD MEMBER [Server];
 GRANT EXECUTE TO [Server];
 GO
 
+-- Server może również tworzyć baże danych, żeby update-database zadziałało
+ALTER SERVER ROLE dbcreator ADD MEMBER [Server];
+GO
+
+
 -- Developerzy mają dostęp do READ
 ALTER ROLE db_datareader ADD MEMBER [DevKC];
 ALTER ROLE db_datareader ADD MEMBER [DevKS];

@@ -11,6 +11,7 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Głębokość
+        [Display(Name = "Głębokość")]
         [Required(ErrorMessage = "Depth is required")]
         [StringLength(40, MinimumLength = 2, ErrorMessage = "Burial depth name should be between 2 and 100 characters")]
         public string Depth { get; set; }

@@ -66,9 +66,29 @@ namespace ProjektCmentarz.Controllers
         {
             if (id == null) return NotFound();
 
-            var deceased = await _context.Deceaseds.FirstOrDefaultAsync(m => m.Id == id);
+            // Wybranie danych powiązanych z Nieboszczykiem
+            var deceased = await _context.Deceaseds
+                .Include(d => d.Funeral)
+                    .ThenInclude(f => f.FuneralPriest)
+                .Include(d => d.Funeral)
+                    .ThenInclude(f => f.FuneralGravekeepers)
+                .Include(d => d.Casket)
+                    .ThenInclude(c => c.Material)
+                .FirstOrDefaultAsync(d => d.Id == id);
 
             if (deceased == null) return NotFound();
+
+            // Wybranie Grobu danego Nieboszczyka
+            var grave = await _context.Graves
+                .Where(g => g.GravePlot.Funerals.Any(f => f.DeceasedId == id))
+                .Include(g => g.BurialDepth)
+                .Include(g => g.GraveGravestone)
+                    .ThenInclude(g => g.Material)
+                .Include(g => g.GraveGravestone)
+                    .ThenInclude(g => g.GravestoneInscryption)
+                .FirstOrDefaultAsync();
+
+            ViewBag.Grave = grave;
 
             return View(deceased);
         }

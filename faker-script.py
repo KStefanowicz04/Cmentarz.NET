@@ -34,6 +34,7 @@ N_priests = int(20 * multiplier)
 N_plots = int(200 * multiplier)
 N_plotowners = int(N_plots/4)
 N_deceased = int(N_plots/2)
+N_gravekeepers = int(N_plots/5)
 N_users = 50 * multiplier  ## Ta zmienna nie uwzględnia użytkowników utworzonych przy tworzeniu PlotOwner!
 
 
@@ -394,6 +395,47 @@ conn.commit()
 print(f"Wypełniono tabelę FuneralHomes!")
 
 
+
+# Wypełnienie tabeli Gravekeepers losowymi danymi: imie, nazwisko, nowe ContactData dla danego Grabarza.
+## Liczenie liczby Grabarzy; w bazie będzie znajdować się najwyżej N Grabarzy
+cursor.execute("SELECT COUNT(*) FROM Gravekeepers")
+current_count = cursor.fetchone()[0]
+
+if current_count < N_gravekeepers:
+    remaining = N_gravekeepers - current_count
+
+    for i in range(remaining):
+        name = fake.first_name()
+        surname = fake.last_name()
+        ## Po podstawowych danych tworzone jest nowe ContactData dla danego Grabarza
+        phone = fake.phone_number()
+        email = f"{name.lower()}.{surname.lower()}@example.com"
+        city = fake.city()
+        street = fake.street_address()
+        post_code = fake.postcode()
+        cursor.execute(
+            """
+            INSERT INTO ContactDatas (PhoneNumber, EMail, CityName, StreetName, ZipCode)
+            OUTPUT INSERTED.Id
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            phone, email, city, street, post_code
+        )
+        contact_data_id = cursor.fetchone()[0]
+
+        cursor.execute(
+            """
+            INSERT INTO Gravekeepers (FirstName, Surname, ContactDataId)
+            VALUES (?, ?, ?)
+            """,
+            name, surname, contact_data_id
+        )
+
+    conn.commit()
+    print(f"Wstawiono {i+1} grabarzy!")
+
+
+
 # Wypełnienie tabeli Priests losowymi danymi: imie, nazwisko, nowe ContactData dla danego księdza, id losowej parafii.
 ## Liczenie liczby Księży; w bazie będzie znajdować się najwyżej N Księży
 cursor.execute("SELECT COUNT(*) FROM Priests")
@@ -679,6 +721,20 @@ if current_count < N_deceased:
         )
         ## ID nowo utworzonego pogrzebu
         funeral_id = cursor.fetchone()[0]
+
+        ## Podłączenie 3-5 losowych grabarzy do nowo utworzonego pogrzebu
+        cursor.execute("SELECT Id FROM Gravekeepers")
+        gravekeeper_ids = [row[0] for row in cursor.fetchall()]
+        selected_gravekeeper_ids = random.sample(gravekeeper_ids, random.randint(3, 5))
+        
+        for gravekpr in selected_gravekeeper_ids:
+            cursor.execute(
+                """
+                INSERT INTO FuneralGravekeeper(FuneralId, GravekeeperId)
+                VALUES (?, ?)
+                """,
+                funeral_id, gravekpr
+            )
 
 
         ## Utworzenie losowego grobu na danej działce dla danego nieboszczyka

@@ -40,7 +40,7 @@ else
                     <div class="card-body">
                         <h4>Grób numer @grave.Id</h4>
                         <p>Nieboszczyk: @grave.GraveDeceased.FirstName @grave.GraveDeceased.Surname</p>
-                        <a asp-controller="Graves" asp-action="Details" asp-route-id="@grave.Id" class="text-danger">Sprawdź</a>
+                        <a asp-controller="Deceased" asp-action="Details" asp-route-id="@grave.GraveDeceased.Id" class="text-danger">Sprawdź</a>
                     </div>
                 </div>
             </div>

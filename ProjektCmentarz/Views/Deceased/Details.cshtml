@@ -1,27 +1,30 @@
 ﻿@model ProjektCmentarz.Models.Deceased
+@{
+    var grave = ViewBag.Grave as Grave;
+}
+
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Nieboszczyk #@Html.DisplayFor(model => model.Id)</h1>
+<hr />
 
 <div>
-    <h4>Deceased</h4>
-    <hr />
     <dl class="row">
+        @* Dane osobowe *@
+        <h4>Dane osobowe</h4>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.DisplayNameFor(model => model.FirstName) i 
+             @Html.DisplayNameFor(model => model.Surname)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.FirstName)
+             @Html.DisplayFor(model => model.Surname)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Surname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Surname)
-        </dd>
+
+        @* Daty *@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.BirthDate)
         </dt>
@@ -34,18 +37,85 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.DeathDate)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CasketId)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Funeral.FuneralDate)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CasketId)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Funeral.FuneralDate)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FuneralId)
+        <dt class="col-sm-2">
+            Data instalacji nagrobka
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FuneralId)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(_ => grave.GraveGravestone.InstallationDate)
         </dd>
+
+        @* Grób *@
+        <h4>Grób</h4>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(_ => grave.GraveGravestone.GravestoneInscryption.Inscryption)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(_ => grave.GraveGravestone.GravestoneInscryption.Inscryption)
+        </dd>
+        <dt class="col-sm-2">
+            Numer działki
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-controller="Plots" asp-action="Details" asp-route-id="@grave.PlotId" class="text-danger">
+                @Html.DisplayFor(_ => grave.PlotId)</a>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(_ => grave.BurialDepth.Depth)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(_ => grave.BurialDepth.Depth)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(_ => grave.GraveGravestone.Material.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(_ => grave.GraveGravestone.Material.Type)
+        </dd>
+
+        @* Trumna *@
+        <h4>Trumna</h4>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Casket.Material)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Casket.Material.Type)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Casket.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Casket.Price)zł
+        </dd>
+
+        @* Pogrzeb *@
+        <h4>Pogrzeb</h4>
+        <dt class="col-sm-2">
+            Ksiądz wykonujący
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Funeral.FuneralPriest.FirstName)
+            @Html.DisplayFor(model => model.Funeral.FuneralPriest.Surname)
+        </dd>
+        @if (Model.Funeral.FuneralGravekeepers.Any())
+        {
+           <dt class="col-sm-2">
+               Grabarze
+           </dt>
+           foreach (var gravekpr in Model.Funeral.FuneralGravekeepers)
+           {
+               <dd class="col-sm-10">
+                   @gravekpr.FirstName @gravekpr.Surname
+               </dd>
+           }
+        }
+           
+       
     </dl>
 </div>
 <div>

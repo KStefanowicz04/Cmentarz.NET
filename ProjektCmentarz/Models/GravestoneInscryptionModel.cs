@@ -11,6 +11,7 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Opis
+        [Display(Name = "Opis na nagrobku")]
         [Required(ErrorMessage = "Gravestone Inscryption is required")]
         public string Inscryption { get; set; }
     }
