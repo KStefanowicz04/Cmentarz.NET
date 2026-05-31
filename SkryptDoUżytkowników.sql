@@ -1,22 +1,32 @@
 USE [master];
 GO
 
--- Utworzenie kont
--- Utworzenie konta Admina
+-- Utworzenie loginów
+-- Utworzenie loginu Admina
 CREATE LOGIN [Admin] WITH PASSWORD = 'Adm123!Password@#';
 GO
 
--- Utworzenie konta Server dla aplikacji
+-- Utworzenie loginu Server dla aplikacji
 CREATE LOGIN [Server] WITH PASSWORD = 'Serv123!Password@#';
 GO
 
--- Utworzenie konta Developera
+-- Utworzenie loginu Developera
 CREATE LOGIN [DevKC] WITH PASSWORD = 'DeveloperPass123!';
 GO
--- Utworzenie konta Developera
+-- Utworzenie loginu Developera
 CREATE LOGIN [DevKS] WITH PASSWORD = 'DeveloperPass123!';
 GO
 
+
+
+-- Utworzenie użytkowników
+USE [GraveyardDB];
+GO
+
+CREATE USER [Admin] FOR LOGIN [Admin];
+CREATE USER [Server] FOR LOGIN [Server];
+CREATE USER [DevKC] FOR LOGIN [DevKC];
+CREATE USER [DevKS] FOR LOGIN [DevKS];
 
 
 -- Przydzielenie ról kontom
@@ -36,8 +46,9 @@ ALTER ROLE db_datareader ADD MEMBER [DevKS];
 GO
 
 
-
 -- Audyt
+USE [master];
+GO
 -- Utworzenie nowego Audytu
 CREATE SERVER AUDIT Audit_Cment
 TO FILE (FILEPATH = '/var/opt/mssql/audit/')
@@ -48,7 +59,7 @@ GO
 ALTER SERVER AUDIT Audit_Cment WITH (STATE = ON);
 
 -- Specyfikacja audytu
-USE GraveyardDB;
+USE [GraveyardDB];
 GO
 
 CREATE DATABASE AUDIT SPECIFICATION Audit_Cment_Spec
