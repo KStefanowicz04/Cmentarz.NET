@@ -33,7 +33,7 @@ multiplier = 1
 N_priests = int(20 * multiplier)
 N_plots = int(200 * multiplier)
 N_plotowners = int(N_plots/4)
-N_deceased = int(N_plots/2)
+N_deceased = int(N_plots/1.25)
 N_gravekeepers = int(N_plots/5)
 N_users = 50 * multiplier  ## Ta zmienna nie uwzględnia użytkowników utworzonych przy tworzeniu PlotOwner!
 
@@ -812,7 +812,7 @@ if current_count < N_deceased:
 
         cursor.execute(
             """
-            INSERT INTO DeathCertificates (IssueDate, Issuer, DeceasedId, CauseOfDeathId)
+            INSERT INTO DeathCertificates (IssueDate, IssuerId, DeceasedId, CauseOfDeathId)
             VALUES (?, ?, ?, ?)
             """,
             issue_date, funeralhome_id, deceased_id, cod_id

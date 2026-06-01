@@ -1,6 +1,7 @@
 ﻿@model ProjektCmentarz.Models.Deceased
 @{
     var grave = ViewBag.Grave as Grave;
+    var certificate = ViewBag.Certificate as DeathCertificate;
 }
 
 
@@ -13,8 +14,8 @@
 
 <div>
     <dl class="row">
-        @* Dane osobowe *@
-        <h4>Dane osobowe</h4>
+        @* Dane *@
+        <h4>Dane</h4>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.FirstName) i 
              @Html.DisplayNameFor(model => model.Surname)
@@ -23,7 +24,20 @@
             @Html.DisplayFor(model => model.FirstName)
              @Html.DisplayFor(model => model.Surname)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(_ => certificate.CauseOfDeath.Cause)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(_ => certificate.CauseOfDeath.Cause)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(_ => certificate.Issuer.FuneralHomeName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(_ => certificate.Issuer.FuneralHomeName)
+        </dd>
 
+        <h4>Daty</h4>
         @* Daty *@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.BirthDate)
@@ -36,6 +50,12 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.DeathDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(_ => certificate.IssueDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(_ => certificate.IssueDate)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Funeral.FuneralDate)

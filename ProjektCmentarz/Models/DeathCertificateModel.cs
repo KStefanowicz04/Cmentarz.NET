@@ -12,6 +12,7 @@ namespace ProjektCmentarz.Models
         public int Id { get; set; }
 
         // Data wystawienia aktu zgonu
+        [Display(Name = "Data wystawienia aktu zgonu")]
         [Required(ErrorMessage = "Issue date is required")]
         public DateTime IssueDate { get; set; }
 
@@ -22,9 +23,12 @@ namespace ProjektCmentarz.Models
         public CauseOfDeath? CauseOfDeath { get; set; }
 
         // Urząd który wystawił dokument - może należy dodać do tego encję słownikową?
-        [Required(ErrorMessage = "Issuing authority is required")]
-        [StringLength(100)]
-        public string Issuer { get; set; }
+        [ForeignKey("Issuer")]
+        [Required(ErrorMessage = "DeathCertificate requires an Issuer")]
+        public int IssuerId { get; set; }
+        // Dom pogrzebowy, który wydał certyfikat
+        public FuneralHome? Issuer { get; set; }
+
 
         // Klucz obcy do zmarłego, którego dotyczy akt zgonu
         [ForeignKey("Deceased")]

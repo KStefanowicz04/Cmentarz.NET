@@ -90,6 +90,16 @@ namespace ProjektCmentarz.Controllers
 
             ViewBag.Grave = grave;
 
+            // Wybranie Certyfikatu Nieboszczyka
+            var certificate = await _context.DeathCertificates
+                .Where(dc => dc.DeceasedId == id)
+                .Include(dc => dc.Issuer)
+                .Include(dc => dc.CauseOfDeath)
+                .FirstOrDefaultAsync();
+
+            ViewBag.Certificate = certificate;
+
+
             return View(deceased);
         }
 
