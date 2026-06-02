@@ -1,106 +1,241 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ProjektCmentarz</title>
+    
+    <!-- CZYSTY TYTUŁ NA KARCIE BEZ .NET -->
+    <title>@ViewData["Title"] - Cmentex</title>
+    
+    <!-- NOWA, DEDYKOWANA IKONKA NA KARCIE (FAVICON) GENEROWANA Z LOGO SYSTEMU -->
+    <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233b82f6'/%3E%3Cpath d='M16 6 C11 12, 11 20, 16 26 C21 20, 21 12, 16 6 Z' fill='none' stroke='%23ffffff' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23ffffff'/%3E%3C/svg%3E">
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ProjektCmentarz.styles.css" asp-append-version="true" />
+
+    <style>
+        /* Domyślny tryb JASNY  */
+        body {
+            background-color: #e3edf7 !important; /* Wyrazisty, piękny pastelowy niebieski */
+            color: #0f172a !important;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Menu górne w trybie jasnym */
+        .navbar {
+            background-color: #ffffff !important;
+            border-bottom: 2px solid #cbd5e1 !important;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important; /* Delikatny cień nadający głębi */
+        }
+        .navbar-brand {
+            color: #0f172a !important;
+        }
+        .nav-link {
+            color: #334155 !important;
+        }
+
+        /* Kafelki na stronie głównej - Czysto białe, dzięki czemu idealnie "wyskakują" z niebieskiego tła */
+        .card {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        /* Przyciski w kafelkach */
+        .btn-outline-secondary {
+            color: #334155 !important;
+            border-color: #94a3b8 !important;
+            background-color: #ffffff !important;
+        }
+        .btn-outline-secondary:hover {
+            background-color: #3b82f6 !important; /* Nowoczesny niebieski hover pasujący do logo Cmentex */
+            color: #ffffff !important;
+            border-color: #3b82f6 !important;
+        }
+
+        /* Tło i teksty w trybie ciemnym */
+        body.dark-mode {
+            background-color: #0b0f19 !important; /* Głęboki, luksusowy granat nocy */
+            color: #e2e8f0 !important;
+        }
+        body.dark-mode .navbar {
+            background-color: #111827 !important;
+            border-bottom: 2px solid #1f2937 !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+        }
+        body.dark-mode .card {
+            background-color: #111827 !important;
+            color: #f1f5f9 !important;
+            border-color: #1f2937 !important;
+        }
+        body.dark-mode .btn-outline-secondary {
+            color: #94a3b8 !important;
+            border-color: #374151 !important;
+            background-color: transparent !important;
+        }
+        body.dark-mode .btn-outline-secondary:hover {
+            background-color: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+        body.dark-mode footer {
+            background-color: #111827 !important;
+            border-top-color: #1f2937 !important;
+        }
+        body.dark-mode .dropdown-menu {
+            background-color: #111827 !important;
+            border: 1px solid #1f2937 !important;
+        }
+        body.dark-mode .dropdown-item {
+            color: #cbd5e1 !important;
+        }
+        body.dark-mode .dropdown-item:hover {
+            background-color: #1f2937 !important;
+        }
+    </style>
 </head>
 <body>
     <header>
-        @* Pasek nawigacji na górze strony *@
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light shadow-sm py-3 mb-4">
             <div class="container-fluid">
-                @* "Logo" strony; przekierowuje na stronę główną *@
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Cmentarz.NET</a>
-                @* Przycisk (ro)zwijający nagłówek na urządzeniach mobilnych; chyba można usunąć? *@
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                
+                <!-- NOWOCZESNE LOGO SVG CMENTEX (BEZ .NET) -->
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-4 m-0" href="/" style="letter-spacing: -0.5px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="34" height="34" class="shadow-sm rounded-3">
+                        <defs>
+                            <linearGradient id="cmentexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#4f46e5" />
+                                <stop offset="100%" stop-color="#3b82f6" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="32" height="32" rx="8" fill="url(#cmentexGrad)" />
+                        <path d="M16 6 C11 12, 11 20, 16 26 C21 20, 21 12, 16 6 Z" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="12" y1="16" x2="20" y2="16" stroke="#ffffff" stroke-width="1.5" opacity="0.8" />
+                        <circle cx="16" cy="16" r="2" fill="#ffffff" />
+                    </svg>
+                    <span class="text-dark-theme-toggle">
+                        Cment<span style="color: #3b82f6; font-weight: 900; font-style: italic;">ex</span>
+                    </span>
+                </a>
+                
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                @* Zakładki; linki do różnych ważnych stron po lewej stronie nagłówka *@
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @* Home *@
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        @* Mapa cmentarza *@
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="GraveyardSections" asp-action="Index">Mapa</a>
-                        </li>
-                        @* Lista nieboszczyków *@
-                          <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Deceased" asp-action="Index">Nieboszczycy</a>
-                        </li>
-                        @* Wykupienie działek - tylko dla zalogowanych*@
-                        @if (User.Identity.IsAuthenticated == true)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="RentPlot" asp-action="Index">Działki</a>
+                
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav flex-grow-1 me-auto mb-2 mb-lg-0 align-items-lg-center">
+                        <li class="nav-item"><a class="nav-link fw-semibold" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/GraveyardSections">Mapa</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Deceased">Nieboszczycy</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Parishes">Parafie</a></li>
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownKadry" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Kadry
+                            </a>
+                            <ul class="dropdown-menu border-0 shadow-sm rounded-3 p-2 mt-2" aria-labelledby="navbarDropdownKadry">
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2" href="/Priests">
+                                        <div class="bg-warning-subtle text-warning rounded-2 p-1.5 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
+                                            <i class="bi bi-person-vcard fs-6"></i>
+                                        </div>
+                                        <div>
+                                            <span class="d-block fw-semibold small m-0" style="line-height:1.2;">Duchowieństwo</span>
+                                            <span class="text-muted d-block" style="font-size: 10px;">Lista Księży</span>
+                                        </div>
+                                    </a>
                                 </li>
-                            }
-                        @* Dostęp do API *@
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="swagger" asp-action="index">API</a>
+                                <li><hr class="dropdown-divider opacity-25 my-2"></li>
+                                <li>
+                                    <a class="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2" href="/Gravekeepers">
+                                        <div class="bg-secondary-subtle text-secondary rounded-2 p-1.5 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
+                                            <i class="bi bi-person-gear fs-6"></i>
+                                        </div>
+                                        <div>
+                                            <span class="d-block fw-semibold small m-0" style="line-height:1.2;">Obsługa</span>
+                                            <span class="text-muted d-block" style="font-size: 10px;">Lista Grabarzy</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
+
+                        @if (User.Identity.IsAuthenticated == true)
+                        {
+                            <li class="nav-item"><a class="nav-link" href="/RentPlot">Działki</a></li>
+                        }
+                        <li class="nav-item"><a class="nav-link text-muted" href="/swagger/index.html">API</a></li>
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto align-items-lg-center gap-3">
+                        <li class="nav-item">
+                            <button class="btn btn-link nav-link p-0 border-0" id="themeToggle" type="button" title="Zmień tryb ekranu">
+                                <i class="bi bi-moon-stars-fill fs-5" id="themeIcon"></i>
+                            </button>
+                        </li>
+
+                        @if (User.Identity.IsAuthenticated == false) 
+                        {
+                            <li class="nav-item"><a class="btn btn-sm btn-outline-secondary rounded-pill px-3" href="/Login?returnUrl=@Context.Request.Path">Logowanie</a></li>
+                            <li class="nav-item"><a class="btn btn-sm btn-dark rounded-pill px-3 text-white" href="/Register">Rejestracja</a></li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link fw-semibold" href="/UserProfile"><i class="bi bi-person-circle me-1"></i>Profil</a></li>
+                            <li class="nav-item"><a class="btn btn-sm btn-outline-danger rounded-pill px-3" href="/Login/Logout?returnUrl=@Context.Request.Path">Wyloguj się</a></li>
+                        }
                     </ul>
                 </div>
-                @* Jeśli użytkownik NIE jest zalogowany, po prawej stronie nagłówka pojawiaja się
-                przekierowania na stronę logowania i stronę rejestracji *@
-                @if (User.Identity.IsAuthenticated == false) {
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav ms-auto">
-                            @* Zalogowanie; zapisuje obecną stronę, do której wróci użytkownik po zalogowaniu *@
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action=""
-                                   asp-route-returnUrl="@Context.Request.Path">Login</a>
-                            </li>
-                            @* Rejestracja *@
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Register" asp-action="">Rejestracja</a>
-                            </li>
-                        </ul>
-                    </div>
-                    }
-                @* Jeśli użytkownik jest zalogowany, w tym samym miejscu pojawia się przekierowanie
-                na stronę profilu użytkownika oraz przycisk do strony wylogowania *@
-                else
-                {
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav ms-auto">
-                            @* Profil użytkownika *@
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="UserProfile" asp-action="Index">Profil</a>
-                            </li>
-                            @* Wylogowanie *@
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout"
-                                   asp-route-returnUrl="@Context.Request.Path">Wyloguj się</a>
-                            </li>
-                        </ul>
-                    </div>
-                }
-                
             </div>
         </nav>
     </header>
+
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-5">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - ProjektCmentarz - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer text-muted py-3 mt-auto bg-white">
+        <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <span>&copy; 2026 - <strong>Cmentex</strong></span>
+            <a class="text-decoration-none text-muted" href="/Home/Privacy">Polityka prywatności</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (themeIcon) themeIcon.className = 'bi bi-sun-fill fs-5 text-warning';
+            }
+
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    if (document.body.classList.contains('dark-mode')) {
+                        document.body.classList.remove('dark-mode');
+                        localStorage.setItem('theme', 'light');
+                        if (themeIcon) themeIcon.className = 'bi bi-moon-stars-fill fs-5 text-secondary';
+                    } else {
+                        document.body.classList.add('dark-mode');
+                        localStorage.setItem('theme', 'dark');
+                        if (themeIcon) themeIcon.className = 'bi bi-sun-fill fs-5 text-warning';
+                    }
+                });
+            }
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
