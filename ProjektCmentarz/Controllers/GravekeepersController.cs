@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjektCmentarz.Data;
 using ProjektCmentarz.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjektCmentarz.Controllers
 {
@@ -46,6 +47,7 @@ namespace ProjektCmentarz.Controllers
         }
 
         // GET: Gravekeepers/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["ContactDataId"] = new SelectList(_context.ContactDatas, "Id", "PhoneNumber");
@@ -55,6 +57,7 @@ namespace ProjektCmentarz.Controllers
         // POST: Gravekeepers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,Surname,ContactDataId")] Gravekeeper gravekeeper)
@@ -70,6 +73,7 @@ namespace ProjektCmentarz.Controllers
         }
 
         // GET: Gravekeepers/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,6 +93,7 @@ namespace ProjektCmentarz.Controllers
         // POST: Gravekeepers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,Surname,ContactDataId")] Gravekeeper gravekeeper)
@@ -122,7 +127,8 @@ namespace ProjektCmentarz.Controllers
             return View(gravekeeper);
         }
 
-        // GET: Gravekeepers/Delete/5
+        // GET: Gravekeepers/Delete/5t
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -142,6 +148,7 @@ namespace ProjektCmentarz.Controllers
         }
 
         // POST: Gravekeepers/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

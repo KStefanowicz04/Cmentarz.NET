@@ -1,36 +1,63 @@
 ﻿@model ProjektCmentarz.Models.Gravekeeper
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = $"Profil - {Model.FirstName} {Model.Surname}";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 rounded-3 mb-4 bg-light text-dark p-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <span class="text-uppercase text-muted fw-bold small">Karta pracownicza</span>
+                <h1 class="display-6 fw-bold m-0 text-primary">@Model.FirstName @Model.Surname</h1>
+            </div>
+            <div class="d-flex gap-2">
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning px-4 rounded-pill shadow-sm">Edytuj dane</a>
+                }
+                <a asp-action="Index" class="btn btn-secondary px-4 rounded-pill shadow-sm">Powrót do kadry</a>
+            </div>
+        </div>
+    </div>
 
-<div>
-    <h4>Gravekeeper</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Surname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Surname)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GravekeeperContactData)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GravekeeperContactData.PhoneNumber)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-3 p-4 mb-4">
+                <h4 class="fw-bold text-dark border-bottom pb-2 mb-3">Informacje systemowe</h4>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4 text-muted mb-2">Identyfikator:</dt>
+                    <dd class="col-sm-8 fw-semibold mb-2">#@Model.Id</dd>
+
+                    <dt class="col-sm-4 text-muted mb-2">Imię:</dt>
+                    <dd class="col-sm-8 mb-2">@Model.FirstName</dd>
+
+                    <dt class="col-sm-4 text-muted mb-0">Nazwisko:</dt>
+                    <dd class="col-sm-8 mb-0">@Model.Surname</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-3 p-4 mb-4">
+                <h4 class="fw-bold text-dark border-bottom pb-2 mb-3">Kontakt i przypisanie</h4>
+                <dl class="row mb-0">
+                    <dt class="col-sm-5 text-muted mb-2">Telefon kontaktowy:</dt>
+                    <dd class="col-sm-7 mb-2 fw-semibold text-secondary">
+                        @if (Model.GravekeeperContactData != null)
+                        {
+                            @Model.GravekeeperContactData.PhoneNumber
+                        }
+                        else
+                        {
+                            <span class="text-muted fw-normal">Nie podano numeru</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-5 text-muted mb-0">Baza adresowa (ID):</dt>
+                    <dd class="col-sm-7 mb-0">#@Model.ContactDataId</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
 </div>
