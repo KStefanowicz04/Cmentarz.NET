@@ -1,77 +1,145 @@
 ﻿@model X.PagedList.IPagedList<ProjektCmentarz.Models.Plot>
-
 @using X.PagedList
 @using X.PagedList.Mvc.Core
-
 
 @{
     ViewData["Title"] = "Wynajmij działkę";
 }
 
-<h1>Wynajmij działkę</h1>
+<div class="container mt-4 p-0">
+    <!-- NAGŁÓWEK STRONY W TWOIM STYLU -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h1 class="display-5 text-dark fw-bold m-0" style="color: inherit !important;">Wynajmij działkę</h1>
+            <p class="text-muted small m-0 mt-1">
+                Dostępne kwatery i miejsca grzebalne w systemie <span class="badge bg-secondary-subtle text-secondary px-2 py-1 rounded-pill fw-bold">Cmentex</span>
+            </p>
+        </div>
+    </div>
 
-@* Formularz wyszukiwania *@
-<div class="card mb-4 shadow-sm">
-    <div class="card-body bg-light">
-        <form asp-action="Index" method="get">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label fw-bold">Sekcja cmentarza</label>
-                        <select name="sectionId" class="form-select">
-                        <option value="">Wszystkie sekcje</option>
-                        @foreach (var sec in ViewBag.Sections)
-                        {
-                            <option value="@sec.Id">@sec.SectionType</option>
-                        }
+    <!-- MODERNIZOWANY FORMULARZ WYSZUKIWANIA -->
+    <div class="card mb-4 border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-body bg-body-tertiary p-4">
+            <form asp-action="Index" method="get">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold text-muted">Sekcja cmentarza</label>
+                        <select name="sectionId" class="form-select rounded-3">
+                            <option value="">Wszystkie sekcje</option>
+                            @foreach (var sec in ViewBag.Sections)
+                            {
+                                <option value="@sec.Id">@sec.SectionType</option>
+                            }
                         </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary w-100 rounded-pill fw-semibold shadow-sm">
+                            <i class="bi bi-search me-1"></i> Filtruj
+                        </button>
+                    </div>
+                    <div class="col-md-3 text-md-end text-start mb-2">
+                        <a asp-action="Index" class="btn btn-sm btn-link link-secondary text-decoration-none small">
+                            <i class="bi bi-x-circle me-1"></i> Wyczyść filtry
+                        </a>
+                    </div>
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">Szukaj</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SIATKA NOWOCZESNYCH KAFELKÓW W TWOIM STYLU -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4">
+        @foreach (var plot in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 border-top border-4 border-info bg-white rounded-3 hover-shadow transition">
+                    <div class="card-body p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <!-- Nagłówek kafelka -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold m-0 text-dark" style="color: inherit !important;">Działka #@plot.Id</h5>
+                                <span class="badge bg-success-subtle text-success px-2.5 py-1.5 rounded-pill fw-bold" style="font-size: 12px;">
+                                    @plot.PlotValue zł
+                                </span>
+                            </div>
+                            
+                            <!-- Opis sekcji -->
+                            <div class="my-3 p-3 bg-light rounded-3 text-muted small" style="background-color: rgba(0,0,0,0.015) !important;">
+                                <i class="bi bi-grid-3x3-gap me-2 text-info"></i>Sekcja: 
+                                <strong class="text-dark d-block mt-1" style="color: inherit !important;">
+                                    @(plot.GraveyardSection != null ? plot.GraveyardSection.SectionType : "Niezdefiniowana")
+                                </strong>
+                            </div>
+                        </div>
+                        
+                        <!-- Przycisk akcji -->
+                        <div class="mt-3">
+                            <a asp-action="Details" asp-route-id="@plot.Id" class="btn btn-outline-danger w-100 rounded-pill fw-bold btn-sm py-2 shadow-sm transition-btn">
+                                <i class="bi bi-bookmark-plus me-1"></i> Wynajmij miejsce
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="mt-2 text-end">
-                <a asp-action="Index" class="btn btn-sm btn-link text-secondary">Wyczyść filtry</a>
-            </div>
-        </form>
+        }
+    </div>
+
+    <!-- STRONICOWANIE DOPASOWANE DO MODUŁU I STYLU -->
+    <div class="d-flex justify-content-center mt-4">
+        @Html.PagedListPager(
+            Model,
+            page => Url.Action("Index", new
+            {
+                page,
+                searchString = Context.Request.Query["searchString"],
+                searchSection = Context.Request.Query["sectionId"],
+            }),
+            new PagedListRenderOptions
+            {
+                DisplayLinkToFirstPage = PagedListDisplayMode.Never,
+                DisplayLinkToLastPage = PagedListDisplayMode.Never,
+                DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                MaximumPageNumbersToDisplay = 5,
+                UlElementClasses = new[] { "pagination", "pagination-sm", "gap-1" },
+                LiElementClasses = new[] { "page-item" },
+                PageClasses = new[] { "page-link", "rounded-3", "px-3" }
+            }
+        )
     </div>
 </div>
 
-@* Działki *@
-<div class="row">
-    @foreach (var plot in Model)
-    {
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <h4>Działka numer @plot.Id</h4>
-                    <p>Sekcja: @plot.GraveyardSection?.SectionType</p>
-                    <p>Cena: @plot.PlotValue</p>
-                    <a asp-action="Details" asp-route-id="@plot.Id" class="text-danger">Wynajmij</a>
-                </div>
-            </div>
-        </div>
+<style>
+    /* Twoje płynne animacje uniesienia kafelków */
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.12) !important;
     }
-</div>
-
-
-
-@Html.PagedListPager(
-    Model,
-    page => Url.Action("Index", new
-    {
-        page,
-        searchString = Context.Request.Query["searchString"],
-        searchSection = Context.Request.Query["sectionId"],
-    }),
-    new PagedListRenderOptions
-    {
-        DisplayLinkToFirstPage = PagedListDisplayMode.Always,
-        DisplayLinkToLastPage = PagedListDisplayMode.Always,
-        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
-        DisplayLinkToNextPage = PagedListDisplayMode.Always,
-        MaximumPageNumbersToDisplay = 5,
-        UlElementClasses = new[] { "pagination" },
-        LiElementClasses = new[] { "page-item" },
-        PageClasses = new[] { "page-link" }
+    .transition { 
+        transition: all 0.25s ease-in-out; 
     }
-)
+    .transition-btn {
+        transition: all 0.2s ease;
+    }
+    .transition-btn:hover {
+        background-color: #dc3545 !important;
+        color: #ffffff !important;
+    }
+
+    /* Dopasowanie stronicowania PagedList */
+    .pagination .page-item .page-link {
+        color: #475569;
+        border: 1px solid #e2e8f0;
+        background-color: #ffffff;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #475569 !important;
+        border-color: #475569 !important;
+        color: #ffffff !important;
+    }
+    body.dark-mode .pagination .page-item .page-link {
+        background-color: #1a1d24;
+        border-color: #2d323f;
+        color: #94a3b8;
+    }
+</style>

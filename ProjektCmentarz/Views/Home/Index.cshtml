@@ -1,8 +1,162 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Strona Główna";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!--  BANER GŁÓWNY SYSTEMU CMENTEX -->
+<div class="mb-5 shadow-sm rounded-3 overflow-hidden text-white p-5 position-relative border-0" 
+     style="min-height: 260px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+    
+    <div class="position-absolute top-50 end-0 translate-middle-y me-5 d-none d-lg-block opacity-25" 
+         style="font-size: 130px; color: #3b82f6; pointer-events: none; z-index: 1;">
+        <i class="bi bi-cpu shadow-lg"></i>
+    </div>
+    <div class="position-absolute top-50 end-0 translate-middle-y me-3 d-none d-lg-block opacity-10" 
+         style="font-size: 160px; color: #ffffff; pointer-events: none; transform: translateY(-20%) rotate(15deg); z-index: 1;">
+        <i class="bi bi-diagram-3"></i>
+    </div>
+
+    <!-- Zawartość tekstowa baneru -->
+    <div class="position-relative" style="z-index: 2; max-width: 650px;">
+        <span class="badge mb-3 px-3 py-2 rounded-pill text-uppercase fw-bold bg-primary text-white" 
+              style="font-size: 11px; letter-spacing: 1px;">
+            System Zarządzania Nekropolią XXI Wieku
+        </span>
+        <h1 class="display-4 fw-black text-white mb-2" style="font-weight: 850; letter-spacing: -1px;">
+    Cment<span style="color: #3b82f6;">ex</span>
+</h1>
+        <p class="lead opacity-75 m-0 fs-5" style="color: #cbd5e1; line-height: 1.6;">
+            Zintegrowana platforma administracyjna dla parafii i przedsiębiorstw komunalnych. Intuicyjna mapa struktur, nowoczesna ewidencja kadr oraz cyfrowy rejestr zmarłych.
+        </p>
+    </div>
 </div>
+
+<div class="container p-0">
+    <div class="mb-4">
+        <h3 class="fw-bold border-bottom pb-2 mb-4">Panele zarządzania i nawigacja</h3>
+    </div>
+
+    <div class="row g-4 mb-5">
+        
+        <!-- MAPA CMENTARZA -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 border-top border-4 border-primary rounded-3 hover-shadow transition">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="text-primary mb-2"><i class="bi bi-map fs-3"></i></div>
+                        <h5 class="card-title fw-bold mb-2">Mapa Cmentarza</h5>
+                        <p class="card-text small m-0 text-muted">
+                            Interaktywny plan i struktura nekropolii. Pozwala na szybki przegląd sektorów, kwater oraz lokalizację wolnych i zajętych działek.
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <a href="/GraveyardSections" class="btn btn-outline-secondary w-100 rounded-pill fw-semibold">
+                            Otwórz mapę
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EWIDENCJA ZMARŁYCH -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 border-top border-4 border-success rounded-3 hover-shadow transition">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="text-success mb-2"><i class="bi bi-people fs-3"></i></div>
+                        <h5 class="card-title fw-bold mb-2">Ewidencja Zmarłych</h5>
+                        <p class="card-text small m-0 text-muted">
+                            Cyfrowy rejestr osób pochowanych. Zawiera pełne dane osobowe, daty oraz powiązania metrykalne z konkretnymi grobami.
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <a href="/Deceased" class="btn btn-outline-secondary w-100 rounded-pill fw-semibold">
+                            Lista osób
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STRUKTURA PARAFIALNA -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 border-top border-4 border-info rounded-3 hover-shadow transition">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="text-info mb-2"><i class="bi bi-bank fs-3"></i></div>
+                        <h5 class="card-title fw-bold mb-2">Struktura Parafialna</h5>
+                        <p class="card-text small m-0 text-muted">
+                            Zarządzanie bazą podległych parafii i dekanatów. Umożliwia integrację administracji kościelnej z systemem cmentarnym.
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <a href="/Parishes" class="btn btn-outline-secondary w-100 rounded-pill fw-semibold">
+                            Przegląd parafii
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DUCHOWIEŃSTWO I OBSŁUGA -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 border-top border-4 border-warning rounded-3 hover-shadow transition">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="text-warning mb-2">
+                            <i class="bi bi-person-badge fs-3 me-2"></i>
+                        </div>
+                        <h5 class="card-title fw-bold mb-2">Duchowieństwo i Obsługa</h5>
+                        <p class="card-text small m-0 text-muted">
+                            Zintegrowany panel zarządzania kadrami. Zawiera rejestr duszpasterzy oraz ewidencję pracowników i grabarzy realizujących usługi na cmentarzu.
+                        </p>
+                    </div>
+                    <div class="mt-4 d-flex flex-column gap-2">
+                        <a href="/Priests" class="btn btn-outline-secondary w-100 rounded-pill fw-semibold btn-sm text-dark-theme-toggle py-2">
+                            <i class="bi bi-person-vcard me-1 text-warning"></i> Lista Księży
+                        </a>
+                        <a href="/Gravekeepers" class="btn btn-outline-secondary w-100 rounded-pill fw-semibold btn-sm text-dark-theme-toggle py-2">
+                            <i class="bi bi-person-gear me-1 text-secondary"></i> Lista Grabarzy
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOKUMENTACJA API -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 border-top border-4 border-danger rounded-3 hover-shadow transition">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="text-danger mb-2"><i class="bi bi-code-slash fs-3"></i></div>
+                        <h5 class="card-title fw-bold mb-2">Dokumentacja API</h5>
+                        <p class="card-text small m-0 text-muted">
+                            Interfejs programistyczny Swagger dla integratorów zewnętrznych, ułatwiający wymianę danych z innymi systemami.
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <a href="/swagger/index.html" class="btn btn-outline-secondary w-100 rounded-pill fw-semibold">
+                            Otwórz Swagger
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* Domyślne tło dla kafelków w trybie jasnym (Dynamiczne dopasowanie) */
+    .card {
+        background-color: #ffffff;
+    }
+
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.15) !important;
+    }
+
+    .transition {
+        transition: all 0.25s ease-in-out;
+    }
+</style>
