@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- CZYSTY TYTUŁ NA KARCIE BEZ .NET -->
+    <!-- CZYSTY TYTUŁ NA KARCIE -->
     <title>@ViewData["Title"] - Cmentex</title>
     
-    <!-- NOWA, DEDYKOWANA IKONKA NA KARCIE (FAVICON) GENEROWANA Z LOGO SYSTEMU -->
+    <!-- FAVICON GENEROWANY Z LOGO SYSTEMU -->
     <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233b82f6'/%3E%3Cpath d='M16 6 C11 12, 11 20, 16 26 C21 20, 21 12, 16 6 Z' fill='none' stroke='%23ffffff' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23ffffff'/%3E%3C/svg%3E">
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -18,7 +18,7 @@
     <style>
         /* Domyślny tryb JASNY  */
         body {
-            background-color: #e3edf7 !important; /* Wyrazisty, piękny pastelowy niebieski */
+            background-color: #e3edf7 !important;
             color: #0f172a !important;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
@@ -27,7 +27,7 @@
         .navbar {
             background-color: #ffffff !important;
             border-bottom: 2px solid #cbd5e1 !important;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important; /* Delikatny cień nadający głębi */
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
         }
         .navbar-brand {
             color: #0f172a !important;
@@ -36,7 +36,7 @@
             color: #334155 !important;
         }
 
-        /* Kafelki na stronie głównej - Czysto białe, dzięki czemu idealnie "wyskakują" z niebieskiego tła */
+        /* Kafelki na stronie głównej */
         .card {
             background-color: #ffffff !important;
             border: 1px solid #cbd5e1 !important;
@@ -50,14 +50,14 @@
             background-color: #ffffff !important;
         }
         .btn-outline-secondary:hover {
-            background-color: #3b82f6 !important; /* Nowoczesny niebieski hover pasujący do logo Cmentex */
+            background-color: #3b82f6 !important;
             color: #ffffff !important;
             border-color: #3b82f6 !important;
         }
 
         /* Tło i teksty w trybie ciemnym */
         body.dark-mode {
-            background-color: #0b0f19 !important; /* Głęboki, luksusowy granat nocy */
+            background-color: #0b0f19 !important;
             color: #e2e8f0 !important;
         }
         body.dark-mode .navbar {
@@ -100,8 +100,9 @@
         <nav class="navbar navbar-expand-lg navbar-light shadow-sm py-3 mb-4">
             <div class="container-fluid">
                 
-                <!-- NOWOCZESNE LOGO SVG CMENTEX (BEZ .NET) -->
-                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-4 m-0" href="/" style="letter-spacing: -0.5px;">
+                <!-- LOGO SVG CMENTEX -->
+                @* Przekierowuje na stronę główną *@
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-4 m-0" style="letter-spacing: -0.5px;" asp-controller="Home" asp-action="Index">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="34" height="34" class="shadow-sm rounded-3">
                         <defs>
                             <linearGradient id="cmentexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -119,24 +120,28 @@
                     </span>
                 </a>
                 
+                @* (Ro)zwija pasek na mniejszych ekranach *@
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 
+                @* Zakładki; linki do różnych ważnych stron po lewej stronie nagłówka *@
                 <div class="collapse navbar-collapse" id="mainNavbar">
                     <ul class="navbar-nav flex-grow-1 me-auto mb-2 mb-lg-0 align-items-lg-center">
-                        <li class="nav-item"><a class="nav-link fw-semibold" href="/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/GraveyardSections">Mapa</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/Deceased">Nieboszczycy</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/Parishes">Parafie</a></li>
+                        @* Linki *@
+                        <li class="nav-item"><a class="nav-link fw-semibold" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="GraveyardSections" asp-action="Index">Mapa</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Deceased" asp-action="Index">Nieboszczycy</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Parishes" asp-action="Index">Parafie</a></li>
                         
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownKadry" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Kadry
                             </a>
                             <ul class="dropdown-menu border-0 shadow-sm rounded-3 p-2 mt-2" aria-labelledby="navbarDropdownKadry">
+                                @* Księża *@
                                 <li>
-                                    <a class="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2" href="/Priests">
+                                    <a class="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2" asp-controller="Priests" asp-action="Index">
                                         <div class="bg-warning-subtle text-warning rounded-2 p-1.5 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
                                             <i class="bi bi-person-vcard fs-6"></i>
                                         </div>
@@ -147,8 +152,9 @@
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider opacity-25 my-2"></li>
+                                @* Grabarze *@
                                 <li>
-                                    <a class="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2" href="/Gravekeepers">
+                                    <a class="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2" asp-controller="Gravekeepers" asp-action="Index">
                                         <div class="bg-secondary-subtle text-secondary rounded-2 p-1.5 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
                                             <i class="bi bi-person-gear fs-6"></i>
                                         </div>
@@ -161,29 +167,36 @@
                             </ul>
                         </li>
 
+                        @* Strona do wynajmu Działek jeśli Użytkownik jest zalogowany *@
                         @if (User.Identity.IsAuthenticated == true)
                         {
-                            <li class="nav-item"><a class="nav-link" href="/RentPlot">Działki</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="RentPlot" asp-action="Index">Działki</a></li>
                         }
-                        <li class="nav-item"><a class="nav-link text-muted" href="/swagger/index.html">API</a></li>
+                        @* Swagger/API *@
+                        <li class="nav-item"><a class="nav-link text-muted" asp-controller="swagger" asp-action="Index">API</a></li>
                     </ul>
 
                     <ul class="navbar-nav ms-auto align-items-lg-center gap-3">
+                        @* Zmiana na tryb ciemny/jasny *@
                         <li class="nav-item">
-                            <button class="btn btn-link nav-link p-0 border-0" id="themeToggle" type="button" title="Zmień tryb ekranu">
+                            <button class="btn btn-link nav-link p-0 border-0" id="themeToggle" type="button" title="Zmień tryb">
                                 <i class="bi bi-moon-stars-fill fs-5" id="themeIcon"></i>
                             </button>
                         </li>
 
+                        @* Linki do stron logowania i rejestracji dla niezalogowanych *@
                         @if (User.Identity.IsAuthenticated == false) 
                         {
-                            <li class="nav-item"><a class="btn btn-sm btn-outline-secondary rounded-pill px-3" href="/Login?returnUrl=@Context.Request.Path">Logowanie</a></li>
-                            <li class="nav-item"><a class="btn btn-sm btn-dark rounded-pill px-3 text-white" href="/Register">Rejestracja</a></li>
+                            <li class="nav-item"><a class="btn btn-sm btn-outline-secondary rounded-pill px-3" asp-controller="Login" asp-action="" asp-route-returnUrl="@Context.Request.Path">Logowanie</a></li>
+                            <li class="nav-item"><a class="btn btn-sm btn-dark rounded-pill px-3 text-white" asp-controller="Register" asp-action="">Rejestracja</a></li>
                         }
+                        @* Link do strony profilu i wylogowania dla zalogowanych *@
                         else
                         {
-                            <li class="nav-item"><a class="nav-link fw-semibold" href="/UserProfile"><i class="bi bi-person-circle me-1"></i>Profil</a></li>
-                            <li class="nav-item"><a class="btn btn-sm btn-outline-danger rounded-pill px-3" href="/Login/Logout?returnUrl=@Context.Request.Path">Wyloguj się</a></li>
+                            <li class="nav-item"><a class="nav-link fw-semibold" asp-controller="UserProfile" asp-action="Index"><i class="bi bi-person-circle me-1"></i>Profil</a></li>
+                            <li class="nav-item">
+                                <a class="btn btn-sm btn-outline-danger rounded-pill px-3" asp-controller="Login" asp-action="Logout" asp-route-returnUrl="@Context.Request.Path">Wyloguj się</a>
+                            </li>
                         }
                     </ul>
                 </div>
