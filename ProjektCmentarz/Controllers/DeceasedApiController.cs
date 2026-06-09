@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProjektCmentarz.Controllers
 {
-    //Stały adres URL dla API
+    // Stały adres URL dla API
     [Route("api/deceased")]
     [ApiController]
     public class DeceasedApiController : ControllerBase
@@ -22,9 +22,20 @@ namespace ProjektCmentarz.Controllers
 
         // 1. Endpoint: Pobranie wszystkich zmarłych 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int page = 1, int pageSize = 30)
         {
+            // Ustawienia stronicowania
+            if (page <= 0) page = 1;
+            if (pageSize <= 0) pageSize = 10;
+
+            var totalCount = await _context.Deceaseds.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+
             var deceasedList = await _context.Deceaseds
+                .OrderBy(d => d.Id)
+                .Skip((page-1) * pageSize)
+                .Take(pageSize)
                 .Select(d => new
                 {
                     d.Id,
@@ -35,7 +46,10 @@ namespace ProjektCmentarz.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(deceasedList);
+            return Ok(new
+            {
+                page, pageSize, totalCount, totalPages, data = deceasedList
+            });
         }
 
         // 2. Endpoint: Pobranie jednego zmarłego po ID 
