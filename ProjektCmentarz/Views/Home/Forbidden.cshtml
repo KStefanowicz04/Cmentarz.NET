@@ -1,0 +1,12 @@
+﻿@page
+@model ProjektCmentarz.Views.Home.ForbiddenModel
+@{
+    ViewData["Title"] = "Brak dostępu";
+}
+
+<div class="container text-center py-5">
+    <h1 class="display-1 fw-bold text-danger">403</h1>
+    <h2 class="mb-3">Brak uprawnień</h2>
+    <p class="text-muted">Nie masz wystarczających uprawnień, aby wyświetlić tę stronę.</p>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-danger rounded-pill px-4">Wróć do strony głównej</a>
+</div>

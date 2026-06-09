@@ -1,6 +1,32 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "O systemie";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="display-4 fw-bold text-center">Cmentex Systems</h1>
+            <p class="lead text-muted text-center">Profesjonalny system zarządzania cmentarzem.</p>
+
+            <hr class="my-4">
+
+            <div class="card p-4 shadow-sm mb-4">
+                <h3 class="h5 fw-bold"><i class="bi bi-shield-check me-2"></i>Bezpieczeństwo danych</h3>
+                <p>Dbamy o to, aby dane przechowywane w systemie Cmentex były przetwarzane zgodnie z RODO. Wszystkie połączenia są szyfrowane, a dostęp do systemu mają wyłącznie uprawnieni administratorzy.</p>
+            </div>
+
+            <div class="card p-4 shadow-sm mb-4">
+                <h3 class="h5 fw-bold"><i class="bi bi-info-circle me-2"></i>Informacje o wersji</h3>
+                <ul class="list-unstyled">
+                    <li><strong>Wersja:</strong> 1.0.0</li>
+                    <li><strong>Aktualizacja:</strong> Czerwiec 2026</li>
+                    <li><strong>Wsparcie:</strong> <a href="mailto:kontakt@cmentex.pl">kontakt@cmentex.pl</a></li>
+                </ul>
+            </div>
+
+            <div class="text-center mt-4">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary rounded-pill px-4">Powrót do strony głównej</a>
+            </div>
+        </div>
+    </div>
+</div>

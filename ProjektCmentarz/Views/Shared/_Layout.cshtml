@@ -125,10 +125,12 @@
                 
                 <div class="collapse navbar-collapse" id="mainNavbar">
                     <ul class="navbar-nav flex-grow-1 me-auto mb-2 mb-lg-0 align-items-lg-center">
-                        <li class="nav-item"><a class="nav-link fw-semibold" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Home/Privacy">O systemie</a></li>
                         <li class="nav-item"><a class="nav-link" href="/GraveyardSections">Mapa</a></li>
                         <li class="nav-item"><a class="nav-link" href="/Deceased">Nieboszczycy</a></li>
                         <li class="nav-item"><a class="nav-link" href="/Parishes">Parafie</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Graves" asp-action="Index">Groby</a></li>
+
                         
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownKadry" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -197,10 +199,32 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted py-3 mt-auto bg-white">
-        <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <span>&copy; 2026 - <strong>Cmentex</strong></span>
-            <a class="text-decoration-none text-muted" href="/Home/Privacy">Polityka prywatności</a>
+    <footer class="border-top py-4 mt-5 bg-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h6 class="fw-bold mb-1">CMENTEX SYSTEMS</h6>
+                    <p class="small text-muted mb-0">&copy; 2026 Wszelkie prawa zastrzeżone.</p>
+                </div>
+
+                <div class="col-md-4 text-md-center mb-3 mb-md-0">
+                    <div class="small text-muted">
+                        <i class="bi bi-telephone-fill me-1"></i> 123 456 78<br>
+                        <a href="mailto:kontakt@cmentex.pl" class="text-decoration-none text-muted">
+                            <i class="bi bi-envelope-fill me-1"></i> kontakt@cmentex.pl
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-4 text-md-end">
+                    <div class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none me-3"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-muted text-decoration-none me-3"><i class="bi bi-linkedin fs-5"></i></a>
+                        <a href="#" class="text-muted text-decoration-none"><i class="bi bi-twitter-x fs-5"></i></a>
+                    </div>
+                    <a href="/Home/Privacy" class="text-decoration-none text-muted small">O systemie</a>
+                </div>
+            </div>
         </div>
     </footer>
 

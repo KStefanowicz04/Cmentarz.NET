@@ -1,129 +1,349 @@
 ﻿@model ProjektCmentarz.Models.UserProfileIndex
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Profil użytkownika";
 }
 
-<h1>Profil</h1>
 
-@* Najważniejsze informacje o danym użytkowniku *@
-<div>
-    <h3>Dane</h3>
-    <p>Imię: @Model.User.FirstName</p>
-    <p>Nazwisko: @Model.User.Surname</p>
-    <p>Email: @Model.User.Email</p>
-</div>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger rounded-4 shadow-sm">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        @TempData["ErrorMessage"]
+    </div>
+}
 
-
-@* Informacje kontaktowe danego użytkownika *@
-<div>
-    <h3>Dane kontaktowe</h3>
-    @if (!string.IsNullOrWhiteSpace(Model.UserCD?.PhoneNumber))
-    {
-        <p>Telefon: @Model.UserCD?.PhoneNumber</p>
-    }
-
-    @if (!string.IsNullOrWhiteSpace(Model.UserCD?.EMail))
-    {
-        <p>Email Kontaktowy: @Model.UserCD?.EMail</p>
-    }
-
-    @if (!string.IsNullOrWhiteSpace(Model.UserCD?.CityName))
-    {
-        <p>Miasto: @Model.UserCD?.CityName</p>
-    }
-
-    @if (!string.IsNullOrWhiteSpace(Model.UserCD?.StreetName))
-    {
-        <p>Ulica: @Model.UserCD?.StreetName</p>
-    }
-
-    @if (!string.IsNullOrWhiteSpace(Model.UserCD?.ZipCode))
-    {
-        <p>Kod: @Model.UserCD?.ZipCode</p>
-    }
-</div>
-
-@* Edytowanie profilu *@
-<div>
-    <a class="btn btn-primary" href="/UserProfile/Edit">Edytuj profil</a>
-    <a class="btn btn-primary" href="/UserProfile/ChangePassword">Zmień hasło</a>
-</div>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success rounded-4 shadow-sm">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        @TempData["SuccessMessage"]
+    </div>
+}
 
 
-@* Zakładki na profilu *@
-<ul class="nav nav-tabs" id="profileTabs" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="plots-tab" data-bs-toggle="tab" data-bs-target="#plots" type="button" role="tab">
-            Wynajęte działki
-        </button>
-    </li>
+<div class="row g-4">
 
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments" type="button" role="tab">
-            Dokonane płatności
-        </button>
-    </li>
-</ul>
+    <!-- LEWA KOLUMNA -->
+    <div class="col-lg-4">
 
-@* Zawartość zakładek *@
-<div class="tab-content mt-3" id="profileTabsContent">
+        <!-- DANE UŻYTKOWNIKA -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
 
-    @* Zakładka 'Działki' *@
-    <div class="tab-pane fade show active" id="plots" role="tabpanel">
-        @* Działki należące do użytkownika, jeśli jakieś ma *@
-        @if (Model.UserPlots.Any())
-        {
-            <div class="row">
-                @foreach (var plot in Model.UserPlots)
+                <h4 class="fw-bold mb-4">
+                    <i class="bi bi-person-vcard text-primary me-2"></i>
+                    Dane użytkownika
+                </h4>
+
+                <div class="mb-3">
+                    <div class="text-muted small">Imię</div>
+                    <div class="fw-semibold">@Model.User.FirstName</div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="text-muted small">Nazwisko</div>
+                    <div class="fw-semibold">@Model.User.Surname</div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="text-muted small">Adres e-mail</div>
+                    <div class="fw-semibold">@Model.User.Email</div>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.UserCD?.PhoneNumber))
                 {
-                    <div class="col-md-3 mb-3">
-                        <div class="card p-3 shadow-sm">
-                            <h4>Działka numer @plot.Id</h4>
-                            <p><strong>Sekcja:</strong> @plot.GraveyardSection.SectionType</p>
-                            <p><strong>Cena:</strong> @plot.PlotValue zł</p>
-                        </div>
+                    <div class="mb-3">
+                        <div class="text-muted small">Telefon</div>
+                        <div class="fw-semibold">@Model.UserCD.PhoneNumber</div>
                     </div>
                 }
+
+                @if (!string.IsNullOrWhiteSpace(Model.UserCD?.CityName))
+                {
+                    <div class="mb-3">
+                        <div class="text-muted small">Miasto</div>
+                        <div class="fw-semibold">@Model.UserCD.CityName</div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.UserCD?.StreetName))
+                {
+                    <div class="mb-3">
+                        <div class="text-muted small">Ulica</div>
+                        <div class="fw-semibold">@Model.UserCD.StreetName</div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.UserCD?.ZipCode))
+                {
+                    <div class="mb-4">
+                        <div class="text-muted small">Kod pocztowy</div>
+                        <div class="fw-semibold">@Model.UserCD.ZipCode</div>
+                    </div>
+                }
+
+                <div class="d-grid gap-2">
+
+                    <a href="/UserProfile/Edit"
+                       class="btn btn-primary rounded-pill fw-semibold">
+
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Edytuj profil
+                    </a>
+
+                    <a href="/UserProfile/ChangePassword"
+                       class="btn btn-outline-secondary rounded-pill fw-semibold">
+
+                        <i class="bi bi-key-fill me-2"></i>
+                        Zmień hasło
+                    </a>
+
+                </div>
+
             </div>
-        }
-        @* Użytkownik nie ma przypisanych działek *@
-        else
-        {
-            <p>Brak działek.</p>
-        }
+        </div>
+
     </div>
 
-    @* Zakładka 'Płatności' *@
-    <div class="tab-pane fade" id="payments" role="tabpanel">
-        @* Płatności wykonane przez użytkownika, jeśli jakieś ma *@
-        @if (Model.UserPayments.Any())
-        {
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Działka</th>
-                        <th>Kwota</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var payment in Model.UserPayments)
+
+    <!-- PRAWA KOLUMNA -->
+    <div class="col-lg-8">
+
+        <!-- ZAKŁADKI -->
+        <ul class="nav nav-pills mb-4 gap-2">
+
+            <li class="nav-item">
+                <button class="nav-link active rounded-pill px-4"
+                        data-bs-toggle="tab"
+                        data-bs-target="#plots">
+
+                    <i class="bi bi-grid-3x3-gap-fill me-2"></i>
+                    Moje działki
+                </button>
+            </li>
+
+            <li class="nav-item">
+                <button class="nav-link rounded-pill px-4"
+                        data-bs-toggle="tab"
+                        data-bs-target="#payments">
+
+                    <i class="bi bi-cash-stack me-2"></i>
+                    Historia płatności
+                </button>
+            </li>
+
+        </ul>
+
+
+        <div class="tab-content">
+
+            <!-- DZIAŁKI -->
+            <div class="tab-pane fade show active" id="plots">
+
+                @if (Model.UserPlots.Any())
+                {
+                    <div class="row g-4">
+
+                        @foreach (var plot in Model.UserPlots)
+                        {
+                            <div class="col-md-6">
+
+                                <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                                    <div class="card-body p-4">
+
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+
+                                            <h5 class="fw-bold mb-0">
+                                                Działka #@plot.Id
+                                            </h5>
+
+                                            <span class="badge bg-primary rounded-pill px-3">
+                                                @plot.GraveyardSection?.SectionType
+                                            </span>
+
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <span class="text-muted">
+                                                Wartość działki
+                                            </span>
+                                        </div>
+
+                                        <h4 class="fw-bold text-success mb-4">
+                                            @plot.PlotValue zł
+                                        </h4>
+
+
+                                        @if (plot.Graves != null && plot.Graves.Any())
+                                        {
+                                            <div class="alert alert-warning rounded-4">
+
+                                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+                                                Nie można zwrócić działki, ponieważ znajdują się na niej istniejące groby.
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-success rounded-4">
+
+                                                <i class="bi bi-check-circle-fill me-2"></i>
+
+                                                Na działce nie znajdują się żadne groby.
+                                                Możesz zakończyć dzierżawę.
+
+                                            </div>
+
+                                            <form asp-controller="Plots"
+                                                  asp-action="ReturnPlot"
+                                                  asp-route-id="@plot.Id"
+                                                  method="post">
+
+                                                <button type="submit"
+                                                        class="btn btn-outline-danger rounded-pill w-100 fw-semibold"
+                                                        onclick="return confirm('Czy na pewno chcesz zakończyć dzierżawę tej działki?')">
+
+                                                    <i class="bi bi-trash me-2"></i>
+                                                    Zakończ dzierżawę
+
+                                                </button>
+
+                                            </form>
+                                        }
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <div class="card border-0 shadow-sm rounded-4">
+
+                        <div class="card-body text-center p-5">
+
+                            <i class="bi bi-grid-3x3-gap fs-1 text-secondary"></i>
+
+                            <h4 class="mt-3 fw-bold">
+                                Brak przypisanych działek
+                            </h4>
+
+                            <p class="text-muted m-0">
+                                Aktualnie nie posiadasz żadnych dzierżawionych działek.
+                            </p>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- PŁATNOŚCI -->
+            <div class="tab-pane fade" id="payments">
+
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+                    @if (Model.UserPayments.Any())
                     {
-                        <tr>
-                            <td>@payment.PaymentDate?.ToString("yyyy-MM-dd")</td>
-                            <td>@payment.PlotId</td>
-                            <td>@payment.Price zł</td>
-                        </tr>
+                        <div class="table-responsive">
+
+                            <table class="table table-hover align-middle mb-0">
+
+                                <thead class="table-light">
+
+                                    <tr>
+                                        <th class="py-3 px-4">Data płatności</th>
+                                        <th class="py-3 px-4">Działka</th>
+                                        <th class="py-3 px-4">Kwota</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    @foreach (var payment in Model.UserPayments)
+                                    {
+                                        <tr>
+
+                                            <td class="py-3 px-4">
+                                                @payment.PaymentDate?.ToString("yyyy-MM-dd")
+                                            </td>
+
+                                            <td class="py-3 px-4">
+                                                #@payment.PlotId
+                                            </td>
+
+                                            <td class="py-3 px-4 fw-bold text-success">
+                                                @payment.Price zł
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
                     }
-                </tbody>
-            </table>
-        }
-        @* Użytkownik nie wykonał żadnych płatności *@
-        else
-        {
-            <p>Brak płatności.</p>
-        }
+                    else
+                    {
+                        <div class="card-body text-center p-5">
+
+                            <i class="bi bi-cash-stack fs-1 text-secondary"></i>
+
+                            <h4 class="mt-3 fw-bold">
+                                Brak płatności
+                            </h4>
+
+                            <p class="text-muted m-0">
+                                Nie wykonano jeszcze żadnych opłat.
+                            </p>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
 </div>
+
+
+<style>
+
+    .nav-pills .nav-link.active {
+        background: #3b82f6;
+    }
+
+    body.dark-mode .table {
+        color: #e2e8f0;
+    }
+
+        body.dark-mode .table thead {
+            background: #1f2937;
+        }
+
+    body.dark-mode .table-light {
+        background: #1f2937 !important;
+        color: #f1f5f9 !important;
+    }
+
+    body.dark-mode .text-muted {
+        color: #94a3b8 !important;
+    }
+
+</style>
