@@ -8,11 +8,11 @@ Encje:
 2. Casket 
 3. CauseOfDeath S
 4. ContactData
-5. DeathCertificate NI - dodać na stronie detali o danym nieboszczyku!
+5. DeathCertificate
 6. Deceased
 7. FuneralHome
 8. Funeral
-9. Gravekeeper NI - na stronie pogrzebu, może na stronie działki?
+9. Gravekeeper
 10. Grave
 11. GravestoneInscryption S
 12. Gravestone
