@@ -20,6 +20,7 @@
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
         <div class="card-body p-4">
 
+            @* Dane podstawowe *@
             <div class="row g-4">
                 <div class="col-md-6">
                     <h5 class="text-primary fw-bold mb-3"><i class="bi bi-person-badge me-2"></i>Dane podstawowe</h5>
@@ -31,24 +32,33 @@
                     </div>
                 </div>
 
+                @* Daty *@
                 <div class="col-md-6">
                     <h5 class="text-primary fw-bold mb-3"><i class="bi bi-calendar-check me-2"></i>Kluczowe daty</h5>
                     <div class="bg-body-tertiary p-3 rounded-3">
                         <div class="row">
                             <div class="col-6"><p class="mb-1 text-muted small">Urodzenia</p><p class="fw-semibold">@Model.BirthDate.ToShortDateString()</p></div>
                             <div class="col-6"><p class="mb-1 text-muted small">Zgonu</p><p class="fw-semibold">@Model.DeathDate.ToShortDateString()</p></div>
+                            <div class="col-6"><p class="mb-1 text-muted small">Wydania certyfikatu śmierci</p><p class="fw-semibold">@certificate.IssueDate.ToShortDateString()</p></div>
+                            <div class="col-6"><p class="mb-1 text-muted small">Pogrzebu</p><p class="fw-semibold">@Model.Funeral.FuneralDate.ToShortDateString()</p></div>
                         </div>
                     </div>
                 </div>
 
+                @* Miejsce pochówku *@
                 <div class="col-12">
                     <hr />
                     <h5 class="text-success fw-bold mb-3"><i class="bi bi-flower1 me-2"></i>Informacje o miejscu pochówku</h5>
                     <div class="row g-3">
-                        <div class="col-md-3"><p class="mb-1 text-muted small">Inskrypcja</p><p class="fw-bold">@grave?.GraveGravestone?.GravestoneInscryption?.Inscryption</p></div>
                         <div class="col-md-3"><p class="mb-1 text-muted small">Numer działki</p><a asp-controller="Plots" asp-action="Details" asp-route-id="@grave?.PlotId" class="text-decoration-none fw-bold">@grave?.PlotId</a></div>
                         <div class="col-md-3"><p class="mb-1 text-muted small">Głębokość</p><p class="fw-bold">@grave?.BurialDepth?.Depth</p></div>
+                        <div class="col-md-3"><p class="mb-1 text-muted small">Inskrypcja</p><p class="fw-bold">@grave?.GraveGravestone?.GravestoneInscryption?.Inscryption</p></div>
                         <div class="col-md-3"><p class="mb-1 text-muted small">Materiał nagrobka</p><p class="fw-bold">@grave?.GraveGravestone?.Material?.Type</p></div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-3"><p class="mb-1 text-muted small">Ksiądz wykonujący pogrzeb</p><a asp-controller="Priests" asp-action="Details" asp-route-id="@Model.Funeral.PriestId" class="text-decoration-none fw-bold">@Model.Funeral.FuneralPriest.FirstName @Model.Funeral.FuneralPriest.Surname</a></div>
+                        <div class="col-md-3"><p class="mb-1 text-muted small">Materiał trumny</p><p class="fw-bold">@Model.Casket?.Material?.Type</p></div>
+                        <div class="col-md-3"><p class="mb-1 text-muted small">Cena trumny</p><p class="fw-bold">@Model.Casket.Price zł</p></div>
                     </div>
                 </div>
             </div>
