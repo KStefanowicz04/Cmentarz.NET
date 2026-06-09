@@ -2,143 +2,73 @@
 @{
     var grave = ViewBag.Grave as Grave;
     var certificate = ViewBag.Certificate as DeathCertificate;
+    ViewData["Title"] = "Profil zmarłego";
 }
 
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">Profil: @Model.FirstName @Model.Surname</h1>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">Powrót do listy</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning rounded-pill px-4 ms-2">Edytuj dane</a>
+            }
+        </div>
+    </div>
 
-@{
-    ViewData["Title"] = "Details";
-}
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body p-4">
 
-<h1>Nieboszczyk #@Html.DisplayFor(model => model.Id)</h1>
-<hr />
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h5 class="text-primary fw-bold mb-3"><i class="bi bi-person-badge me-2"></i>Dane podstawowe</h5>
+                    <div class="bg-body-tertiary p-3 rounded-3">
+                        <p class="mb-1 text-muted small">Przyczyna zgonu</p>
+                        <p class="fw-semibold">@certificate?.CauseOfDeath?.Cause</p>
+                        <p class="mb-1 text-muted small">Dom pogrzebowy</p>
+                        <p class="fw-semibold">@certificate?.Issuer?.FuneralHomeName</p>
+                    </div>
+                </div>
 
-<div>
-    <dl class="row">
-        @* Dane *@
-        <h4>Dane</h4>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName) i 
-             @Html.DisplayNameFor(model => model.Surname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-             @Html.DisplayFor(model => model.Surname)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(_ => certificate.CauseOfDeath.Cause)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(_ => certificate.CauseOfDeath.Cause)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(_ => certificate.Issuer.FuneralHomeName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(_ => certificate.Issuer.FuneralHomeName)
-        </dd>
+                <div class="col-md-6">
+                    <h5 class="text-primary fw-bold mb-3"><i class="bi bi-calendar-check me-2"></i>Kluczowe daty</h5>
+                    <div class="bg-body-tertiary p-3 rounded-3">
+                        <div class="row">
+                            <div class="col-6"><p class="mb-1 text-muted small">Urodzenia</p><p class="fw-semibold">@Model.BirthDate.ToShortDateString()</p></div>
+                            <div class="col-6"><p class="mb-1 text-muted small">Zgonu</p><p class="fw-semibold">@Model.DeathDate.ToShortDateString()</p></div>
+                        </div>
+                    </div>
+                </div>
 
-        <h4>Daty</h4>
-        @* Daty *@
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BirthDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BirthDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DeathDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DeathDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(_ => certificate.IssueDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(_ => certificate.IssueDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Funeral.FuneralDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Funeral.FuneralDate)
-        </dd>
-        <dt class="col-sm-2">
-            Data instalacji nagrobka
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(_ => grave.GraveGravestone.InstallationDate)
-        </dd>
-
-        @* Grób *@
-        <h4>Grób</h4>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(_ => grave.GraveGravestone.GravestoneInscryption.Inscryption)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(_ => grave.GraveGravestone.GravestoneInscryption.Inscryption)
-        </dd>
-        <dt class="col-sm-2">
-            Numer działki
-        </dt>
-        <dd class="col-sm-10">
-            <a asp-controller="Plots" asp-action="Details" asp-route-id="@grave.PlotId" class="text-danger">
-                @Html.DisplayFor(_ => grave.PlotId)</a>
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(_ => grave.BurialDepth.Depth)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(_ => grave.BurialDepth.Depth)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(_ => grave.GraveGravestone.Material.Type)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(_ => grave.GraveGravestone.Material.Type)
-        </dd>
-
-        @* Trumna *@
-        <h4>Trumna</h4>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Casket.Material)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Casket.Material.Type)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Casket.Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Casket.Price)zł
-        </dd>
-
-        @* Pogrzeb *@
-        <h4>Pogrzeb</h4>
-        <dt class="col-sm-2">
-            Ksiądz wykonujący
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Funeral.FuneralPriest.FirstName)
-            @Html.DisplayFor(model => model.Funeral.FuneralPriest.Surname)
-        </dd>
-        @if (Model.Funeral.FuneralGravekeepers.Any())
-        {
-           <dt class="col-sm-2">
-               Grabarze
-           </dt>
-           foreach (var gravekpr in Model.Funeral.FuneralGravekeepers)
-           {
-               <dd class="col-sm-10">
-                   @gravekpr.FirstName @gravekpr.Surname
-               </dd>
-           }
-        }
-           
-       
-    </dl>
+                <div class="col-12">
+                    <hr />
+                    <h5 class="text-success fw-bold mb-3"><i class="bi bi-flower1 me-2"></i>Informacje o miejscu pochówku</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3"><p class="mb-1 text-muted small">Inskrypcja</p><p class="fw-bold">@grave?.GraveGravestone?.GravestoneInscryption?.Inscryption</p></div>
+                        <div class="col-md-3"><p class="mb-1 text-muted small">Numer działki</p><a asp-controller="Plots" asp-action="Details" asp-route-id="@grave?.PlotId" class="text-decoration-none fw-bold">@grave?.PlotId</a></div>
+                        <div class="col-md-3"><p class="mb-1 text-muted small">Głębokość</p><p class="fw-bold">@grave?.BurialDepth?.Depth</p></div>
+                        <div class="col-md-3"><p class="mb-1 text-muted small">Materiał nagrobka</p><p class="fw-bold">@grave?.GraveGravestone?.Material?.Type</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<style>
+    /* Wsparcie dla Dark Mode */
+    body.dark-mode .card,
+    body.dark-mode .bg-body-tertiary {
+        background-color: #1a1d24 !important;
+        color: #e2e8f0 !important;
+    }
+
+    body.dark-mode h1, body.dark-mode h5 {
+        color: #ffffff !important;
+    }
+
+    body.dark-mode .text-muted {
+        color: #94a3b8 !important;
+    }
+</style>

@@ -1,4 +1,6 @@
-﻿@model IEnumerable<ProjektCmentarz.Models.Priest>
+﻿@model X.PagedList.IPagedList<ProjektCmentarz.Models.Priest>
+@using X.PagedList
+@using X.PagedList.Mvc.Core
 
 @{
     ViewData["Title"] = "Lista Duchowieństwa";
@@ -68,6 +70,24 @@
             </div>
         }
     </div>
+</div>
+
+<div class="d-flex justify-content-center mt-4">
+    @Html.PagedListPager(
+        Model,
+        page => Url.Action("Index", new { page }),
+        new PagedListRenderOptions
+        {
+            DisplayLinkToFirstPage = PagedListDisplayMode.Never,
+            DisplayLinkToLastPage = PagedListDisplayMode.Never,
+            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+            MaximumPageNumbersToDisplay = 5,
+            UlElementClasses = new[] { "pagination", "pagination-sm", "gap-1" },
+            LiElementClasses = new[] { "page-item" },
+            PageClasses = new[] { "page-link", "rounded-3", "px-3" }
+        }
+    )
 </div>
 
 <style>

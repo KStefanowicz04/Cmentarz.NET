@@ -1,52 +1,83 @@
 ﻿@model ProjektCmentarz.Models.GraveyardSection
-
 @using X.PagedList
 @using X.PagedList.Mvc.Core
+
 @{
     var plots = (IPagedList<ProjektCmentarz.Models.Plot>)ViewBag.Plots;
+    ViewData["Title"] = $"{Model.SectionType}";
 }
 
-@{
-    ViewData["Title"] = $"{@Model.SectionType}";
-}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold m-0">Sekcja: @Model.SectionType</h1>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="bi bi-map me-1"></i> Mapa Cmentarza
+        </a>
+    </div>
 
+    <h3 class="fw-bold mb-3">Działki w tej sekcji</h3>
 
-<h1>@Model.SectionType</h1>
-<div>
-    <a asp-action="Index">Mapa Cmentarza</a>
-</div>
-
-<h2>Działki w sekcji</h2>
-@* Działki *@
-<div class="row">
-    @foreach (var plot in plots)
+    @if (plots == null || !plots.Any())
     {
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <h4>Działka numer @plot.Id</h4>
-                    <p>@plot.GraveyardSection?.SectionType</p>
-                    <p>Właściciel: @plot.Owner.FirstName @plot.Owner.Surname</p>
-                    <a asp-controller="Plots" asp-action="Details" asp-route-id="@plot.Id" class="text-danger">Sprawdź</a>
+        <div class="alert alert-secondary rounded-3 border-0 shadow-sm text-center py-5">
+            <i class="bi bi-grid fs-1 d-block mb-2"></i>
+            Brak działek przypisanych do tej sekcji.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var plot in plots)
+            {
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100 rounded-4 p-2">
+                        <div class="card-body">
+                            <h5 class="fw-bold">Działka nr @plot.Id</h5>
+                            <p class="text-muted small mb-1">@plot.GraveyardSection?.SectionType</p>
+                            <p class="mb-3">
+                                <span class="text-muted small d-block">Właściciel:</span>
+                                <span class="fw-semibold">@plot.Owner.FirstName @plot.Owner.Surname</span>
+                            </p>
+                            <a asp-controller="Plots" asp-action="Details" asp-route-id="@plot.Id"
+                               class="btn btn-sm btn-primary rounded-pill px-3">Sprawdź</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            }
+        </div>
+
+        <div class="d-flex justify-content-center mt-5">
+            @Html.PagedListPager(plots, page => Url.Action("Details", new { id = Model.Id, page }),
+            new PagedListRenderOptions
+            {
+                UlElementClasses = new[] { "pagination pagination-sm" },
+                LiElementClasses = new[] { "page-item" },
+                PageClasses = new[] { "page-link rounded-3" }
+            })
         </div>
     }
 </div>
 
-@* Stronicowanie *@
-@Html.PagedListPager(
-    plots,
-    page => Url.Action("Details", new { id = Model.Id, page }),
-    new PagedListRenderOptions
-    {
-        DisplayLinkToFirstPage = PagedListDisplayMode.Always,
-        DisplayLinkToLastPage = PagedListDisplayMode.Always,
-        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
-        DisplayLinkToNextPage = PagedListDisplayMode.Always,
-        MaximumPageNumbersToDisplay = 5,
-        UlElementClasses = new[] { "pagination" },
-        LiElementClasses = new[] { "page-item" },
-        PageClasses = new[] { "page-link" }
+<style>
+   
+    body.dark-mode .card {
+        background-color: #1a1d24 !important;
+        color: #e2e8f0 !important;
     }
-)
+
+    body.dark-mode h1, body.dark-mode h3, body.dark-mode h5 {
+        color: #ffffff !important;
+    }
+
+    body.dark-mode .text-muted {
+        color: #94a3b8 !important;
+    }
+
+    body.dark-mode .pagination .page-link {
+        background-color: #1a1d24;
+        border-color: #2d323f;
+        color: #94a3b8;
+    }
+</style>
