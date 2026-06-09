@@ -54,6 +54,7 @@ namespace ProjektCmentarz.Controllers
             {
                 ownedPlots = await _context.Plots
                     .Include(p => p.GraveyardSection)
+                    .Include(p => p.Graves)
                     .Where(p => p.PlotOwnerId == owner.Id)
                     .ToListAsync();
 

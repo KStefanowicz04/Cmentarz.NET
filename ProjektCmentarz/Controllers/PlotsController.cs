@@ -187,5 +187,31 @@ namespace ProjektCmentarz.Controllers
         {
             return _context.Plots.Any(e => e.Id == id);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> ReturnPlot(int id)
+        {
+            var plot = await _context.Plots
+                .Include(p => p.Graves)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (plot == null) return NotFound();
+
+            // Sprawdzenie czy są groby
+            if (plot.Graves != null && plot.Graves.Any())
+            {
+                TempData["ErrorMessage"] = "Nie możesz zrezygnować z tej działki, ponieważ znajdują się na niej groby.";
+                return RedirectToAction("Index", "UserProfile");
+            }
+
+            // Zwolnienie działki (zrezygnowanie z opłat)
+            plot.PlotOwnerId = null;
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Zrezygnowano z opłacania działki.";
+            return RedirectToAction("Index", "UserProfile");
+        }
     }
 }

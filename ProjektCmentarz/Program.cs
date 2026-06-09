@@ -28,13 +28,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 {
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);  // 60 minut trwania
     options.SlidingExpiration = true;  // Ponowienie włączone
-    options.AccessDeniedPath = "/Forbidden/";
-    options.LoginPath = "/Login";
+    options.AccessDeniedPath = "/Home/Forbidden"; 
+    options.LoginPath = "/Home/Login";
 });
 // Ustawienia
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.AccessDeniedPath = "/Home/Login";
+    options.AccessDeniedPath = "/Home/Forbidden";
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     options.LoginPath = "/Home/Login";
 });
@@ -50,6 +50,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Projekt Cmentarz API V1");
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Projekt Cmentarz API V1");
     });
 }
@@ -69,6 +70,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
 app.UseAuthentication();  // Autentykacja
 app.UseAuthorization();  // Autoryzacja

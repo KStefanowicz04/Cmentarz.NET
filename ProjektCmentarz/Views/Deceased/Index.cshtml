@@ -105,7 +105,7 @@
     <div class="card border-0 shadow-sm rounded-3 overflow-hidden mb-4">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0" style="color: inherit;">
-                <thead class="table-light border-bottom" style="background-color: rgba(0,0,0,0.015); color: inherit;">
+                <thead class="border-bottom">
                     <tr>
                         <th class="py-3 px-4 fw-bold">Imię</th>
                         <th class="py-3 px-4 fw-bold">Nazwisko</th>
@@ -135,8 +135,8 @@
                                 <td class="py-3 px-4 fw-semibold">@Html.DisplayFor(modelItem => item.Surname)</td>
                                 <td class="py-3 px-4 text-muted">@item.BirthDate.ToShortDateString()</td>
                                 <td class="py-3 px-4 text-muted">@item.DeathDate.ToShortDateString()</td>
-                                <td class="py-3 px-4"><span class="badge bg-light text-dark border px-2 py-1.5 rounded-3">#@item.CasketId</span></td>
-                                <td class="py-3 px-4"><span class="badge bg-light text-dark border px-2 py-1.5 rounded-3">#@item.FuneralId</span></td>
+                                <td class="py-3 px-4"><span class="deceased-id">#@item.CasketId</span></td>
+                                <td class="py-3 px-4"><span class="deceased-id">#@item.FuneralId</span></td>
                                 <td class="py-3 px-4 text-end">
                                     <div class="btn-group gap-1">
                                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3" style="font-size: 13px;">
@@ -187,26 +187,136 @@
         )
     </div>
 </div>
-
 <style>
+    /* PAGINACJA */
     .pagination .page-item .page-link {
         color: #475569;
         border: 1px solid #e2e8f0;
         background-color: #ffffff;
     }
+
     .pagination .page-item.active .page-link {
         background-color: #475569 !important;
         border-color: #475569 !important;
         color: #ffffff !important;
     }
+
+    .deceased-id {
+        display: inline-block;
+        padding: 8px 16px;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        color: #0f172a;
+        background-color: #ffffff;
+        font-weight: 600;
+    }
+   
+    /* DARK MODE */
+
+    body.dark-mode .deceased-id {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #e2e8f0;
+    }
+
+    body.dark-mode .card,
+    body.dark-mode .card-body {
+        background-color: #111827 !important;
+        border-color: #1f2937 !important;
+        color: #e2e8f0 !important;
+    }
+
+    /* Inputy i selecty */
+    body.dark-mode .form-control,
+    body.dark-mode .form-select,
+    body.dark-mode .input-group-text {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+        color: #e2e8f0 !important;
+    }
+
+        body.dark-mode .form-control::placeholder {
+            color: #94a3b8 !important;
+        }
+
+        body.dark-mode .form-control:focus,
+        body.dark-mode .form-select:focus {
+            background-color: #1e293b !important;
+            color: #e2e8f0 !important;
+            border-color: #3b82f6 !important;
+            box-shadow: none;
+        }
+
+    /* Tabela */
+    body.dark-mode .table {
+        color: #e2e8f0 !important;
+    }
+
+        body.dark-mode .table thead {
+            background-color: #1f2937 !important;
+        }
+
+        body.dark-mode .table th {
+            color: #cbd5e1 !important;
+            border-color: #334155 !important;
+        }
+
+        body.dark-mode .table td {
+            border-color: #334155 !important;
+        }
+
+        body.dark-mode .table tbody tr {
+            background-color: #111827 !important;
+        }
+
+    body.dark-mode .table-hover tbody tr:hover {
+        background-color: #1e293b !important;
+    }
+
+    /* Badge (#ID) */
+    body.dark-mode .badge.bg-light {
+        background-color: #1e293b !important;
+        color: #e2e8f0 !important;
+        border: 1px solid #334155 !important;
+    }
+
+    /* Link "Wyczyść filtry" */
+    body.dark-mode .link-secondary,
+    body.dark-mode .text-muted {
+        color: #94a3b8 !important;
+    }
+
+    /* Paginacja */
     body.dark-mode .pagination .page-item .page-link {
         background-color: #1a1d24;
         border-color: #2d323f;
         color: #94a3b8;
     }
+
     body.dark-mode .pagination .page-item.active .page-link {
         background-color: #475569 !important;
         border-color: #475569 !important;
         color: #ffffff !important;
+    }
+
+    /* Naprawa bg-body-tertiary */
+    body.dark-mode .bg-body-tertiary {
+        background-color: #111827 !important;
+    }
+
+    
+    body.dark-mode .table-light {
+        background-color: #1f2937 !important;
+        color: #e2e8f0 !important;
+    }
+
+        body.dark-mode .table-light th {
+            background-color: #1f2937 !important;
+            color: #e2e8f0 !important;
+        }
+
+   
+    body.dark-mode .input-group-text i {
+        color: #94a3b8;
     }
 </style>
