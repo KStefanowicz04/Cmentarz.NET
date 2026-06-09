@@ -1,21 +1,63 @@
 ﻿@model ProjektCmentarz.Models.Plot
 
 @{
-    ViewData["Title"] = "Wynajęcie działki";
+    ViewData["Title"] = "Potwierdzenie wynajęcia";
 }
 
-<h1>Potwierdzenie wynajęcia działki</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
 
-<div>
-    <h3>Działka numer @Model.Id</h3>
-    <h4>@Model.GraveyardSection.SectionType</h4>
-    <h2>Cena działki: @Model.PlotValue zł</h2>
-</div>
-<div>
-    <form asp-action="Confirm" method="post">
-        <input type="hidden" name="id" value="@Model.Id" />
-        <button type="submit" class="btn btn-success">Przejdź do zapłaty</button>
-    </form>
-    <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-success text-white p-4 border-0 text-center">
+                    <i class="bi bi-check-circle fs-1"></i>
+                    <h3 class="fw-bold mt-2">Potwierdzenie wynajęcia</h3>
+                </div>
+
+                <div class="card-body p-4 text-center">
+                    <h5 class="text-muted mb-1">Działka numer</h5>
+                    <h2 class="fw-bold mb-4">@Model.Id</h2>
+
+                    <div class="bg-body-tertiary rounded-3 p-3 mb-4">
+                        <p class="mb-1 text-muted small">Sekcja cmentarza</p>
+                        <p class="fw-semibold fs-5">@Model.GraveyardSection.SectionType</p>
+
+                        <hr />
+
+                        <p class="mb-1 text-muted small">Do zapłaty</p>
+                        <h3 class="text-success fw-bold">@Model.PlotValue.ToString("F2") zł</h3>
+                    </div>
+
+                    <form asp-action="Confirm" method="post" class="d-grid gap-2">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-success btn-lg rounded-pill fw-bold shadow-sm">
+                            <i class="bi bi-credit-card me-2"></i>Przejdź do zapłaty
+                        </button>
+                        <a asp-action="Index" class="btn btn-link text-decoration-none text-muted">Anuluj i wróć</a>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 
+<style>
+    
+    body.dark-mode .card {
+        background-color: #1a1d24 !important;
+        color: #e2e8f0 !important;
+    }
+
+    body.dark-mode .bg-body-tertiary {
+        background-color: #252a34 !important;
+    }
+
+    body.dark-mode .text-muted {
+        color: #94a3b8 !important;
+    }
+
+    body.dark-mode h2, body.dark-mode h3, body.dark-mode h5 {
+        color: #ffffff !important;
+    }
+</style>

@@ -4,45 +4,134 @@
     ViewData["Title"] = "Rejestracja";
 }
 
-<h1>Rejestracja</h1>
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-lg-6 col-md-8">
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Index" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+            <div class="p-4 text-center text-white"
+                 style="background: linear-gradient(135deg,#1e293b 0%,#0f172a 100%);">
+
+                <div class="mb-3">
+                    <i class="bi bi-person-plus-fill" style="font-size:60px;color:#3b82f6;"></i>
+                </div>
+
+                <h2 class="fw-bold mb-1">
+                    Dołącz do Cment<span style="color:#3b82f6;">ex</span>
+                </h2>
+
+                <p class="mb-0 opacity-75">
+                    Utwórz konto 
+                </p>
             </div>
-            <div class="form-group">
-                <label asp-for="Surname" class="control-label"></label>
-                <input asp-for="Surname" class="form-control" />
-                <span asp-validation-for="Surname" class="text-danger"></span>
+
+            <div class="card-body p-5">
+                <form asp-action="Index" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="Name" class="form-label fw-semibold small">Imię</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input asp-for="Name" class="form-control rounded-end-3" placeholder="Jan" />
+                            </div>
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="Surname" class="form-label fw-semibold small">Nazwisko</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input asp-for="Surname" class="form-control rounded-end-3" placeholder="Kowalski" />
+                            </div>
+                            <span asp-validation-for="Surname" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Email" class="form-label fw-semibold small">Adres e-mail</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input asp-for="Email" class="form-control rounded-end-3" placeholder="jan@kowalski.pl" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Password" class="form-label fw-semibold small">Hasło</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input asp-for="Password" class="form-control rounded-end-3" placeholder="••••••••" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="PolImage" class="form-label fw-semibold small">Zdjęcie profilowe</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-image"></i></span>
+                            <input asp-for="PolImage" class="form-control rounded-end-3" accept="image/*" />
+                        </div>
+                        <span asp-validation-for="PolImage" class="text-danger small"></span>
+                        <div class="form-text small">Wybierz plik graficzny (JPG, PNG).</div>
+                    </div>
+
+                    <div class="d-grid mt-5">
+                        <button type="submit" class="btn btn-primary rounded-pill fw-semibold py-2 shadow-sm">
+                            <i class="bi bi-check-circle me-2"></i>Zarejestruj konto
+                        </button>
+                    </div>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="text-center">
+                    <small class="text-muted">Masz już konto?</small>
+                    <br>
+                    <a href="/Login" class="btn btn-outline-secondary rounded-pill mt-3 px-4">
+                        Wróć do logowania
+                    </a>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" type="password" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PolImage" class="control-label"></label>
-                <input asp-for="PolImage" class="form-control" type="file" accept="image/*" />
-                <span asp-validation-for="PolImage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Zarejestruj się" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
+<style>
+    /* Spójność z Loginem */
+    .input-group-text {
+        background: transparent;
+    }
+
+    /* Obsługa trybu ciemnego */
+    body.dark-mode .card {
+        background-color: #1a1d24 !important;
+        color: #ffffff !important;
+    }
+
+    body.dark-mode .form-control,
+    body.dark-mode .input-group-text {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+        color: #e2e8f0 !important;
+    }
+
+        body.dark-mode .form-control::placeholder {
+            color: #64748b;
+        }
+
+    body.dark-mode .form-text {
+        color: #94a3b8 !important;
+    }
+
+    body.dark-mode hr {
+        border-color: #334155;
+    }
+</style>
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

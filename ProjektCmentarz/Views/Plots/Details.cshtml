@@ -4,65 +4,95 @@
 
 @{
     var graves = (IPagedList<ProjektCmentarz.Models.Grave>)ViewBag.Graves;
+    ViewData["Title"] = $"Szczegóły działki";
 }
 
-@{
-    ViewData["Title"] = $"Działka";
-}
-
-<h1>Działka @Html.DisplayFor(model => model.Id)</h1>
-<h3>@Html.DisplayFor(model => model.GraveyardSection.SectionType)</h3>
-
-<div>
-    <p>Właściciel: @Html.DisplayFor(model => model.Owner.FirstName) @Html.DisplayFor(model => model.Owner.Surname)</p>
-</div>
-<div>
-    <a asp-controller="GraveyardSections" asp-action="Details" asp-route-id="@Model?.GraveyardSectionId">
-        @Html.DisplayFor(model => model.GraveyardSection.SectionType)</a>
-</div>
-
-
-@* Groby *@
-@* Jeśli na danej działce nie występują groby, nic się nie wyświetli *@
-@if (graves == null | !graves.Any())
-{
-    <h2>Brak grobów na działce!</h2>
-}
-@* W przeciwnym wypadku, wyświetl groby na działce *@
-else
-{
-    <h2>Groby na Działce</h2>
-    <div class="row">
-        @foreach (var grave in graves)
-        {
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h4>Grób numer @grave.Id</h4>
-                        <p>Nieboszczyk: @grave.GraveDeceased.FirstName @grave.GraveDeceased.Surname</p>
-                        <a asp-controller="Deceased" asp-action="Details" asp-route-id="@grave.GraveDeceased.Id" class="text-danger">Sprawdź</a>
-                    </div>
-                </div>
-            </div>
-        }
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold m-0">Działka nr @Model.Id</h1>
+            <p class="text-muted">Sekcja: @Model.GraveyardSection.SectionType</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">Powrót do listy</a>
     </div>
 
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-person-circle me-2"></i>Informacje o właścicielu</h5>
+            <div class="bg-body-tertiary p-3 rounded-3">
+                <p class="mb-0">
+                    <span class="text-muted small d-block">Właściciel:</span>
+                    <span class="fw-semibold fs-5">@Model.Owner.FirstName @Model.Owner.Surname</span>
+                </p>
+            </div>
+        </div>
+    </div>
 
+    <h3 class="fw-bold mb-3">Groby na działce</h3>
 
-    @* Stronicowanie *@
-    @Html.PagedListPager(
-        graves,
-        page => Url.Action("Details", new { id = Model.Id, page }),
-        new PagedListRenderOptions
-        {
-            DisplayLinkToFirstPage = PagedListDisplayMode.Always,
-            DisplayLinkToLastPage = PagedListDisplayMode.Always,
-            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
-            DisplayLinkToNextPage = PagedListDisplayMode.Always,
-            MaximumPageNumbersToDisplay = 5,
-            UlElementClasses = new[] { "pagination" },
-            LiElementClasses = new[] { "page-item" },
-            PageClasses = new[] { "page-link" }
-        }
-    )
-}
+    @if (graves == null || !graves.Any())
+    {
+        <div class="alert alert-secondary rounded-3 border-0 shadow-sm text-center py-5">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            Brak zarejestrowanych grobów na tej działce.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var grave in graves)
+            {
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm h-100 rounded-4 p-3">
+                        <div class="card-body">
+                            <h5 class="fw-bold">Grób nr #@grave.Id</h5>
+                            <p class="text-muted small mb-3">Osoba: @grave.GraveDeceased.FirstName @grave.GraveDeceased.Surname</p>
+                                <div class="btn-group">
+                                    <a asp-controller="Deceased" asp-action="Details" asp-route-id="@grave.GraveDeceased.Id"
+                                       class="btn btn-sm btn-outline-primary rounded-pill px-3">Zmarły</a>
+
+                                    <a asp-controller="Graves" asp-action="Details" asp-route-id="@grave.Id"
+                                       class="btn btn-sm btn-primary rounded-pill px-3 ms-2">Grób</a>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="d-flex justify-content-center mt-5">
+
+            @* Stronicowanie *@
+            @Html.PagedListPager(graves, page => Url.Action("Details", new { id = Model.Id, page }),
+            new PagedListRenderOptions
+            {
+                UlElementClasses = new[] { "pagination pagination-sm" },
+                LiElementClasses = new[] { "page-item" },
+                PageClasses = new[] { "page-link rounded-3" }
+            })
+        </div>
+    }
+</div>
+
+<style>
+    
+    body.dark-mode .card,
+    body.dark-mode .bg-body-tertiary {
+        background-color: #1a1d24 !important;
+        color: #e2e8f0 !important;
+    }
+
+    body.dark-mode h1, body.dark-mode h3, body.dark-mode h5 {
+        color: #ffffff !important;
+    }
+
+    body.dark-mode .text-muted {
+        color: #94a3b8 !important;
+    }
+
+    body.dark-mode .pagination .page-link {
+        background-color: #1a1d24;
+        border-color: #2d323f;
+        color: #94a3b8;
+    }
+</style>

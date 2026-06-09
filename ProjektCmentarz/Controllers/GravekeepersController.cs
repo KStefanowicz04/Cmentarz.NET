@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjektCmentarz.Data;
 using ProjektCmentarz.Models;
 using Microsoft.AspNetCore.Authorization;
+using X.PagedList.Extensions;
 
 namespace ProjektCmentarz.Controllers
 {
@@ -21,10 +22,16 @@ namespace ProjektCmentarz.Controllers
         }
 
         // GET: Gravekeepers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
-            var graveyardContext = _context.Gravekeepers.Include(g => g.GravekeeperContactData);
-            return View(await graveyardContext.ToListAsync());
+            int pageSize = 8;
+            int pageNumber = page ?? 1;
+
+            var gravekeepers = await _context.Gravekeepers
+                .Include(g => g.GravekeeperContactData)
+                .ToListAsync();
+
+            return View(gravekeepers.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Gravekeepers/Details/5

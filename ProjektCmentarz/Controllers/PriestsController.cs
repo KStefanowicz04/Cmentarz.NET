@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjektCmentarz.Data;
 using ProjektCmentarz.Models;
+using X.PagedList.Extensions;
 
 namespace ProjektCmentarz.Controllers
 {
@@ -20,10 +21,17 @@ namespace ProjektCmentarz.Controllers
         }
 
         // GET: Priests
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
-            var graveyardContext = _context.Priests.Include(p => p.Parish).Include(p => p.PriestContactData);
-            return View(await graveyardContext.ToListAsync());
+            int pageSize = 8;
+            int pageNumber = page ?? 1;
+
+            var priests = await _context.Priests
+                .Include(p => p.Parish)
+                .Include(p => p.PriestContactData)
+                .ToListAsync();
+
+            return View(priests.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Priests/Details/5
