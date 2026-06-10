@@ -17,7 +17,7 @@ Domyślnie jest to sqlserwer postawiony za pomocą Dockera:<br>
     <br>
     ```
         docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Haslo123!" -p 1433:1433 -v sqlvolume:/var/opt/mssql --name sqlserver -d mcr.microsoft.com/server:2025-latest
-    
+    ```    
 
 Serwer aplikacji łączy się z bazą danych kontem Użytkownika bazy danych "Server".<br>
 Tego Użytkownika można utworzyć za pomocą skryptu ```SkryptDoUżytkowników.sql```, uruchomionego w SQL Server Management Studio.<br>
