@@ -4,12 +4,14 @@ using ProjektCmentarz.Data;
 using ProjektCmentarz.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjektCmentarz.Controllers
 {
     // Stały adres URL dla API
     [Route("api/priests")]
     [ApiController]
+    [Authorize]
     public class PriestsApiController : ControllerBase
     {
         private readonly GraveyardContext _context;
