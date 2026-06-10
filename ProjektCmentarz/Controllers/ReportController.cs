@@ -22,7 +22,6 @@ namespace ProjektCmentarz.Controllers
         [HttpGet]
         public async Task<IActionResult> DownloadMonthlyReport(int month, int year)
         {
-            // 1. Pobieranie danych z bazy
             var deceasedList = await _context.Deceaseds
                 .Where(d => d.DeathDate.Month == month && d.DeathDate.Year == year)
                 .Select(d => new
@@ -40,13 +39,10 @@ namespace ProjektCmentarz.Controllers
             int totalFunerals = deceasedList.Count(d => d.HasFuneral);
             double averageAge = deceasedList.Any() ? deceasedList.Average(d => d.Age) : 0;
 
-            // 2. Tworzenie Excela
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("Raport Miesięczny");
 
-                
-             
 
                 // Tytuł
                 worksheet.Cell("A1").Value = $"Raport Statystyczny - Okres: {month:02d}/{year}";
@@ -54,7 +50,7 @@ namespace ProjektCmentarz.Controllers
                 worksheet.Cell("A1").Style.Font.SetFontColor(XLColor.FromHtml("#2A4B7C"));
                 worksheet.Cell("A1").Style.Font.SetFontSize(16);
 
-                // Podsumowanie (KPI)
+                // Podsumowanie
                 worksheet.Cell("A3").Value = "Liczba zmarłych:";
                 worksheet.Cell("B3").Value = totalDeceased;
                 worksheet.Cell("C3").Value = "Liczba pogrzebów:";
