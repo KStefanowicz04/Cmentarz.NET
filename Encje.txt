@@ -1,7 +1,5 @@
 Historia:
 S - encja słownikowa
-NI - Not Implemented - encja nie wykorzystana w programie
-NF - Not Filled - encja nie wypełniona Fakerem
 
 Encje:
 1. BurialDepth S
@@ -28,15 +26,3 @@ Encje:
 Encji łącznie: 20/20
 Encji słownikowych: 6/6
 Encji niesłownikowych: 14/14
-
-Usunięto:
-Condition -
-Cremation -
-GraveMaintenance -
-MaintenanceRequest -
-Ownership -
-Reservation -
-TaskStatus -
-Transfer -
-Urn -
-WorkTask -
