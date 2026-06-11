@@ -29,7 +29,7 @@ def hash_password(password: str) -> bytes:
 
 ## Liczba rekordów wstawianych do tabel bazy danych zależy od poniższych zmiennych
 # Mnożnik rekordów; 1 to wartość podstawowa, np. 1.5 to 50% więcej rekordów, 0.5 to 50% mniej rekordów
-multiplier = 1
+multiplier = 100
 N_priests = int(20 * multiplier)
 N_plots = int(200 * multiplier)
 N_plotowners = int(N_plots/4)
