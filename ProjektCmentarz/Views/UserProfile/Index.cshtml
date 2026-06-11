@@ -223,6 +223,7 @@
 
                     </div>
                 }
+                @* Brak działek *@
                 else
                 {
                     <div class="card border-0 shadow-sm rounded-4">
@@ -254,6 +255,7 @@
 
                     @if (Model.UserPayments.Any())
                     {
+                        <div class="py-3 px-4">Łączna wartość wszystkich płatności: @ViewBag.PaymentTotal zł</div>
                         <div class="table-responsive">
 
                             <table class="table table-hover align-middle mb-0">
@@ -295,6 +297,7 @@
 
                         </div>
                     }
+                    @* Brak płatności *@
                     else
                     {
                         <div class="card-body text-center p-5">

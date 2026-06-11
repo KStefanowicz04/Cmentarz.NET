@@ -9,6 +9,7 @@ using ProjektCmentarz.Data;
 using ProjektCmentarz.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -73,6 +74,27 @@ namespace ProjektCmentarz.Controllers
                 UserPlots = ownedPlots,
                 UserPayments = payments
             };
+
+
+            // Korzystamy z funkcji w SQLServer żeby otrzymać łączną wartość dokonanych płatności
+            decimal total = 0;
+            using (var cmd = _context.Database.GetDbConnection().CreateCommand())
+            {
+                cmd.CommandText = "SELECT schema_cment.GetOwnerPaymentsSum(@OwnerId)";
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                var param = cmd.CreateParameter();
+                param.ParameterName = "@OwnerId";
+                param.Value = owner.Id;
+                cmd.Parameters.Add(param);
+
+                await _context.Database.OpenConnectionAsync();
+                var result = await cmd.ExecuteScalarAsync();
+
+                total = Convert.ToDecimal(result);
+            }
+            ViewBag.PaymentTotal = total;
+
 
             return View(userProfileData);
         }

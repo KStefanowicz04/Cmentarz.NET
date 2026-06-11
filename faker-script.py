@@ -29,7 +29,7 @@ def hash_password(password: str) -> bytes:
 
 ## Liczba rekordów wstawianych do tabel bazy danych zależy od poniższych zmiennych
 # Mnożnik rekordów; 1 to wartość podstawowa, np. 1.5 to 50% więcej rekordów, 0.5 to 50% mniej rekordów
-multiplier = 100
+multiplier = 10
 N_priests = int(20 * multiplier)
 N_plots = int(200 * multiplier)
 N_plotowners = int(N_plots/4)
@@ -409,7 +409,7 @@ if current_count < N_gravekeepers:
         surname = fake.last_name()
         ## Po podstawowych danych tworzone jest nowe ContactData dla danego Grabarza
         phone = fake.phone_number()
-        email = f"{name.lower()}.{surname.lower()}@example.com"
+        email = f"{name.lower()}.{surname.lower()}{randint(0, 9999999)}@example.com"
         city = fake.city()
         street = fake.street_address()
         post_code = fake.postcode()
@@ -449,7 +449,7 @@ if current_count < N_priests:
         surname = fake.last_name()
         ## Po podstawowych danych tworzone jest nowe ContactData dla danego Księdza
         phone = fake.phone_number()
-        email = f"{name.lower()}.{surname.lower()}@example.com"
+        email = f"{name.lower()}.{surname.lower()}{randint(0, 9999999)}@example.com"
         city = fake.city()
         street = fake.street_address()
         post_code = fake.postcode()
@@ -499,7 +499,7 @@ if current_count < N_plotowners:
         surname = fake.last_name()
         ## Po podstawowych danych tworzone jest nowe ContactData dla właściciela
         phone = fake.phone_number()
-        email = f"{name.lower()}.{surname.lower()}@example.com"
+        email = f"{name.lower()}.{surname.lower()}{randint(0, 9999999)}@example.com"
         city = fake.city()
         street = fake.street_address()
         post_code = fake.postcode()
@@ -818,9 +818,10 @@ if current_count < N_deceased:
             issue_date, funeralhome_id, deceased_id, cod_id
         )
 
+        print(f"Wstawiono {i+1} nieboszczyków, pogrzebów, grobów, certyfikatów!")
+
 
     conn.commit()
-    print(f"Wstawiono {i+1} nieboszczyków, pogrzebów, grobów, certyfikatów!")
 
 
 # Wypełnienie tabeli Users losowymi zwykłymi użytkownikami. Dodaj również użytkownika admin z rolą Admin.
@@ -882,7 +883,7 @@ if current_count < N_users:
     for i in range(remaining):
         name = fake.first_name()
         surname = fake.last_name()
-        email = f"{name.lower()}.{surname.lower()}@example.com"
+        email = f"{name.lower()}.{surname.lower()}{randint(0, 9999999)}@example.com"
         ## Hashowanie hasła (jest i musi być TEN SAM SPOSÓB co w Kontrolerze do Logowania i Kontrolerze do Rejestracji)
         password = hash_password(surname)
 

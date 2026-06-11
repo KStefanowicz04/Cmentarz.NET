@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen(c =>
 // Własny serwis Context do połączenia z bazą danych GraveyardDB
 builder.Services.AddDbContext<GraveyardContext>(options =>
     // Korzystamy z SqlServer, pytamy o bazę GraveyardDB (to jest w appsettings.json)
-    options.UseSqlServer(builder.Configuration.GetConnectionString("GraveyardDB")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("GraveyardDB"), o => o.CommandTimeout(1800)));
 
 // Serwisy do logowania
 builder.Services.AddAntiforgery();
